@@ -15,4 +15,6 @@ about:
       href: https://github.com
 ---
 
-About this blog
+This blog serves as a place for me to post written pieces, videos, and code for whatever project I want to share.
+
+Here is good goth song.

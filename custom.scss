@@ -1,0 +1,221 @@
+/*-- scss:defaults --*/
+
+// Colors
+$body-bg: #0d0d0f;
+$body-color: #c9c3b8;
+$link-color: #b8956a;
+$navbar-bg: #0d0d0f;
+$navbar-fg: #8a8070;
+$navbar-hl: #c9b99a;
+
+// Fonts
+$font-family-sans-serif: 'Inter', system-ui, sans-serif;
+$font-family-serif: 'Cormorant Garamond', Georgia, serif;
+$headings-font-family: 'Cormorant Garamond', Georgia, serif;
+$headings-font-weight: 300;
+$headings-color: #e8e0d4;
+$font-size-base: 1.1rem;
+
+// Borders
+$border-color: #2a2520;
+$card-border-color: #2a2520;
+$card-bg: #0d0d0f;
+
+/*-- scss:rules --*/
+
+// Google Fonts
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Cinzel:wght@400;600&family=Inter:wght@300;400&display=swap');
+
+// ── Navbar ──────────────────────────────────────────────
+.navbar {
+  border-bottom: 1px solid #2a2520 !important;
+  padding: 1.2rem 2rem !important;
+  background-color: #0d0d0f !important;
+
+  &::after {
+    content: '';
+    display: block;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, #6b4f3a, transparent);
+    margin-top: 1px;
+  }
+}
+
+.navbar-brand {
+  font-family: 'Cinzel', serif !important;
+  font-size: 1rem !important;
+  font-weight: 600 !important;
+  letter-spacing: 0.25em !important;
+  color: #e8e0d4 !important;
+  text-transform: none !important;
+}
+
+.navbar-nav .nav-link {
+  font-family: 'Inter', sans-serif !important;
+  font-size: 0.72rem !important;
+  font-weight: 300 !important;
+  letter-spacing: 0.15em !important;
+  text-transform: uppercase !important;
+  color: #8a8070 !important;
+
+  &:hover {
+    color: #c9b99a !important;
+  }
+}
+
+// Remove blue header band entirely
+.quarto-title-banner,
+.page-title-block,
+#title-block-header {
+  background: #0d0d0f !important;
+  border-bottom: 1px solid #2a2520 !important;
+  padding: 4rem 0 3rem !important;
+
+  .title {
+    font-family: 'Cinzel', serif !important;
+    font-size: 2.5rem !important;
+    font-weight: 600 !important;
+    letter-spacing: 0.15em !important;
+    color: #e8e0d4 !important;
+    text-transform: none !important;
+  }
+}
+
+// ── Body & Typography ────────────────────────────────────
+body {
+  background-color: #0d0d0f !important;
+  color: #c9c3b8 !important;
+  font-family: 'Cormorant Garamond', serif !important;
+  font-size: 1.15rem !important;
+  font-weight: 300 !important;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Cormorant Garamond', serif !important;
+  font-weight: 300 !important;
+  color: #e8e0d4 !important;
+  letter-spacing: 0.01em !important;
+}
+
+p {
+  line-height: 1.8 !important;
+  color: #c9c3b8 !important;
+}
+
+a {
+  color: #b8956a !important;
+  text-decoration: none !important;
+
+  &:hover {
+    color: #d4b48a !important;
+    text-decoration: underline !important;
+  }
+}
+
+// ── Blog listing page ────────────────────────────────────
+.quarto-listing {
+  margin-top: 2rem !important;
+}
+
+.quarto-post {
+  border-top: 1px solid #1e1c19 !important;
+  border-bottom: none !important;
+  padding: 2.5rem 0 !important;
+  background: transparent !important;
+
+  &:hover {
+    background: #111010 !important;
+  }
+
+  .listing-title {
+    font-family: 'Cormorant Garamond', serif !important;
+    font-size: 1.8rem !important;
+    font-weight: 300 !important;
+    color: #e8e0d4 !important;
+    line-height: 1.2 !important;
+  }
+
+  .listing-description {
+    font-family: 'Cormorant Garamond', serif !important;
+    font-style: italic !important;
+    color: #7a7068 !important;
+    font-size: 1.05rem !important;
+  }
+
+  .listing-date,
+  .listing-author {
+    font-family: 'Inter', sans-serif !important;
+    font-size: 0.65rem !important;
+    font-weight: 300 !important;
+    letter-spacing: 0.12em !important;
+    color: #4a4540 !important;
+    text-transform: uppercase !important;
+  }
+}
+
+// Category badges
+.listing-category,
+.quarto-category {
+  font-family: 'Inter', sans-serif !important;
+  font-size: 0.6rem !important;
+  font-weight: 400 !important;
+  letter-spacing: 0.18em !important;
+  text-transform: uppercase !important;
+  color: #8a6a50 !important;
+  background: transparent !important;
+  border: 1px solid #3a2e25 !important;
+  border-radius: 0 !important;
+  padding: 2px 8px !important;
+}
+
+// ── Sidebar (categories) ─────────────────────────────────
+.sidebar-navigation,
+#quarto-sidebar {
+  background: #0d0d0f !important;
+  border-left: 1px solid #1e1c19 !important;
+
+  .sidebar-title,
+  .sidebar-section-item {
+    font-family: 'Inter', sans-serif !important;
+    font-size: 0.65rem !important;
+    font-weight: 300 !important;
+    letter-spacing: 0.2em !important;
+    text-transform: uppercase !important;
+    color: #4a3f35 !important;
+  }
+
+  a {
+    color: #8a8070 !important;
+    font-family: 'Inter', sans-serif !important;
+    font-size: 0.8rem !important;
+    font-weight: 300 !important;
+
+    &:hover { color: #c9b99a !important; }
+  }
+}
+
+// ── Footer ───────────────────────────────────────────────
+.nav-footer {
+  border-top: 1px solid #1e1c19 !important;
+  background: #0d0d0f !important;
+  color: #3d3830 !important;
+  font-family: 'Inter', sans-serif !important;
+  font-size: 0.65rem !important;
+  font-weight: 300 !important;
+  letter-spacing: 0.15em !important;
+}
+
+// ── Code blocks ──────────────────────────────────────────
+pre, code {
+  background: #141210 !important;
+  border: 1px solid #2a2520 !important;
+  border-radius: 0 !important;
+  color: #c9a87a !important;
+  font-size: 0.85rem !important;
+}
+
+// ── Dividers ─────────────────────────────────────────────
+hr {
+  border-color: #1e1c19 !important;
+  opacity: 1 !important;
+}
