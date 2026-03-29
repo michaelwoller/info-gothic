@@ -6,8 +6,10 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
+<meta name="dcterms.date" content="2023-04-09">
+<meta name="description" content="How biological instinct only leads to mistaken optimism in service of reproduction">
 
-<title>InfoGothic</title>
+<title>Zapffe: Our Undesirable Instinct of Hope – InfoGothic</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -26,25 +28,23 @@ ul.task-list li input[type="checkbox"] {
 </style>
 
 
-<script src="site_libs/quarto-nav/quarto-nav.js"></script>
-<script src="site_libs/quarto-nav/headroom.min.js"></script>
-<script src="site_libs/clipboard/clipboard.min.js"></script>
-<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
-<script src="site_libs/quarto-search/fuse.min.js"></script>
-<script src="site_libs/quarto-search/quarto-search.js"></script>
-<meta name="quarto:offset" content="./">
-<script src="site_libs/quarto-listing/list.min.js"></script>
-<script src="site_libs/quarto-listing/quarto-listing.js"></script>
-<script src="site_libs/quarto-html/quarto.js" type="module"></script>
-<script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
-<script src="site_libs/quarto-html/popper.min.js"></script>
-<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
-<script src="site_libs/quarto-html/anchor.min.js"></script>
-<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-dark-f418161beb48e0141c760e455f12af2c.css" rel="stylesheet" id="quarto-text-highlighting-styles">
-<script src="site_libs/bootstrap/bootstrap.min.js"></script>
-<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-4d14f3be7bc8eb7ec2287338953877e0.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="dark">
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<script src="../../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-dark-f418161beb48e0141c760e455f12af2c.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap-4d14f3be7bc8eb7ec2287338953877e0.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="dark">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -72,77 +72,19 @@ ul.task-list li input[type="checkbox"] {
     "search-label": "Search"
   }
 }</script>
-<script>
 
-  window.document.addEventListener("DOMContentLoaded", function (_event) {
-    const listingTargetEl = window.document.querySelector('#listing-listing .list');
-    if (!listingTargetEl) {
-      // No listing discovered, do not attach.
-      return; 
-    }
 
-    const options = {
-      valueNames: ['listing-date','listing-title','listing-author','listing-image','listing-description','listing-categories',{ data: ['index'] },{ data: ['categories'] },{ data: ['listing-date-sort'] },{ data: ['listing-file-modified-sort'] }],
-      
-      searchColumns: ["listing-date","listing-title","listing-author","listing-image","listing-description","listing-categories"],
-    };
+<link rel="stylesheet" href="../../styles.css">
+</head>
 
-    window['quarto-listings'] = window['quarto-listings'] || {};
-    window['quarto-listings']['listing-listing'] = new List('listing-listing', options);
-
-    if (window['quarto-listing-loaded']) {
-      window['quarto-listing-loaded']();
-    }
-  });
-
-  window.addEventListener('hashchange',() => {
-    if (window['quarto-listing-loaded']) {
-      window['quarto-listing-loaded']();
-    }
-  })
-  </script>
-
-  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
-  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
-
-<script type="text/javascript">
-const typesetMath = (el) => {
-  if (window.MathJax) {
-    // MathJax Typeset
-    window.MathJax.typeset([el]);
-  } else if (window.katex) {
-    // KaTeX Render
-    var mathElements = el.getElementsByClassName("math");
-    var macros = [];
-    for (var i = 0; i < mathElements.length; i++) {
-      var texText = mathElements[i].firstChild;
-      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
-        window.katex.render(texText.data, mathElements[i], {
-          displayMode: mathElements[i].classList.contains('display'),
-          throwOnError: false,
-          macros: macros,
-          fleqn: false
-        });
-      }
-    }
-  }
-}
-window.Quarto = {
-  typesetMath
-};
-</script>
-
-<link rel="stylesheet" href="styles.css">
-<link rel="alternate" type="application/rss+xml" title="InfoGothic" href="index.xml" data-external="1"></head>
-
-<body class="nav-fixed quarto-light">
+<body class="nav-fixed fullcontent quarto-light">
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top quarto-banner">
     <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
-    <a class="navbar-brand" href="./index.html">
+    <a class="navbar-brand" href="../../index.html">
     <span class="navbar-title">InfoGothic</span>
     </a>
   </div>
@@ -153,7 +95,7 @@ window.Quarto = {
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll ms-auto">
   <li class="nav-item">
-    <a class="nav-link" href="./about.html"> 
+    <a class="nav-link" href="../../about.html"> 
 <span class="menu-text">About</span></a>
   </li>  
   <li class="nav-item compact">
@@ -176,137 +118,111 @@ window.Quarto = {
 <!-- content -->
 <header id="title-block-header" class="quarto-title-block default page-columns page-full">
   <div class="quarto-title-banner page-columns page-full">
-    <div class="quarto-title column-page-left">
-      <h1 class="title">InfoGothic</h1>
-                      </div>
+    <div class="quarto-title column-body">
+      <h1 class="title">Zapffe: Our Undesirable Instinct of Hope</h1>
+                  <div>
+        <div class="description">
+          How biological instinct only leads to mistaken optimism in service of reproduction
+        </div>
+      </div>
+                          <div class="quarto-categories">
+                <div class="quarto-category">philosophy</div>
+                <div class="quarto-category">pessimism</div>
+                <div class="quarto-category">analysis</div>
+              </div>
+                  </div>
   </div>
     
   
-  <div class="quarto-title-meta column-page-left">
+  <div class="quarto-title-meta">
 
       
+      <div>
+      <div class="quarto-title-meta-heading">Published</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date">April 9, 2023</p>
+      </div>
+    </div>
     
       
     </div>
     
   
-  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-full page-navbar">
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        
-    <h5 class="quarto-listing-category-title">Categories</h5><div class="quarto-listing-category category-default"><div class="category" data-category="">All <span class="quarto-category-count">(3)</span></div><div class="category" data-category="YW5hbHlzaXM=">analysis <span class="quarto-category-count">(2)</span></div><div class="category" data-category="Y29kZQ==">code <span class="quarto-category-count">(1)</span></div><div class="category" data-category="bmV3cw==">news <span class="quarto-category-count">(2)</span></div><div class="category" data-category="cGVzc2ltaXNt">pessimism <span class="quarto-category-count">(1)</span></div><div class="category" data-category="cGhpbG9zb3BoeQ==">philosophy <span class="quarto-category-count">(1)</span></div></div></div>
+    
 <!-- main -->
-<main class="content quarto-banner-title-block column-page-left" id="quarto-document-content">
+<main class="content quarto-banner-title-block" id="quarto-document-content">
 
 
 
 
 
-
-
-
-
-<div class="quarto-listing quarto-listing-container-default" id="listing-listing">
-<div class="list quarto-listing-default">
-<div class="quarto-post image-right" data-index="0" data-categories="bmV3cyUyQ2NvZGUlMkNhbmFseXNpcw==" data-listing-date-sort="1774677600000" data-listing-file-modified-sort="1774815233297" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="1" data-listing-word-count-sort="9">
-<div class="thumbnail"><a href="./posts/post-with-code/index.html" class="no-external">
-
-<img loading="lazy" src="./posts/post-with-code/image.jpg" class="thumbnail-image">
-
-</a></div>
-<div class="body">
-<h3 class="no-anchor listing-title">
-<a href="./posts/post-with-code/index.html" class="no-external">Post With Code</a>
-</h3>
-<div class="listing-categories">
-
-<div class="listing-category" onclick="window.quartoListingCategory('bmV3cw=='); return false;">news</div>
-
-<div class="listing-category" onclick="window.quartoListingCategory('Y29kZQ=='); return false;">code</div>
-
-<div class="listing-category" onclick="window.quartoListingCategory('YW5hbHlzaXM='); return false;">analysis</div>
-
+<p>Pessimism has always been a paradoxical force in my life. Something about the depths of hopelessness motivates me. Allowing existential terror into my soul puts me in a somewhat pensive but reflective mood. Whenever I need a work ethic boost, I usually turn to the works of pessimistic writers to get my creative wheels turning. I take pride in being one of the weird few where this occurs.</p>
+<p>One of my recent go-to sources of inspiration is examining my own personal experiences through the lens of Peter Wessel Zapffe. Zapffe was a Norwegian philosopher who wrote about pessimistic philosophy in the early 20th century, before the times of more famous existentialists such as Sartre and Camus.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="zapffe-portrait.webp" class="img-fluid figure-img"></p>
+<figcaption>Portrait of Peter Wessel Zapffe (1949)</figcaption>
+</figure>
 </div>
-<div class="delink listing-description"><a href="./posts/post-with-code/index.html" class="no-external">
-This is a post with executable code.
-</a></div>
+<p>Zapffe’s masterwork is his essay “The Last Messiah,” originally published in 1933. If you would like to read it, the online version <a href="https://philosophynow.org/issues/45/The_Last_Messiah">can be found here</a>. It’s only roughly four pages in length, so I highly recommend it if you want to indulge in a pessimism-filled fantasy.</p>
+<p>Unfortunately, Zapffe’s complete treatise in which he fully develops all his thoughts, <em>On the Tragic</em> (1941), has never been translated from Norwegian. This translation has been close to being finished for decades now. I have more hope that we will obtain efficient translation machines for Norwegian philosophy before we get the human-made translation. For now, we will just assess “The Last Messiah,” his most well-known work.</p>
+<p>To be honest, I often find pessimism to be more about texture than substance. Pessimists tend to rely on emotional appeal rather than reason in many cases. However, some might argue that this is intentional, as it can be difficult to indulge a pessimistic argument without adopting their worldview.</p>
+<p>At the very least, this quality makes pessimists entertaining to read. When you are having a bad week, nothing validates you quite like reading how horrible existence is. Trying to rationalize your miserable life with pure reason isn’t always appealing. Short, analytical sentences just aren’t that sexy.</p>
+<p>Allow me to wax Zapffe for a moment. Pessimists, serving as the contrarian, use esoteric vocabulary to create a phantasmagoric landscape in the reader’s skull. This approach may be unproductive, but the pessimist would argue that human comprehension is dismal, and using dreary languages better conveys the ineffability of our existence. Only through the terms of misery may we come to understand misery.</p>
+<p>When reading Zapffe, one cannot help but notice how he portrays the human condition with these words of misery: tragedy, punishment, redundancy, and delusion, to name a few. Whether this was done to emphasize Zapffe’s point or as a reaction to the conclusions he had reached is unclear. Regardless, it helps to paint a unique picture of human consciousness that would come to define future work in the niche community of pessimist writers.</p>
+<p>“The Last Messiah” explores human consciousness and our existential dread, as well as our self-conceptualizations of existence. Zapffe’s argument is unique in that it attempts to explain these concepts through an evolutionary lens. However, it’s important to note that this was written well before modern understandings of consciousness and evolutionary psychology, which should be taken into account when considering the context for which this argument was written.</p>
+<p>According to Zapffe, human consciousness was a byproduct of evolutionarily beneficial traits, which made humanity successful in the game of natural selection. The negative side effects of consciousness, such as angst, dread, and confusion, weren’t enough to prove detrimental to our reproduction. Because of this, we are now stuck dealing with self-awareness in the face of an indifferent and absurd universe.</p>
+<p>This was never part of the plan, but it wasn’t a big enough of an issue for the human mind not to be selected for over time. So we are stuck as beings he describes as “over evolved.”</p>
+<p>Zapffe argues that having to deal with these feelings and experiences is simply the price we paid for evolving consciousness. The persistent belief that there must be more to life and that we need explanations for ourselves and the cosmos is just an undesirable evolutionary byproduct. Due to our natural instincts, we often become misguided by these beliefs.</p>
+<p>This is what Zapffe refers to as the “paradox” of man. Humanity is the only species that is so acutely aware of its own existence that it has become a liability to itself. We are conscious that we exist without intrinsic meaning, yet we also know that we will die without any explanation or justification for our existence and sufferings. The struggle of being human is therefore a struggle to find a solution to the suffering that has befallen us.</p>
+<p>But these perceived issues were never anything more than a consequence of our evolution, just like how walking upright had caused back pain for us and our ancestors or how our large craniums caused painful childbirth.</p>
+<p>The “paradox” is that our own biological creation has caused us to despise this method of becoming.</p>
+<p>Zapffe’s primary rhetorical tool is the allegory of the <a href="https://en.wikipedia.org/wiki/Irish_elk">Irish elk</a>, an extinct species of deer that had the largest antlers in deer history. Zapffe remarks how these deer succumbed to their own biology. The antlers served some positive purpose to be evolutionarily selected for but also served as a burden to the deer, who had to carry the physical weight. Eventually, the antlers became too large and became more of a detriment than a benefit. If the Irish elk’s antlers had not evolved to be so large, they might not have died out.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="irish-elk.webp" class="img-fluid figure-img"></p>
+<figcaption>A depiction of a doe and buck Irish Elk</figcaption>
+</figure>
 </div>
-<div class="metadata">
-<a href="./posts/post-with-code/index.html" class="no-external">
-<div class="listing-date">
-Mar 28, 2026
+<p>Now humans find themselves in a similar situation. We have evolved an overdeveloped consciousness that has become a hindrance. Zapffe thinks it could be our undoing. From an evolutionary perspective, what is suicide other than a complete biological failure?</p>
+<p>Stepping aside for a slight tangent, I personally take issue with Zapffe’s allegory here because antlers are a <a href="https://www.nature.com/scitable/knowledge/library/sexual-selection-13255240/">sexually selected</a> trait, which even <a href="https://www.nature.com/scitable/knowledge/library/sexual-selection-13255240/">Darwin noted</a> often works at the expense of the animal’s survival. So it surprises me that a self-stated naturalist would use antlers as an example. Moreover, the Irish elk’s extinction was likely caused by multiple factors. After all, the Irish elk was only one of the many animals who died out during the end of the Pleistocene era. Not to mention that only the bucks bore antlers. To be fair to Zapffe, he probably based his argument on the <a href="https://uwaterloo.ca/wat-on-earth/news/irish-elk-victim-or-success">popular conception</a> of the elk’s fate at the time.</p>
+<p>The next part in the essay has Zapffe questions why human consciousness hasn’t become our undoing. He goes on to describe <strong>four natural defense mechanisms</strong> that humans have developed as coping responses to self-awareness.</p>
+<p>The <strong>first</strong> coping mechanism is what he calls <em>isolation</em>. He describes this as, “a fully arbitrary dismissal from consciousness of all disturbing and destructive thought and feeling.” This amounts to dodging the question or a <em>best to not think about it</em> mindset. Zapffe says how this can become a societal practice as society can also isolate certain ideas by sterilizing our surroundings with ideas of death.</p>
+<p>Zapffe calls the <strong>second</strong> coping mechanism <em>anchoring</em>, which involves focusing on a “bigger” idea that can help individuals replace their own existential anguish with something they have deemed more important. Examples Zapffe gives include religion, ideology, morality, law and order, humanitarianism, the future, or any other outlet that provides a sense of fixation. They all ultimately release us from the pains of innate existence.</p>
+<p>The <strong>third</strong> coping mechanism is <em>distraction</em>, which limits attention to the critical bounds by constantly enthralling it with impressions. Examples of these distractions include jobs, entertainment, or any other activity that consumes one’s time instead of contemplating their lives. Zapffe notes that this method is very popular, especially among high society, and dubs it “high society’s tactic for living.” This method has become increasingly easier in modern times as more distractions have become readily available to us.</p>
+<p>The <strong>fourth</strong> and final coping mechanism Zapffe describes is <em>sublimation</em>, which involves transforming existential panic into another form that provides a sense of relief or validation. This is a preferred method for artists and philosophers, who dedicate their lives to sublimating the thoughts and emotions existence has left them with. In fact, Zapffe himself acknowledges that his essay “The Last Messiah” is an act of sublimation.</p>
+<p>A crucial aspect of Zapffe’s argument is that the coping mechanisms he describes are adaptive traits that humanity had to develop to survive their over-evolved consciousness. They serve as evidence that consciousness has proven to be a liability that we needed to protect ourselves against. As an example in nature, a giraffe’s height is advantageous for eating leaves from tall trees, but it had to adapt behaviors to overcompensate, like awkwardly splaying its legs to drink from a pool.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="giraffe.webp" class="img-fluid figure-img"></p>
+<figcaption>A giraffe splaying its legs while drinking</figcaption>
+</figure>
 </div>
-<div class="listing-author">
-Harlow Malloc
+<p>Zapffe cautions against assigning too much importance to behavioral traits that have come about for the sake of our own protection. Our desire to fixate on important, elevated concepts to explain our existential dread is just an evolutionary backstopping measure, similar to our bodies’ natural instinct to break our fall with our arms if we were to trip. These psychological instincts are illusions of greater significance.</p>
+<p>Zapffe raises a final question: now that we have faced the hollowness of our coping mechanisms, what should we do? Hope for a solution is merely an instinct that our evolution over millions of years has built into us to prevent self-destruction. What Zapffe seeks is a solution that does not give in to our biological predispositions.</p>
+<p>And like any good pessimist, the solution he derives is not a happy one.</p>
+<p>Humanity has long passed the point of returning to an animalistic life. As long as we continue to exist, we will seek new salvations and messiahs to save us from ourselves. But the only true messiah, the last one to save us from our plight of existence, will appear and say, “there is one conquest and one crown, one redemption and one solution. Know yourselves — <em>be infertile and let the earth be silent after ye</em>.”</p>
+<p>Zapffe’s solution is <a href="https://en.wikipedia.org/wiki/Antinatalism">antinatalism</a> — the refusal of procreation. Natural selection cursed us to become existentially awakened and deluded us into believing in purpose. However, it only cared about the preservation of the genome and was content to feed us lies to keep us breeding. The only act we can do to overcome our nature is to refuse to play this game. Once humanity intentionally dies out, we will have finally bested our biological natures and provided our own ending to the pre-written story that evolution was crafting for us.</p>
+<p>To understand Zapffe’s argument, it’s like imagining being eternally tortured with no avenue of escape. Any reason to cope and carry onwards with the torture would not foil the torturer. The torturer is getting paid just by being there, and any internal reasoning to continue onwards would only make them happy. The only way to win over the torturer is to die and prevent the torturer from gaining anything more.</p>
+<p>In this sense, our DNA’s proclivity for reproduction is what is torturing us by the continuation of an existentially suffering species. It tells us what we want to hear to keep us alive and make babies that will grow up and suffer still. What we must do, Zapffe is saying, is end this cycle of abuse.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="dna-replication.webp" class="img-fluid figure-img"></p>
+<figcaption>Three types of DNA replications: Binary fission, Mitosis, and Meiosis</figcaption>
+</figure>
 </div>
-</a>
-</div>
-</div>
-<div class="quarto-post image-right" data-index="1" data-categories="bmV3cw==" data-listing-date-sort="1774418400000" data-listing-file-modified-sort="1774815233297" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="1" data-listing-word-count-sort="32">
-<div class="thumbnail"><a href="./posts/welcome/index.html" class="no-external">
+<p>There are several potential objections to Zapffe’s argument. One might wonder if the natural selection-inclined solutions to the problem are actually wrong. Just because they are defense mechanisms does not mean they lack inherent meaning. Additionally, it is unclear whether Zapffe sufficiently justifies why we should deny our evolved natural instincts. He seems to believe that natural selection being responsible for existential awareness is enough justification for us to not trust the coping mechanisms it has supplied us.</p>
+<p>Perhaps these questions and more were discussed in <em>On the Tragic</em>, but unless I learn Norwegian or can convince my Norwegian friend to translate it for me, I will have to wait until an official published translation becomes available.</p>
+<p>Either way, my goal is not to debate this idea but deliver what I think is a super weird and morbid vision of reality. It’s such an interesting take that only pessimists could come up with, and it’s given me a lot of food for thought about how I conceptualize myself and my potential children.</p>
+<p>In conclusion, this blog post has served its purpose of sublimating my thoughts. So, biology, you’ve won again!</p>
+<p>Allow me to finish with a final pessimist’s consideration. Inevitably, the human race shall perish. Will the last vestiges of our species cling desperately to their fading breaths, dragging their fingernails on the walls of unyielding survival? Or shall they opt for dignity and depart on their own volition? Only those who stand during the ultimate hour will know, but make no deception: self extinction can always be a choice.</p>
 
-<p class="card-img-top"><img loading='lazy' src="posts/welcome/thumbnail.jpg"  class="thumbnail-image card-img"/></p>
 
-</a></div>
-<div class="body">
-<h3 class="no-anchor listing-title">
-<a href="./posts/welcome/index.html" class="no-external">Welcome To My Blog</a>
-</h3>
-<div class="listing-categories">
 
-<div class="listing-category" onclick="window.quartoListingCategory('bmV3cw=='); return false;">news</div>
-
-</div>
-<div class="delink listing-description"><a href="./posts/welcome/index.html" class="no-external">
-This is the first post in a Quarto blog. Welcome!
-</a></div>
-</div>
-<div class="metadata">
-<a href="./posts/welcome/index.html" class="no-external">
-<div class="listing-date">
-Mar 25, 2026
-</div>
-<div class="listing-author">
-Tristan O’Malley
-</div>
-</a>
-</div>
-</div>
-<div class="quarto-post image-right" data-index="2" data-categories="cGhpbG9zb3BoeSUyQ3Blc3NpbWlzbSUyQ2FuYWx5c2lz" data-listing-date-sort="1681020000000" data-listing-file-modified-sort="1774815233299" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="11" data-listing-word-count-sort="2130">
-<div class="thumbnail"><a href="./posts/zapffe/index.html" class="no-external">
-
-<img loading="lazy" src="./posts/zapffe/zapffe-portrait.webp" class="thumbnail-image">
-
-</a></div>
-<div class="body">
-<h3 class="no-anchor listing-title">
-<a href="./posts/zapffe/index.html" class="no-external">Zapffe: Our Undesirable Instinct of Hope</a>
-</h3>
-<div class="listing-categories">
-
-<div class="listing-category" onclick="window.quartoListingCategory('cGhpbG9zb3BoeQ=='); return false;">philosophy</div>
-
-<div class="listing-category" onclick="window.quartoListingCategory('cGVzc2ltaXNt'); return false;">pessimism</div>
-
-<div class="listing-category" onclick="window.quartoListingCategory('YW5hbHlzaXM='); return false;">analysis</div>
-
-</div>
-<div class="delink listing-description"><a href="./posts/zapffe/index.html" class="no-external">
-<p>How biological instinct only leads to mistaken optimism in service of reproduction</p>
-</a></div>
-</div>
-<div class="metadata">
-<a href="./posts/zapffe/index.html" class="no-external">
-<div class="listing-date">
-Apr 9, 2023
-</div>
-</a>
-</div>
-</div>
-</div>
-<div class="listing-no-matching d-none">No matching items</div>
-</div></main> <!-- /main -->
+</main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
   window.document.addEventListener("DOMContentLoaded", function (event) {
     const icon = "";
