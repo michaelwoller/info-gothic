@@ -1,0 +1,14 @@
+---
+title: "Post Title"
+date: today
+description: ""
+categories: []
+image: ""
+draft: true
+---
+
+## Introduction
+
+## Main section
+
+## Conclusion
