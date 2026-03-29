@@ -1,19 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://infogothic.com/about.html</loc>
-    <lastmod>2026-03-29T18:33:13.575Z</lastmod>
+    <loc>https://infogothic.com/index.html</loc>
+    <lastmod>2026-03-29T18:41:24.727Z</lastmod>
   </url>
   <url>
-    <loc>https://infogothic.com/posts/welcome/index.html</loc>
-    <lastmod>2026-03-28T19:41:56.969Z</lastmod>
+    <loc>https://infogothic.com/posts/Zapffe/index.html</loc>
+    <lastmod>2026-03-29T19:01:41.524Z</lastmod>
   </url>
   <url>
     <loc>https://infogothic.com/posts/post-with-code/index.html</loc>
     <lastmod>2026-03-28T19:41:56.969Z</lastmod>
   </url>
   <url>
-    <loc>https://infogothic.com/index.html</loc>
-    <lastmod>2026-03-29T18:41:24.727Z</lastmod>
+    <loc>https://infogothic.com/posts/welcome/index.html</loc>
+    <lastmod>2026-03-28T19:41:56.969Z</lastmod>
+  </url>
+  <url>
+    <loc>https://infogothic.com/about.html</loc>
+    <lastmod>2026-03-29T18:33:13.575Z</lastmod>
   </url>
 </urlset>
