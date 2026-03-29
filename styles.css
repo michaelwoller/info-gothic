@@ -1,1 +1,33 @@
-/* css styles */
+/* styles.css — additional overrides on top of custom.scss */
+
+/* Remove any remaining blue/colored backgrounds */
+.quarto-title-banner {
+  background-image: none !important;
+  background-color: #0d0d0f !important;
+}
+
+/* Ornamental divider between posts */
+.quarto-listing .quarto-post + .quarto-post {
+  position: relative;
+}
+
+/* Make the main content column a bit wider */
+.page-columns .content {
+  max-width: 780px;
+}
+
+/* Subtle warm glow on post title hover */
+.quarto-post:hover .listing-title {
+  color: #d4c9b8 !important;
+  transition: color 0.3s ease;
+}
+
+/* Inter for all metadata/small text */
+.metadata, .quarto-post .metadata {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.65rem;
+  font-weight: 300;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #4a4540;
+}
