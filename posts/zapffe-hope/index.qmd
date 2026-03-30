@@ -4,7 +4,6 @@ date: "2023-04-09"
 description: "How biological instinct only leads to mistaken optimism in service of reproduction"
 categories: [philosophy, pessimism, analysis]
 image: "zapffe-portrait.webp"
-draft: false
 ---
 
 **Disclaimer: I wrote this a while ago, and it does not reflect my current mindset. Well, basically I just have a more nuanced position on this though I don't entirely disagree with what is written here. I think its nice to catalog old writings of yours.**
@@ -47,15 +46,15 @@ Zapffe's primary rhetorical tool is the allegory of the [Irish elk](https://en.w
 
 Now humans find themselves in a similar situation. We have evolved an overdeveloped consciousness that has become a hindrance. Zapffe thinks it could be our undoing. From an evolutionary perspective, what is suicide other than a complete biological failure?
 
-Stepping aside for a slight tangent, I personally take issue with Zapffe's allegory here because antlers are a [sexually selected](https://www.nature.com/scitable/knowledge/library/sexual-selection-13255240/) trait, which even [Darwin noted](https://www.nature.com/scitable/knowledge/library/sexual-selection-13255240/) often works at the expense of the animal's survival. So it surprises me that a self-stated naturalist would use antlers as an example. Moreover, the Irish elk's extinction was likely caused by multiple factors. After all, the Irish elk was only one of the many animals who died out during the end of the Pleistocene era. Not to mention that only the bucks bore antlers. To be fair to Zapffe, he probably based his argument on the [popular conception](https://uwaterloo.ca/wat-on-earth/news/irish-elk-victim-or-success) of the elk's fate at the time.
+Stepping aside for a slight tangent, I personally take issue with Zapffe's allegory here because antlers are a [sexually selected](https://www.nature.com/scitable/knowledge/library/sexual-selection-13255240/) trait, which even Darwin noted often works at the expense of the animal's survival. So it surprises me that a self-stated naturalist would use antlers as an example. Moreover, the Irish elk's extinction was likely caused by multiple factors. After all, the Irish elk was only one of the many animals who died out during the end of the Pleistocene era. Not to mention that only the bucks bore antlers. To be fair to Zapffe, he probably based his argument on the [popular conception](https://uwaterloo.ca/wat-on-earth/news/irish-elk-victim-or-success) of the elk's fate at the time.
 
 The next part in the essay has Zapffe questions why human consciousness hasn't become our undoing. He goes on to describe **four natural defense mechanisms** that humans have developed as coping responses to self-awareness.
 
-The **first** coping mechanism is what he calls *isolation*. He describes this as, "a fully arbitrary dismissal from consciousness of all disturbing and destructive thought and feeling." This amounts to dodging the question or a *best to not think about it* mindset. Zapffe says how this can become a societal practice as society can also isolate certain ideas by sterilizing our surroundings with ideas of death.
+The **first** coping mechanism is what he calls *isolation* — a fully arbitrary dismissal from consciousness of all disturbing and destructive thought and feeling. This amounts to dodging the question or a *best to not think about it* mindset. Zapffe says how this can become a societal practice as society can also isolate certain ideas by sterilizing our surroundings with ideas of death.
 
 Zapffe calls the **second** coping mechanism *anchoring*, which involves focusing on a "bigger" idea that can help individuals replace their own existential anguish with something they have deemed more important. Examples Zapffe gives include religion, ideology, morality, law and order, humanitarianism, the future, or any other outlet that provides a sense of fixation. They all ultimately release us from the pains of innate existence.
 
-The **third** coping mechanism is *distraction*, which limits attention to the critical bounds by constantly enthralling it with impressions. Examples of these distractions include jobs, entertainment, or any other activity that consumes one's time instead of contemplating their lives. Zapffe notes that this method is very popular, especially among high society, and dubs it "high society's tactic for living." This method has become increasingly easier in modern times as more distractions have become readily available to us.
+The **third** coping mechanism is *distraction*, which limits attention to the critical bounds by constantly enthralling it with impressions. Examples of these distractions include jobs, entertainment, or any other activity that consumes one's time instead of contemplating their lives. Zapffe notes that this method is very popular, especially among high society, and dubs it "high society's tactic for living."
 
 The **fourth** and final coping mechanism Zapffe describes is *sublimation*, which involves transforming existential panic into another form that provides a sense of relief or validation. This is a preferred method for artists and philosophers, who dedicate their lives to sublimating the thoughts and emotions existence has left them with. In fact, Zapffe himself acknowledges that his essay "The Last Messiah" is an act of sublimation.
 
@@ -71,17 +70,15 @@ And like any good pessimist, the solution he derives is not a happy one.
 
 Humanity has long passed the point of returning to an animalistic life. As long as we continue to exist, we will seek new salvations and messiahs to save us from ourselves. But the only true messiah, the last one to save us from our plight of existence, will appear and say, "there is one conquest and one crown, one redemption and one solution. Know yourselves — *be infertile and let the earth be silent after ye*."
 
-Zapffe's solution is [antinatalism](https://en.wikipedia.org/wiki/Antinatalism) — the refusal of procreation. Natural selection cursed us to become existentially awakened and deluded us into believing in purpose. However, it only cared about the preservation of the genome and was content to feed us lies to keep us breeding. The only act we can do to overcome our nature is to refuse to play this game. Once humanity intentionally dies out, we will have finally bested our biological natures and provided our own ending to the pre-written story that evolution was crafting for us.
+Zapffe's solution is [antinatalism](https://en.wikipedia.org/wiki/Antinatalism) — the refusal of procreation. Natural selection cursed us to become existentially awakened and deluded us into believing in purpose. However, it only cared about the preservation of the genome and was content to feed us lies to keep us breeding. The only act we can do to overcome our nature is to refuse to play this game.
 
 To understand Zapffe's argument, it's like imagining being eternally tortured with no avenue of escape. Any reason to cope and carry onwards with the torture would not foil the torturer. The torturer is getting paid just by being there, and any internal reasoning to continue onwards would only make them happy. The only way to win over the torturer is to die and prevent the torturer from gaining anything more.
 
 In this sense, our DNA's proclivity for reproduction is what is torturing us by the continuation of an existentially suffering species. It tells us what we want to hear to keep us alive and make babies that will grow up and suffer still. What we must do, Zapffe is saying, is end this cycle of abuse.
 
-![Three types of DNA replications: Binary fission, Mitosis, and Meiosis](dna-replication.webp)
+![Three types of DNA replications: Binary fission, Mitosis, and Meiosis](dna-replication.jpg)
 
-There are several potential objections to Zapffe's argument. One might wonder if the natural selection-inclined solutions to the problem are actually wrong. Just because they are defense mechanisms does not mean they lack inherent meaning. Additionally, it is unclear whether Zapffe sufficiently justifies why we should deny our evolved natural instincts. He seems to believe that natural selection being responsible for existential awareness is enough justification for us to not trust the coping mechanisms it has supplied us.
-
-Perhaps these questions and more were discussed in *On the Tragic*, but unless I learn Norwegian or can convince my Norwegian friend to translate it for me, I will have to wait until an official published translation becomes available.
+There are several potential objections to Zapffe's argument. One might wonder if the natural selection-inclined solutions to the problem are actually wrong. Just because they are defense mechanisms does not mean they lack inherent meaning. Additionally, it is unclear whether Zapffe sufficiently justifies why we should deny our evolved natural instincts.
 
 Either way, my goal is not to debate this idea but deliver what I think is a super weird and morbid vision of reality. It's such an interesting take that only pessimists could come up with, and it's given me a lot of food for thought about how I conceptualize myself and my potential children.
 
