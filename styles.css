@@ -31,3 +31,8 @@
   text-transform: uppercase;
   color: #4a4540;
 }
+
+/* About page left of center */
+.about-contents {
+  text-align: left !important;
+}
