@@ -1,9 +1,7 @@
 [
   {
-    "listing": "/index.html",
+    "listing": "/blog-posts.html",
     "items": [
-      "/posts/post-with-code/index.html",
-      "/posts/welcome/index.html",
       "/posts/evolutionary-psychology-loon/index.html",
       "/posts/zapffe-hope/index.html"
     ]

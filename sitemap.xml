@@ -1,27 +1,31 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://infogothic.com/index.html</loc>
-    <lastmod>2026-03-29T20:23:28.541Z</lastmod>
+    <loc>https://infogothic.com/tutorials/reg-course.html</loc>
+    <lastmod>2026-03-31T05:54:34.576Z</lastmod>
+  </url>
+  <url>
+    <loc>https://infogothic.com/about.html</loc>
+    <lastmod>2026-03-30T03:53:35.002Z</lastmod>
+  </url>
+  <url>
+    <loc>https://infogothic.com/posts/zapffe-hope/index.html</loc>
+    <lastmod>2026-03-30T01:34:26.045Z</lastmod>
   </url>
   <url>
     <loc>https://infogothic.com/posts/evolutionary-psychology-loon/index.html</loc>
     <lastmod>2026-03-30T00:23:33.452Z</lastmod>
   </url>
   <url>
-    <loc>https://infogothic.com/posts/post-with-code/index.html</loc>
-    <lastmod>2026-03-29T20:23:28.542Z</lastmod>
+    <loc>https://infogothic.com/index.html</loc>
+    <lastmod>2026-03-30T02:06:25.107Z</lastmod>
   </url>
   <url>
-    <loc>https://infogothic.com/posts/welcome/index.html</loc>
-    <lastmod>2026-03-29T20:23:28.543Z</lastmod>
+    <loc>https://infogothic.com/tutorials.html</loc>
+    <lastmod>2026-03-30T19:57:04.575Z</lastmod>
   </url>
   <url>
-    <loc>https://infogothic.com/posts/zapffe-hope/index.html</loc>
-    <lastmod>2026-03-30T00:23:34.543Z</lastmod>
-  </url>
-  <url>
-    <loc>https://infogothic.com/about.html</loc>
-    <lastmod>2026-03-30T00:09:07.892Z</lastmod>
+    <loc>https://infogothic.com/blog-posts.html</loc>
+    <lastmod>2026-03-30T19:49:40.547Z</lastmod>
   </url>
 </urlset>
