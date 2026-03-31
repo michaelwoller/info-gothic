@@ -5,7 +5,7 @@ website:
   description: "A blog built with Quarto"
   site-url: https://infogothic.com 
   title: "InfoGothic"
-  favicon: /images/favicon.png
+  favicon: images/favicon.ico
   navbar:
     right:
       - about.qmd
@@ -21,6 +21,7 @@ format:
   html:
     theme: [darkly, custom.scss]
     css: styles.css
+    anchor-sections: false
 
 editor: visual
 
