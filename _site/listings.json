@@ -5,7 +5,25 @@
       "/posts/post-with-code/index.html",
       "/posts/welcome/index.html",
       "/posts/evolutionary-psychology-loon/index.html",
-      "/posts/zapffe/index.html"
+      "/posts/zapffe-hope/index.html"
+    ]
+  },
+  {
+    "listing": "/writing.html",
+    "items": [
+      "/posts/evolutionary-psychology-loon/index.html",
+      "/posts/zapffe-hope/index.html"
+    ]
+  },
+  {
+    "listing": "/tutorials.html",
+    "items": []
+  },
+  {
+    "listing": "/blog-posts.html",
+    "items": [
+      "/posts/evolutionary-psychology-loon/index.html",
+      "/posts/zapffe-hope/index.html"
     ]
   }
 ]

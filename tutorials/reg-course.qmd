@@ -1,0 +1,74 @@
+---
+title: "Graduate Level Intro to Regression with R for Psychological Research"
+---
+
+Below is a link to multiple lab lessons for the lessons I gave at UCLA for incoming psychology doctorate students. I was not the main lecturer, but I lead the lab sessions where I taught the students regression in R. So the material here is not the full extent of the course, however it covers a good foundation of what a psychological researcher would need in practical coding. The course was 10 weeks long and there was only so much we could cover in that time frame.
+
+If you are familiar with R, some of these might seem simple, but I would recommend looking over the lessons as I go over important definitions and functions that build on each other consecutively.
+
+By going through these lessons, you should be equipped enough to deal with a lot of use cases for regression in psychological research. However, this is an intro level course, and statistics for psychology goes much deeper than what is presented here.
+
+For anyone who wishes to dig deeper or is interested in pursuing psychological research as a career and wants to know what are the higher stats courses needed, I would recommend pursuing learning material in the fields of: multilevel modeling, factor analysis, structural equation modeling, item response theory, longitudinal modeling.
+
+## Introduction to R and Simple Linear Regression
+
+A beginner tutorial covering the basics of R objects and functions and how to do simple linear regression. This lesson will cover important functions and interpretations we will use throughout the course.
+
+[Open Tutorial](https://infogothic.shinyapps.io/simple_linear_regression){target="_blank"}
+
+------------------------------------------------------------------------
+
+## Multiple Linear Regression
+
+In this lesson, we cover how to run multiple linear regressions and how to interpret their output. We also cover the various different types of model correlations. Including, model correlation $R$, the $R^2$ effect size, and adjusted-$R^2$ , and partial correlations.
+
+
+[Open Tutorial](https://infogothic.shinyapps.io/mlr_tutorial/){target="_blank"}
+
+------------------------------------------------------------------------
+
+## Inference
+
+In this lesson, we cover how to interpret significance tests of the regression. These involve the *t* test of the slope coefficients, *F* test of the $R^2$ coefficient, and model comparison tests with the $\Delta R^2$ test. We will also cover multiple squared correlations.
+
+------------------------------------------------------------------------
+
+## Diagnostics
+
+In this lesson, we cover the basic model assumptions of linear regression and how to check whether or not your regression model upholds or violates these assumptions using graphical diagnostics. We also cover what to do in situations where your model violates important assumptions.
+
+------------------------------------------------------------------------
+
+## Variable Importance
+
+In this lesson, we cover what makes variables important in the model and how "importance" differs from "significance". We will cover multiple different predictor effect sizes as well as dominance analysis of regression slopes.
+
+------------------------------------------------------------------------
+
+## Prediction
+
+In this lesson, we cover predictive statistics and how this differs from the inferential statistics we've been doing previously. This involves covering cross-validation and how to get shrunken-$R^2$'s as well as simple variable selection techniques. It also covers how to generate prediction intervals and how to run simple LASSO regression.
+
+------------------------------------------------------------------------
+
+## Multicategorical Predictors
+
+In this lesson, we cover how to run and interpret multicategorical predictors. This involves covering multiple categorical coding schemes. We will cover the popular dummy coding technique and the lesser known sequential specification, Helmert coding, and effects coding methods.\
+
+------------------------------------------------------------------------
+
+## Nonlinear Regression
+
+In this lesson, we cover how to fit and analyze nonlinear regression models. These models include polynomial regression, piecewise regression, and log-transformed models.
+
+------------------------------------------------------------------------
+
+## Moderation
+
+In this lesson, we cover moderation and interaction terms in regression. This involves covering how to interpret interactions and conditional effects, how to get simple effects, and how to make interaction plots.
+
+------------------------------------------------------------------------
+
+## Logistic Regression
+
+In this lesson, we cover logistic regression of binary outcome variables. This involves covering fitting and interpreting log-odds, how to convert log-odds to odds ratios or probabilities, how to get pseudo-$R^2$ statistics, and how to plot logistic regression models.

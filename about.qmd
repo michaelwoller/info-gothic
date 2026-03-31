@@ -18,8 +18,10 @@ format:
     css: styles.css
 ---
 
+I'm a doctoral candidate for quantitative psychology. I like goth stuff and social Georgism.
+
 This blog serves as a place for me to post written pieces, videos, and code for whatever project I want to share. It's all for fun.
 
-Here is one of my favorite goth songs.
+Here is one of my favorite goth songs:
 
 {{< video https://www.youtube.com/watch?v=AM8SXViIzOI >}}

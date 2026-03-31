@@ -1,0 +1,7 @@
+---
+title: "Tutorials"
+---
+
+Here are links to lesson material I've created and decided to turn into interactable tutorials.
+
+## [Graduate Level Intro to Regression with R for Psychological Research](tutorials/reg-course.qmd)

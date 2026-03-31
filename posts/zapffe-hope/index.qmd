@@ -2,7 +2,7 @@
 title: "[OLD] Zapffe: Our Undesirable Instinct of Hope"
 date: "2023-04-09"
 description: "How biological instinct only leads to mistaken optimism in service of reproduction"
-categories: [philosophy, pessimism, analysis]
+categories: [philosophy, pessimism, evolution]
 image: "zapffe-portrait.webp"
 ---
 

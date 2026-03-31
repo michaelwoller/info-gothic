@@ -5,9 +5,14 @@ website:
   description: "A blog built with Quarto"
   site-url: https://infogothic.com 
   title: "InfoGothic"
+  favicon: /images/favicon.png
   navbar:
     right:
       - about.qmd
+      - tutorials.qmd
+      - blog-posts.qmd
+      - text: "Obsidian Notes"
+        href: "https://notes.infogothic.com"
       - icon: github
         href: https://github.com/michaelwoller
       - icon: bluesky
