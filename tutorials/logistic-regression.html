@@ -1,0 +1,1071 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.9.36">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Michael Woller">
+
+<title>Logistic Regression – InfoGothic</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<link href="../images/favicon.ico" rel="icon">
+<script src="../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-dark-f418161beb48e0141c760e455f12af2c.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap-4d14f3be7bc8eb7ec2287338953877e0.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="dark">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<link rel="stylesheet" href="../styles.css">
+</head>
+
+<body class="nav-fixed quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="../index.html">
+    <span class="navbar-title">InfoGothic</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../about.html"> 
+<span class="menu-text">About</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../tutorials.html"> 
+<span class="menu-text">Tutorials</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../blog-posts.html"> 
+<span class="menu-text">Blog Posts</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="https://notes.infogothic.com"> 
+<span class="menu-text">Obsidian Notes</span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/michaelwoller"> <i class="bi bi-github" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://bsky.app/profile/infogothic.bsky.social"> <i class="bi bi-bluesky" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction">Introduction</a>
+  <ul class="collapse">
+  <li><a href="#the-dataset" id="toc-the-dataset" class="nav-link" data-scroll-target="#the-dataset">The Dataset</a></li>
+  </ul></li>
+  <li><a href="#fitting-a-logistic-regression-model" id="toc-fitting-a-logistic-regression-model" class="nav-link" data-scroll-target="#fitting-a-logistic-regression-model">1. Fitting a Logistic Regression Model</a>
+  <ul class="collapse">
+  <li><a href="#fit-logistic-regression-with-glm" id="toc-fit-logistic-regression-with-glm" class="nav-link" data-scroll-target="#fit-logistic-regression-with-glm">Fit Logistic Regression with glm()</a></li>
+  </ul></li>
+  <li><a href="#coefficient-interpretations-odds-ratios-and-probabilities" id="toc-coefficient-interpretations-odds-ratios-and-probabilities" class="nav-link" data-scroll-target="#coefficient-interpretations-odds-ratios-and-probabilities">2. Coefficient Interpretations, Odds Ratios, and Probabilities</a>
+  <ul class="collapse">
+  <li><a href="#interpreting-the-log-odds-coefficients" id="toc-interpreting-the-log-odds-coefficients" class="nav-link" data-scroll-target="#interpreting-the-log-odds-coefficients">Interpreting the Log-Odds Coefficients</a></li>
+  <li><a href="#calculating-and-interpreting-odds-ratios" id="toc-calculating-and-interpreting-odds-ratios" class="nav-link" data-scroll-target="#calculating-and-interpreting-odds-ratios">Calculating and Interpreting Odds Ratios</a></li>
+  <li><a href="#odds-ratios-in-the-opposite-direction" id="toc-odds-ratios-in-the-opposite-direction" class="nav-link" data-scroll-target="#odds-ratios-in-the-opposite-direction">Odds Ratios in the Opposite Direction</a></li>
+  <li><a href="#odds-ratio-confidence-intervals" id="toc-odds-ratio-confidence-intervals" class="nav-link" data-scroll-target="#odds-ratio-confidence-intervals">Odds Ratio Confidence Intervals</a></li>
+  <li><a href="#probabilities" id="toc-probabilities" class="nav-link" data-scroll-target="#probabilities">Probabilities</a></li>
+  </ul></li>
+  <li><a href="#pseudo-r2" id="toc-pseudo-r2" class="nav-link" data-scroll-target="#pseudo-r2">3. Pseudo-<span class="math inline">\(R^2\)</span></a>
+  <ul class="collapse">
+  <li><a href="#pseudo-r2-1" id="toc-pseudo-r2-1" class="nav-link" data-scroll-target="#pseudo-r2-1">Pseudo-<span class="math inline">\(R^2\)</span></a></li>
+  <li><a href="#calculating-pseudo-r2-in-base-r" id="toc-calculating-pseudo-r2-in-base-r" class="nav-link" data-scroll-target="#calculating-pseudo-r2-in-base-r">Calculating Pseudo-<span class="math inline">\(R^2\)</span> in Base R</a></li>
+  </ul></li>
+  <li><a href="#likelihood-ratio-test" id="toc-likelihood-ratio-test" class="nav-link" data-scroll-target="#likelihood-ratio-test">4. Likelihood Ratio Test</a>
+  <ul class="collapse">
+  <li><a href="#likelihood-ratio-tests" id="toc-likelihood-ratio-tests" class="nav-link" data-scroll-target="#likelihood-ratio-tests">Likelihood Ratio Tests</a></li>
+  <li><a href="#calculating-likelihood-ratio-tests-with-deviance-values" id="toc-calculating-likelihood-ratio-tests-with-deviance-values" class="nav-link" data-scroll-target="#calculating-likelihood-ratio-tests-with-deviance-values">Calculating Likelihood Ratio Tests with Deviance Values</a></li>
+  <li><a href="#calculating-likelihood-ratio-tests-with-r-functions" id="toc-calculating-likelihood-ratio-tests-with-r-functions" class="nav-link" data-scroll-target="#calculating-likelihood-ratio-tests-with-r-functions">Calculating Likelihood Ratio Tests with R Functions</a></li>
+  <li><a href="#comparing-nested-predictor-sets-with-r-functions" id="toc-comparing-nested-predictor-sets-with-r-functions" class="nav-link" data-scroll-target="#comparing-nested-predictor-sets-with-r-functions">Comparing Nested Predictor Sets with R Functions</a></li>
+  </ul></li>
+  <li><a href="#plotting-logistic-regression" id="toc-plotting-logistic-regression" class="nav-link" data-scroll-target="#plotting-logistic-regression">5. Plotting Logistic Regression</a>
+  <ul class="collapse">
+  <li><a href="#plotting-log-odds-and-probabilities" id="toc-plotting-log-odds-and-probabilities" class="nav-link" data-scroll-target="#plotting-log-odds-and-probabilities">Plotting Log-Odds and Probabilities</a></li>
+  <li><a href="#computing-and-ranking-probabilities" id="toc-computing-and-ranking-probabilities" class="nav-link" data-scroll-target="#computing-and-ranking-probabilities">Computing and Ranking Probabilities</a></li>
+  <li><a href="#plot-predicted-probabilities" id="toc-plot-predicted-probabilities" class="nav-link" data-scroll-target="#plot-predicted-probabilities">Plot Predicted Probabilities</a></li>
+  <li><a href="#interpreting-the-plot" id="toc-interpreting-the-plot" class="nav-link" data-scroll-target="#interpreting-the-plot">Interpreting the Plot</a></li>
+  <li><a href="#model-goals-from-plots" id="toc-model-goals-from-plots" class="nav-link" data-scroll-target="#model-goals-from-plots">Model Goals from Plots</a></li>
+  </ul></li>
+  <li><a href="#well-done" id="toc-well-done" class="nav-link" data-scroll-target="#well-done">Well Done!</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Logistic Regression</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Michael Woller </p>
+          </div>
+  </div>
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="introduction" class="level2">
+<h2 data-anchor-id="introduction">Introduction</h2>
+<p>In this lesson we will predict the binary outcome employee turnover intention (0 = intend to stay, 1 = intend to leave).</p>
+<p>The goal of a logistic model is to rank individuals according to their risk of the outcome occurring. If the model works well:</p>
+<ul>
+<li>Individuals where turnover actually occurred (1) should receive higher predicted log-odds and probabilities.</li>
+<li>Individuals where turnover did not occur (0) should receive lower predicted log-odds and probabilities.</li>
+</ul>
+<p>A poor performing model is one in which our predictors cannot discriminate between employees who are or are not considering quitting. We want to be able to appropriately sort individuals by predicting their group membership, so we know which individual is higher in “risk.” “Risk” is a specific term in statistics, which is just the probability of an event occurring. A bad model cannot accurately predict the individual’s risk.</p>
+<section id="the-dataset" class="level3">
+<h3 data-anchor-id="the-dataset">The Dataset</h3>
+<p>The dataset comes from a company that had their employees fill out a “climate survey”, where each employee gave feedback on variables related to satisfaction to their workplace. The variables we will focus on in this lesson are</p>
+<ul>
+<li><code>turnoverint</code> — binary indicator of whether or not the employee intends to leave their job (0 = intend to stay, 1 = intend to leave)</li>
+<li><code>male</code> — binary indicator of an employee’s gender (0 = female, 1 = male)</li>
+<li><code>lmx</code> — measure of how well the employee perceives their interactions with their team leader (0–20 scale)</li>
+<li><code>jobsat</code> — a measure of the employee’s satisfaction at their job (1–7 scale)</li>
+</ul>
+<p>The focal model we are interested in is whether an employee’s intention to leave their job (<code>turnoverint</code>) can be predicted by their gender (<code>male</code>) and how well they perceive their relationship with the team leader (<code>lmx</code>).</p>
+<hr>
+</section>
+</section>
+<section id="fitting-a-logistic-regression-model" class="level2">
+<h2 data-anchor-id="fitting-a-logistic-regression-model">1. Fitting a Logistic Regression Model</h2>
+<section id="fit-logistic-regression-with-glm" class="level3">
+<h3 data-anchor-id="fit-logistic-regression-with-glm">Fit Logistic Regression with glm()</h3>
+<p>In base R, the <code>lm()</code> function cannot perform logistic regression. Instead we use <code>glm()</code> (generalized linear models). <code>glm()</code> can estimate many model types. The argument <code>family = "binomial"</code> specifies that we want a logistic model. Recall that we are predicting the probability of a binary outcome, which is represented with a binomial function.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>model1 <span class="ot">&lt;-</span> <span class="fu">glm</span>(turnoverint <span class="sc">~</span> male <span class="sc">+</span> lmx,</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>              <span class="at">data =</span> employee,</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>              <span class="at">family =</span> <span class="st">"binomial"</span>)  <span class="co"># binomial family = logistic regression</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(model1)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+glm(formula = turnoverint ~ male + lmx, family = "binomial", 
+    data = employee)
+
+Coefficients:
+            Estimate Std. Error z value Pr(&gt;|z|)    
+(Intercept)  0.44794    0.29615   1.513     0.13    
+male        -0.14474    0.17575  -0.824     0.41    
+lmx         -0.12605    0.03003  -4.197  2.7e-05 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+(Dispersion parameter for binomial family taken to be 1)
+
+    Null deviance: 779.59  on 629  degrees of freedom
+Residual deviance: 759.94  on 627  degrees of freedom
+AIC: 765.94
+
+Number of Fisher Scoring iterations: 4</code></pre>
+</div>
+</div>
+<p>The output looks similar to a linear regression summary, but several parts are different.</p>
+<p><strong>Coefficient tests</strong> - the coefficient tests in logistic regression are Wald tests, which use a <em>Z</em> statistic instead of the <em>t</em> statistic used in ordinary least squares (OLS) regression. If you report these results, be sure to refer to them as Wald tests.</p>
+<p><strong>Deviance</strong> - logistic models do not have a traditional <span class="math inline">\(R^2\)</span>. Instead, the output reports deviance values for both the null model and the fitted model. The null deviance is the deviance of a model with no predictors. The residual deviance is the deviance of the model we specified, and is equal to -2 log-likelihood (-2LL). These deviance values will later be used to calculate a pseudo-<span class="math inline">\(R^2\)</span> and to conduct a likelihood ratio test.</p>
+<p><strong>AIC</strong> (Akaike Information Criterion) is used to compare competing models. Lower AIC values generally indicate a better-fitting model. But we won’t be using these for this class.</p>
+<p><strong>Fisher Scoring Iterations</strong> tells us how many steps were needed for the algorithm to estimate the model. Logistic regression does not use the OLS estimation procedure used in standard linear regression. This output just helps diagnosing issues with model estimation.</p>
+<hr>
+</section>
+</section>
+<section id="coefficient-interpretations-odds-ratios-and-probabilities" class="level2">
+<h2 data-anchor-id="coefficient-interpretations-odds-ratios-and-probabilities">2. Coefficient Interpretations, Odds Ratios, and Probabilities</h2>
+<section id="interpreting-the-log-odds-coefficients" class="level3">
+<h3 data-anchor-id="interpreting-the-log-odds-coefficients">Interpreting the Log-Odds Coefficients</h3>
+<p>By default, logistic regression coefficients are reported in log-odds units. All rules of interpretations still apply to log-odds (see the Multiple Linear Regression lesson).</p>
+<p><strong>Binary predictor (male: 0 = female, 1 = male):</strong> Holding leader-member exchange constant, males are expected to differ from females by -.144 in the log-odds of turnover intention = 1. Because the coefficient is negative here, males have lower log-odds than females.</p>
+<p><strong>Continuous predictor (lmx):</strong> Between two females that differ in one unit of leader-member exchange, the log-odds of the outcome is expected to be .12 less for the female with higher leader-member exchange</p>
+<p><strong>Intercept:</strong> When all predictors equal 0, the intercept gives the predicted log-odds of turnover intention = 1. In this example, that is the predicted log-odds for females with <code>LMX = 0</code>.</p>
+<p>The problem with log-odds is that they are not very intuitive in practice. For that reason, we often convert them into odds ratios or probabilities.</p>
+</section>
+<section id="calculating-and-interpreting-odds-ratios" class="level3">
+<h3 data-anchor-id="calculating-and-interpreting-odds-ratios">Calculating and Interpreting Odds Ratios</h3>
+<p>We can convert log-odds coefficients into odds ratios by exponentiating them with <code>exp()</code>. Odds ratios tell us the multiplicative change in the odds of <code>turnoverint = 1</code> relative to<code>turnoverint = 0</code>.</p>
+<p>Interpretation rule:</p>
+<ul>
+<li>Values greater than 1 indicate higher odds of <code>turnoverint = 1</code>.</li>
+<li>Values less than 1 indicate lower odds of <code>turnoverint = 1</code>.</li>
+<li>Because this is a ratio, the interpretation is always with respect to the outcome in the numerator.</li>
+</ul>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">exp</span>(model1<span class="sc">$</span>coef)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>(Intercept)        male         lmx 
+  1.5650822   0.8652440   0.8815739 </code></pre>
+</div>
+</div>
+<p><strong>Binary predictor:</strong> Holding leader-member exchange constant, males are predicted to have .86 times the odds that the employee intends to leave, which means their odds are predicted to be about 14% lower than females.</p>
+<p><strong>Continuous predictor:</strong> For two females who differ in an leader-member exchange value of 1, the individual with the larger leader-member exchange score is predicted to be .88 times lower in odds that the employee intends to leave than the other female, which means they are predicted to be about 12% lower in odds.</p>
+<p><strong>Intercept:</strong> Exponentiating the intercept gives the baseline odds of employee intends to leave when all predictors equal 0. For example, if <code>exp(b0)</code> = 1.57, then the baseline odds are 1.57 to 1. This is why the odds ratio of the intercept is usually not interpreted much in practice.</p>
+</section>
+<section id="odds-ratios-in-the-opposite-direction" class="level3">
+<h3 data-anchor-id="odds-ratios-in-the-opposite-direction">Odds Ratios in the Opposite Direction</h3>
+<p>If you want to interpret the odds ratio in the opposite direction (e.g., comparing males to females instead of females to males), you can take the inverse of the odds ratio.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="dv">1</span> <span class="sc">/</span> <span class="fl">0.86</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 1.162791</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Equals 1.162791</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>For a male and female with equal leader-member exchange scores, being male increases the odds of that the employee intends to leave by a factor of 1.16 compared to being female. In other words, the odds are about 16% higher. Reversing the odds ratio does not change the <em>p</em> value. The confidence interval conveys the same information as well, although its endpoints will be inverted.</p>
+</section>
+<section id="odds-ratio-confidence-intervals" class="level3">
+<h3 data-anchor-id="odds-ratio-confidence-intervals">Odds Ratio Confidence Intervals</h3>
+<p>Significance tests for odds ratios follow the same results as the log-odds coefficients. However, if you want confidence intervals for the odds ratios, you can exponentiate the confidence intervals from the log-odds model.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">exp</span>(<span class="fu">confint</span>(model1))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>                2.5 %    97.5 %
+(Intercept) 0.8774753 2.8065863
+male        0.6125334 1.2206918
+lmx         0.8304593 0.9343625</code></pre>
+</div>
+</div>
+<p>For odds ratios, statistical significance is evaluated against 1 (not 0, as in linear regression). If the confidence interval contains 1, the effect is not statistically significant. In this example, only <code>LMX</code> has a confidence interval that does not contain 1, indicating it is statistically significant.</p>
+</section>
+<section id="probabilities" class="level3">
+<h3 data-anchor-id="probabilities">Probabilities</h3>
+<p>Sometimes, it might be preferable to give concrete probabilities rather than more abstract odds. You can convert predicted log-odds into probabilities manually. To do this, plug specific predictor values into the logistic regression equation to get the predicted log-odds (sometimes called eta), then convert eta to a probability.</p>
+<p>In other words:</p>
+<ol type="1">
+<li>Compute the predicted log-odds</li>
+<li>Convert the log-odds to probability with: <span class="math inline">\(p = 1 / (1 + e^{-\eta})\)</span></li>
+</ol>
+<p><strong>Example 1:</strong> What is the predicted probability that a <code>male</code> with <code>LMX = 0</code> has <code>turnoverint = 1</code>?</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>eta1 <span class="ot">&lt;-</span> model1<span class="sc">$</span>coef[<span class="dv">1</span>] <span class="sc">+</span> (model1<span class="sc">$</span>coef[<span class="dv">2</span>] <span class="sc">*</span> <span class="dv">1</span>) <span class="sc">+</span> (model1<span class="sc">$</span>coef[<span class="dv">3</span>] <span class="sc">*</span> <span class="dv">0</span>)</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>p1   <span class="ot">&lt;-</span> <span class="dv">1</span> <span class="sc">/</span> (<span class="dv">1</span> <span class="sc">+</span> <span class="fu">exp</span>(<span class="sc">-</span>eta1))</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>p1</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>(Intercept) 
+  0.5752233 </code></pre>
+</div>
+</div>
+<p>Note that the first line of code is just the estimated logistic regression equation with the specific values:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fl">0.4479383</span> <span class="sc">+</span> (<span class="sc">-</span><span class="fl">0.1447437</span> <span class="sc">*</span> <span class="dv">1</span>) <span class="sc">+</span> (<span class="sc">-</span><span class="fl">0.1260464</span> <span class="sc">*</span> <span class="dv">0</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.3031946</code></pre>
+</div>
+</div>
+<p>The probability is .57. So there is about a .57 predicted probability that a male with <code>LMX = 0</code> has <code>turnoverint = 1</code>.</p>
+<p><strong>Example 2:</strong> What is the predicted probability that a female (<code>male = 0</code>) with <code>LMX = 3</code> has <code>turnoverint = 1</code>?</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>eta2 <span class="ot">&lt;-</span> model1<span class="sc">$</span>coef[<span class="dv">1</span>] <span class="sc">+</span> (model1<span class="sc">$</span>coef[<span class="dv">2</span>] <span class="sc">*</span> <span class="dv">0</span>) <span class="sc">+</span> (model1<span class="sc">$</span>coef[<span class="dv">3</span>] <span class="sc">*</span> <span class="dv">3</span>)</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>p2   <span class="ot">&lt;-</span> <span class="dv">1</span> <span class="sc">/</span> (<span class="dv">1</span> <span class="sc">+</span> <span class="fu">exp</span>(<span class="sc">-</span>eta2))</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>p2</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>(Intercept) 
+  0.5174427 </code></pre>
+</div>
+</div>
+<p>So there is about a .51 predicted probability that a female with <code>LMX = 3</code> has <code>turnoverint = 1</code>.</p>
+<p>If you do not want to convert these manually, you can use the <code>ilogit()</code> function from the <code>mosaicCore</code> package. <code>ilogit()</code> converts log-odds to probabilities.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ilogit</span>(eta1)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>(Intercept) 
+  0.5752233 </code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ilogit</span>(eta2)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>(Intercept) 
+  0.5174427 </code></pre>
+</div>
+</div>
+<p>Alternatively, if you want to convert probabilities back to log-odds, you can use the <code>logit()</code> function from <code>mosaicCore</code>. These values should match the respective eta values above.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">logit</span>(p1)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>(Intercept) 
+  0.3031947 </code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="fu">logit</span>(p2)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>(Intercept) 
+ 0.06979917 </code></pre>
+</div>
+</div>
+<hr>
+</section>
+</section>
+<section id="pseudo-r2" class="level2">
+<h2 data-anchor-id="pseudo-r2">3. Pseudo-<span class="math inline">\(R^2\)</span></h2>
+<section id="pseudo-r2-1" class="level3">
+<h3 data-anchor-id="pseudo-r2-1">Pseudo-<span class="math inline">\(R^2\)</span></h3>
+<p>Logistic models do not have residuals in the same way OLS regression does, so the usual <span class="math inline">\(R^2\)</span> is not available. Instead, we use pseudo-<span class="math inline">\(R^2\)</span> measures. Pseudo-<span class="math inline">\(R^2\)</span> measures quantify how much the model improves prediction relative to a null model (a model with only an intercept and no predictors). In other words, they measure how much better our model fits the data compared to a model that assumes the same probability for every observation.</p>
+<p>Some pseudo-<span class="math inline">\(R^2\)</span> measures are scaled so that their values roughly resemble the 0–1 interpretation of <span class="math inline">\(R^2\)</span> in linear regression. Examples include Cox-Snell and Nagelkerke pseudo-<span class="math inline">\(R^2\)</span>.</p>
+<p>However, the McFadden pseudo-<span class="math inline">\(R^2\)</span> is often considered the most “honest” because it does not attempt to mimic the variance-explained interpretation of OLS <span class="math inline">\(R^2\)</span>. Instead, it directly measures the proportional improvement in model likelihood relative to the null model. Larger pseudo-<span class="math inline">\(R^2\)</span> values indicate that the predictors help the model predict the outcome better than the null model (i.e., assuming no variables can predict the outcome). This is often what is desired from the pseudo-<span class="math inline">\(R^2\)</span>, so the McFadden statistic will suffice and we will focus on it for the class.</p>
+</section>
+<section id="calculating-pseudo-r2-in-base-r" class="level3">
+<h3 data-anchor-id="calculating-pseudo-r2-in-base-r">Calculating Pseudo-<span class="math inline">\(R^2\)</span> in Base R</h3>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>dev.null     <span class="ot">&lt;-</span> model1<span class="sc">$</span>null.deviance      <span class="co"># deviance of the null model</span></span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>dev.proposed <span class="ot">&lt;-</span> model1<span class="sc">$</span>deviance           <span class="co"># deviance of the fitted model</span></span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>(dev.null <span class="sc">-</span> dev.proposed) <span class="sc">/</span> dev.null      <span class="co"># Calculated McFadden pseudo-R^2</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.02520202</code></pre>
+</div>
+</div>
+<p>Interpretation is broadly similar to <span class="math inline">\(R^2\)</span> in linear regression. For example, if this value is about .02, then the predictors are estimated to explain about 2% of the variation in employee turnover intention. However, keep in mind that this is a pseudo-<span class="math inline">\(R^2\)</span>, so it should not be treated as exactly the same thing as the usual OLS <span class="math inline">\(R^2\)</span>.</p>
+<hr>
+</section>
+</section>
+<section id="likelihood-ratio-test" class="level2">
+<h2 data-anchor-id="likelihood-ratio-test">4. Likelihood Ratio Test</h2>
+<section id="likelihood-ratio-tests" class="level3">
+<h3 data-anchor-id="likelihood-ratio-tests">Likelihood Ratio Tests</h3>
+<p>The likelihood ratio test (LRT) is a model comparison test. By default, it compares your fitted model to the null model (a model with only an intercept and no predictors). Conceptually, this asks: does the model with predictors fit significantly better than the null model? This is similar to the overall model F test in linear regression.</p>
+<p>You can also use an LRT to compare two nested models. “Nested” means that one model is just a reduced version of the other, with a subset of the predictors. This is similar to a <span class="math inline">\(\Delta R^2\)</span> test in linear regression.</p>
+</section>
+<section id="calculating-likelihood-ratio-tests-with-deviance-values" class="level3">
+<h3 data-anchor-id="calculating-likelihood-ratio-tests-with-deviance-values">Calculating Likelihood Ratio Tests with Deviance Values</h3>
+<p>One way to do this in base R is to work with deviance values. Deviance is equal to -2 log-likelihood (-2LL), so differences in deviance can be used to compute the likelihood ratio test. The test statistic is the difference in deviance values and follows a chi-square distribution.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>dev.null     <span class="ot">&lt;-</span> model1<span class="sc">$</span>null.deviance      <span class="co"># deviance of the null model</span></span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>dev.proposed <span class="ot">&lt;-</span> model1<span class="sc">$</span>deviance           <span class="co"># deviance of the fitted model</span></span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a><span class="dv">1</span> <span class="sc">-</span> <span class="fu">pchisq</span>(dev.null <span class="sc">-</span> dev.proposed,       <span class="co"># Difference of deviances</span></span>
+<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a>           <span class="at">df =</span> <span class="fu">length</span>(model1<span class="sc">$</span>coefficients) <span class="sc">-</span> <span class="dv">1</span>) <span class="co"># df = # of coefficients - 1</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 5.415987e-05</code></pre>
+</div>
+</div>
+<p>The output is the <em>p</em> value for the overall model test. If <em>p</em> &lt; .05, the fitted model predicts the outcome significantly better than the null model. So since our value is significant, our model predicts significantly better than the empty null model.</p>
+</section>
+<section id="calculating-likelihood-ratio-tests-with-r-functions" class="level3">
+<h3 data-anchor-id="calculating-likelihood-ratio-tests-with-r-functions">Calculating Likelihood Ratio Tests with R Functions</h3>
+<p>Another approach is to fit the null model directly and compare the two models.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>model0 <span class="ot">&lt;-</span> <span class="fu">glm</span>(turnoverint <span class="sc">~</span> <span class="dv">1</span>,        <span class="co"># intercept-only model (denoted with ~ 1)</span></span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>              <span class="at">data =</span> employee,</span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>              <span class="at">family =</span> binomial)</span>
+<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Use anova() to calculate LRT between fitted model 1 and null model 0.</span></span>
+<span id="cb28-6"><a href="#cb28-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Make sure test = "Chisq" is specified. The "Deviance" is the LRT test statistic.</span></span>
+<span id="cb28-7"><a href="#cb28-7" aria-hidden="true" tabindex="-1"></a><span class="fu">anova</span>(model0, model1, <span class="at">test =</span> <span class="st">"Chisq"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Analysis of Deviance Table
+
+Model 1: turnoverint ~ 1
+Model 2: turnoverint ~ male + lmx
+  Resid. Df Resid. Dev Df Deviance  Pr(&gt;Chi)    
+1       629     779.59                          
+2       627     759.94  2   19.647 5.416e-05 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="co"># You can also use lrtest() from the lmtest package.</span></span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a><span class="fu">lrtest</span>(model0, model1)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Likelihood ratio test
+
+Model 1: turnoverint ~ 1
+Model 2: turnoverint ~ male + lmx
+  #Df  LogLik Df  Chisq Pr(&gt;Chisq)    
+1   1 -389.79                         
+2   3 -379.97  2 19.647  5.416e-05 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
+</div>
+</div>
+</section>
+<section id="comparing-nested-predictor-sets-with-r-functions" class="level3">
+<h3 data-anchor-id="comparing-nested-predictor-sets-with-r-functions">Comparing Nested Predictor Sets with R Functions</h3>
+<p>If you want to compare predictor sets, fit two nested models and then compare them with an LRT. This method is akin to a <span class="math inline">\(\Delta R^2\)</span> test of regular OLS regression.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>model2 <span class="ot">&lt;-</span> <span class="fu">glm</span>(turnoverint <span class="sc">~</span> jobsat,   <span class="co"># model with job satisfaction only</span></span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>              <span class="at">data =</span> employee,</span>
+<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a>              <span class="at">family =</span> binomial)</span>
+<span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(model2)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+glm(formula = turnoverint ~ jobsat, family = binomial, data = employee)
+
+Coefficients:
+            Estimate Std. Error z value Pr(&gt;|z|)    
+(Intercept)  1.45422    0.31047   4.684 2.81e-06 ***
+jobsat      -0.58999    0.08063  -7.317 2.53e-13 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+(Dispersion parameter for binomial family taken to be 1)
+
+    Null deviance: 779.59  on 629  degrees of freedom
+Residual deviance: 717.04  on 628  degrees of freedom
+AIC: 721.04
+
+Number of Fisher Scoring iterations: 4</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>model3 <span class="ot">&lt;-</span> <span class="fu">glm</span>(turnoverint <span class="sc">~</span> male <span class="sc">+</span> lmx <span class="sc">+</span> jobsat,   <span class="co"># add male and lmx</span></span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a>              <span class="at">data =</span> employee,</span>
+<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a>              <span class="at">family =</span> binomial)</span>
+<span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(model3)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+glm(formula = turnoverint ~ male + lmx + jobsat, family = binomial, 
+    data = employee)
+
+Coefficients:
+             Estimate Std. Error z value Pr(&gt;|z|)    
+(Intercept)  1.690165   0.367305   4.602 4.19e-06 ***
+male        -0.006413   0.183369  -0.035    0.972    
+lmx         -0.041694   0.033366  -1.250    0.211    
+jobsat      -0.548865   0.087147  -6.298 3.01e-10 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+(Dispersion parameter for binomial family taken to be 1)
+
+    Null deviance: 779.59  on 629  degrees of freedom
+Residual deviance: 715.47  on 626  degrees of freedom
+AIC: 723.47
+
+Number of Fisher Scoring iterations: 4</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="co"># To run the LRT, compare the two models.</span></span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Make sure one model is nested within the other (Model 2 is nested in Model 3).</span></span>
+<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a><span class="fu">anova</span>(model2, model3, <span class="at">test =</span> <span class="st">"Chisq"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Analysis of Deviance Table
+
+Model 1: turnoverint ~ jobsat
+Model 2: turnoverint ~ male + lmx + jobsat
+  Resid. Df Resid. Dev Df Deviance Pr(&gt;Chi)
+1       628     717.04                     
+2       626     715.47  2   1.5688   0.4564</code></pre>
+</div>
+</div>
+<p>If this test is not significant, then adding <code>male</code> and <code>lmx</code> does not improve prediction beyond the model that already contains <code>jobsat</code>. In other words, <code>male</code> and <code>lmx</code> are not providing much additional predictive value once job satisfaction is already in the model. This matches the model summaries above, where <code>jobsat</code> is significant but <code>male</code> and <code>lmx</code> are not. In this dataset, job satisfaction is a much stronger predictor of turnover intention than gender or leader-member exchange.</p>
+<hr>
+</section>
+</section>
+<section id="plotting-logistic-regression" class="level2">
+<h2 data-anchor-id="plotting-logistic-regression">5. Plotting Logistic Regression</h2>
+<section id="plotting-log-odds-and-probabilities" class="level3">
+<h3 data-anchor-id="plotting-log-odds-and-probabilities">Plotting Log-Odds and Probabilities</h3>
+<p>Since the outcome variable is binary and logistic models do not produce traditional residuals, we are somewhat limited in the usual regression plots. However, we can still visualize how well the model separates the two outcome groups using predicted values.</p>
+</section>
+<section id="computing-and-ranking-probabilities" class="level3">
+<h3 data-anchor-id="computing-and-ranking-probabilities">Computing and Ranking Probabilities</h3>
+<p>First compute the predicted probabilities of turnover for each individual, then rank individuals based on the size of their predicted probability. <code>rank()</code> assigns each individual a rank from the lowest predicted probability of turnover to the highest.</p>
+<ul>
+<li>If individual 1 has a rank of 158, this means they have the 158th lowest predicted probability of turnover in the dataset.</li>
+<li>If you see a decimal rank (e.g., 417.5), it means that observation is tied with another individual who has the same predicted probability.</li>
+</ul>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a>employee<span class="sc">$</span>pred     <span class="ot">&lt;-</span> <span class="fu">predict</span>(model1, <span class="at">type =</span> <span class="st">"response"</span>)</span>
+<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a>employee<span class="sc">$</span>predrank <span class="ot">&lt;-</span> <span class="fu">rank</span>(employee<span class="sc">$</span>pred)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+<section id="plot-predicted-probabilities" class="level3">
+<h3 data-anchor-id="plot-predicted-probabilities">Plot Predicted Probabilities</h3>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb39"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="fu">gf_point</span>(pred <span class="sc">~</span> predrank, <span class="at">data =</span> employee,</span>
+<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a>         <span class="at">color =</span> <span class="sc">~</span><span class="fu">as.factor</span>(turnoverint))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="logistic-regression_files/figure-html/prob-plot-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>This plot allows you to visually inspect how well the model separates the two turnover groups. The X-axis is the rank of individuals based on predicted probability. The Y-axis is the predicted probability of turnover. The color is the actual observed outcome (0 = intend to stay, 1 = intend to leave).</p>
+</section>
+<section id="interpreting-the-plot" class="level3">
+<h3 data-anchor-id="interpreting-the-plot">Interpreting the Plot</h3>
+<p>Ideally we would like to see individuals with <code>turnoverint = 1</code> appearing mostly on the right side of the plot (higher predicted probabilities), while individuals with <code>turnoverint = 0</code> appear mostly on the left side. If this pattern occurs, it means the model is effectively ranking higher-risk individuals above lower-risk individuals.</p>
+<p>In this example, the model does push some higher-risk employees toward the right side of the plot, but the separation between employees with and without turnover intention is modest.</p>
+</section>
+<section id="model-goals-from-plots" class="level3">
+<h3 data-anchor-id="model-goals-from-plots">Model Goals from Plots</h3>
+<p>Look back at the beginning of the lesson where the goals of logistic regression were discussed. Recall that the goal of a logistic model is to rank individuals according to their risk of the outcome occurring (probability of <code>turnoverint = 1</code>). If the model works well, individuals that actually turned over (1) should receive higher predicted probabilities, and individuals that actually did not turn over (0) should receive lower predicted probabilities.</p>
+<p>Thus our plot should show all the <code>turnoverint = 1</code> dots on the right, since that would mean they have a higher predicted probability. We <em>want</em> them to have a higher <em>predicted</em> probability, since we KNOW that they are in <code>turnoverint = 1</code>.</p>
+<p>Since our model isn’t the best at doing that (it only slightly discriminates for <code>turnoverint = 1</code>), we can’t say our model is well performing. This matches up with what we’ve seen from the model summary, in which the coefficients weren’t very effective at predicting the outcome (pseudo-<span class="math inline">\(R^2\)</span> of .02).</p>
+<hr>
+</section>
+</section>
+<section id="well-done" class="level2">
+<h2 data-anchor-id="well-done">Well Done!</h2>
+<p>You have completed the Logistic Regression tutorial. Here is a summary of what was covered:</p>
+<ul>
+<li>Fitting logistic regression with <code>glm()</code> using <code>family = "binomial"</code> and interpreting the output</li>
+<li>Interpreting log-odds coefficients, odds ratios, and converting to probabilities with <code>ilogit()</code></li>
+<li>Computing odds ratio confidence intervals and evaluating significance against 1</li>
+<li>Computing McFadden’s pseudo-<span class="math inline">\(R^2\)</span> as a measure of model fit</li>
+<li>Testing model significance using the likelihood ratio test with <code>anova()</code> and <code>lrtest()</code></li>
+<li>Visualizing predicted probabilities to assess model discrimination</li>
+</ul>
+<p>The next lesson covers multicategorical predictors.</p>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/infogothic\.com");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

@@ -6,8 +6,9 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
+<meta name="author" content="Michael Woller">
 
-<title>Blog Posts – InfoGothic</title>
+<title>Prediction – InfoGothic</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -26,25 +27,23 @@ ul.task-list li input[type="checkbox"] {
 </style>
 
 
-<script src="site_libs/quarto-nav/quarto-nav.js"></script>
-<script src="site_libs/quarto-nav/headroom.min.js"></script>
-<script src="site_libs/clipboard/clipboard.min.js"></script>
-<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
-<script src="site_libs/quarto-search/fuse.min.js"></script>
-<script src="site_libs/quarto-search/quarto-search.js"></script>
-<meta name="quarto:offset" content="./">
-<link href="./images/favicon.ico" rel="icon">
-<script src="site_libs/quarto-listing/list.min.js"></script>
-<script src="site_libs/quarto-listing/quarto-listing.js"></script>
-<script src="site_libs/quarto-html/quarto.js" type="module"></script>
-<script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
-<script src="site_libs/quarto-html/popper.min.js"></script>
-<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
-<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-dark-f418161beb48e0141c760e455f12af2c.css" rel="stylesheet" id="quarto-text-highlighting-styles">
-<script src="site_libs/bootstrap/bootstrap.min.js"></script>
-<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-4d14f3be7bc8eb7ec2287338953877e0.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="dark">
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<link href="../images/favicon.ico" rel="icon">
+<script src="../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-dark-f418161beb48e0141c760e455f12af2c.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap-4d14f3be7bc8eb7ec2287338953877e0.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="dark">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -72,67 +71,9 @@ ul.task-list li input[type="checkbox"] {
     "search-label": "Search"
   }
 }</script>
-<script>
 
-  window.document.addEventListener("DOMContentLoaded", function (_event) {
-    const listingTargetEl = window.document.querySelector('#listing-listing .list');
-    if (!listingTargetEl) {
-      // No listing discovered, do not attach.
-      return; 
-    }
 
-    const options = {
-      valueNames: ['listing-date','listing-title','listing-author','listing-image','listing-description',{ data: ['index'] },{ data: ['categories'] },{ data: ['listing-date-sort'] },{ data: ['listing-file-modified-sort'] }],
-      
-      searchColumns: ["listing-date","listing-title","listing-author","listing-image","listing-description"],
-    };
-
-    window['quarto-listings'] = window['quarto-listings'] || {};
-    window['quarto-listings']['listing-listing'] = new List('listing-listing', options);
-
-    if (window['quarto-listing-loaded']) {
-      window['quarto-listing-loaded']();
-    }
-  });
-
-  window.addEventListener('hashchange',() => {
-    if (window['quarto-listing-loaded']) {
-      window['quarto-listing-loaded']();
-    }
-  })
-  </script>
-
-  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
-  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
-
-<script type="text/javascript">
-const typesetMath = (el) => {
-  if (window.MathJax) {
-    // MathJax Typeset
-    window.MathJax.typeset([el]);
-  } else if (window.katex) {
-    // KaTeX Render
-    var mathElements = el.getElementsByClassName("math");
-    var macros = [];
-    for (var i = 0; i < mathElements.length; i++) {
-      var texText = mathElements[i].firstChild;
-      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
-        window.katex.render(texText.data, mathElements[i], {
-          displayMode: mathElements[i].classList.contains('display'),
-          throwOnError: false,
-          macros: macros,
-          fleqn: false
-        });
-      }
-    }
-  }
-}
-window.Quarto = {
-  typesetMath
-};
-</script>
-
-<link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="../styles.css">
 </head>
 
 <body class="nav-fixed quarto-light">
@@ -142,7 +83,7 @@ window.Quarto = {
     <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
-    <a class="navbar-brand" href="./index.html">
+    <a class="navbar-brand" href="../index.html">
     <span class="navbar-title">InfoGothic</span>
     </a>
   </div>
@@ -153,15 +94,15 @@ window.Quarto = {
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll ms-auto">
   <li class="nav-item">
-    <a class="nav-link" href="./about.html"> 
+    <a class="nav-link" href="../about.html"> 
 <span class="menu-text">About</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="./tutorials.html"> 
+    <a class="nav-link" href="../tutorials.html"> 
 <span class="menu-text">Tutorials</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link active" href="./blog-posts.html" aria-current="page"> 
+    <a class="nav-link" href="../blog-posts.html"> 
 <span class="menu-text">Blog Posts</span></a>
   </li>  
   <li class="nav-item">
@@ -186,22 +127,39 @@ window.Quarto = {
     </nav>
 </header>
 <!-- content -->
-<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-full page-navbar">
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
 <!-- margin-sidebar -->
-    
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction">Introduction</a>
+  <ul class="collapse">
+  <li><a href="#the-dataset" id="toc-the-dataset" class="nav-link" data-scroll-target="#the-dataset">The Dataset</a></li>
+  </ul></li>
+  </ul>
+</nav>
+    </div>
 <!-- main -->
-<main class="content column-page" id="quarto-document-content">
+<main class="content" id="quarto-document-content">
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Blog Posts</h1>
+<h1 class="title">Prediction</h1>
 </div>
 
 
 
-<div class="quarto-title-meta column-page">
+<div class="quarto-title-meta">
 
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Michael Woller </p>
+          </div>
+  </div>
     
   
     
@@ -212,91 +170,26 @@ window.Quarto = {
 </header>
 
 
-<p>Below is a selection of online writings, musings, and complete mental breakdowns (for your entertainment).</p>
+<section id="introduction" class="level2">
+<h2 data-anchor-id="introduction">Introduction</h2>
+<p>Most of this course has focused on <strong>inference</strong>, which involves using a model to make conclusions about population-level relationships. But there is another goal in regression: <strong>prediction</strong>. For predictive models, we are often less concerned with how well the model fits the data we already have, and more concerned with how well it will perform on new, unseen data. A model can fit the current dataset very well simply by capturing noise (overfitting), but this does not guarantee it will generalize to future datasets.</p>
+<p>In this lesson we will cover cross-validation methods for evaluating predictive accuracy, variable selection techniques for building optimal models, prediction intervals, and LASSO regression.</p>
+<section id="the-dataset" class="level3">
+<h3 data-anchor-id="the-dataset">The Dataset</h3>
+<p>For this lesson we continue with the <strong>Big 5</strong> personality dataset, predicting <code>ExistentialWellBeing</code> from the five personality traits:</p>
+<ul>
+<li><code>OpenMindedness</code></li>
+<li><code>Conscientiousness</code></li>
+<li><code>Extraversion</code></li>
+<li><code>Agreeableness</code></li>
+<li><code>NegativeEmotionality</code></li>
+</ul>
 
 
+</section>
+</section>
 
-
-<div class="quarto-listing quarto-listing-container-default" id="listing-listing">
-<div class="list quarto-listing-default">
-<div class="quarto-post image-right" data-index="0" data-categories="bXVzaWMlMkNnb3Ro" data-listing-date-sort="1775545200000" data-listing-file-modified-sort="1776103197652" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="16" data-listing-word-count-sort="3016">
-<div class="thumbnail"><a href="./posts/i-dont-like-what-it-does-to-me/index.html" class="no-external">
-
-<img loading="lazy" src="./posts/i-dont-like-what-it-does-to-me/album.jpeg" class="thumbnail-image">
-
-</a></div>
-<div class="body">
-<h3 class="no-anchor listing-title">
-<a href="./posts/i-dont-like-what-it-does-to-me/index.html" class="no-external">Album Review: I Don’t Like What it Does to Me – Bragolin</a>
-</h3>
-<div class="delink listing-description"><a href="./posts/i-dont-like-what-it-does-to-me/index.html" class="no-external">
-<p>New Goth Album Just Gets Me</p>
-</a></div>
-</div>
-<div class="metadata">
-<a href="./posts/i-dont-like-what-it-does-to-me/index.html" class="no-external">
-<div class="listing-date">
-Apr 7, 2026
-</div>
-<div class="listing-author">
-Michael Woller
-</div>
-</a>
-</div>
-</div>
-<div class="quarto-post image-right" data-index="1" data-categories="cGhpbG9zb3BoeSUyQ3BzeWNob2xvZ3klMkNldm9sdXRpb24lMkNhbmFseXNpcw==" data-listing-date-sort="1729753200000" data-listing-file-modified-sort="1776103187067" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="8" data-listing-word-count-sort="1585">
-<div class="thumbnail"><a href="./posts/evolutionary-psychology-loon/index.html" class="no-external">
-
-<img loading="lazy" src="./posts/evolutionary-psychology-loon/loon.webp" class="thumbnail-image">
-
-</a></div>
-<div class="body">
-<h3 class="no-anchor listing-title">
-<a href="./posts/evolutionary-psychology-loon/index.html" class="no-external">[OLD] How Evolutionary Psychology Turned me into a Loon</a>
-</h3>
-<div class="delink listing-description"><a href="./posts/evolutionary-psychology-loon/index.html" class="no-external">
-<p>A soft defense and attack on the field</p>
-</a></div>
-</div>
-<div class="metadata">
-<a href="./posts/evolutionary-psychology-loon/index.html" class="no-external">
-<div class="listing-date">
-Oct 24, 2024
-</div>
-<div class="listing-author">
-Michael Woller
-</div>
-</a>
-</div>
-</div>
-<div class="quarto-post image-right" data-index="2" data-categories="cGhpbG9zb3BoeSUyQ3Blc3NpbWlzbSUyQ2V2b2x1dGlvbg==" data-listing-date-sort="1681023600000" data-listing-file-modified-sort="1776103176934" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="11" data-listing-word-count-sort="2061">
-<div class="thumbnail"><a href="./posts/zapffe-hope/index.html" class="no-external">
-
-<img loading="lazy" src="./posts/zapffe-hope/zapffe-portrait.webp" class="thumbnail-image">
-
-</a></div>
-<div class="body">
-<h3 class="no-anchor listing-title">
-<a href="./posts/zapffe-hope/index.html" class="no-external">[OLD] Zapffe: Our Undesirable Instinct of Hope</a>
-</h3>
-<div class="delink listing-description"><a href="./posts/zapffe-hope/index.html" class="no-external">
-<p>How biological instinct only leads to mistaken optimism in service of reproduction</p>
-</a></div>
-</div>
-<div class="metadata">
-<a href="./posts/zapffe-hope/index.html" class="no-external">
-<div class="listing-date">
-Apr 9, 2023
-</div>
-<div class="listing-author">
-Michael Woller
-</div>
-</a>
-</div>
-</div>
-</div>
-<div class="listing-no-matching d-none">No matching items</div>
-</div></main> <!-- /main -->
+</main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
   window.document.addEventListener("DOMContentLoaded", function (event) {
     const isCodeAnnotation = (el) => {
