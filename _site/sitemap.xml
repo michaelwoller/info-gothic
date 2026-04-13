@@ -2,19 +2,19 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://infogothic.com/tutorials/reg-course.html</loc>
-    <lastmod>2026-03-31T05:54:34.576Z</lastmod>
+    <lastmod>2026-04-13T19:55:51.833Z</lastmod>
   </url>
   <url>
     <loc>https://infogothic.com/about.html</loc>
-    <lastmod>2026-03-30T03:53:35.002Z</lastmod>
+    <lastmod>2026-04-07T20:41:23.585Z</lastmod>
   </url>
   <url>
     <loc>https://infogothic.com/posts/zapffe-hope/index.html</loc>
-    <lastmod>2026-03-30T01:34:26.045Z</lastmod>
+    <lastmod>2026-04-13T17:59:36.934Z</lastmod>
   </url>
   <url>
     <loc>https://infogothic.com/posts/evolutionary-psychology-loon/index.html</loc>
-    <lastmod>2026-03-30T00:23:33.452Z</lastmod>
+    <lastmod>2026-04-13T17:59:47.067Z</lastmod>
   </url>
   <url>
     <loc>https://infogothic.com/index.html</loc>
@@ -22,10 +22,42 @@
   </url>
   <url>
     <loc>https://infogothic.com/tutorials.html</loc>
-    <lastmod>2026-03-30T19:57:04.575Z</lastmod>
+    <lastmod>2026-04-13T19:45:14.648Z</lastmod>
   </url>
   <url>
     <loc>https://infogothic.com/blog-posts.html</loc>
     <lastmod>2026-03-30T19:49:40.547Z</lastmod>
+  </url>
+  <url>
+    <loc>https://infogothic.com/posts/i-dont-like-what-it-does-to-me/index.html</loc>
+    <lastmod>2026-04-13T17:59:57.652Z</lastmod>
+  </url>
+  <url>
+    <loc>https://infogothic.com/tutorials/variable-importance.html</loc>
+    <lastmod>2026-04-13T20:29:02.268Z</lastmod>
+  </url>
+  <url>
+    <loc>https://infogothic.com/tutorials/test.html</loc>
+    <lastmod>2026-04-13T18:54:10.937Z</lastmod>
+  </url>
+  <url>
+    <loc>https://infogothic.com/tutorials/prediction.html</loc>
+    <lastmod>2026-04-13T19:04:24.477Z</lastmod>
+  </url>
+  <url>
+    <loc>https://infogothic.com/tutorials/multicategorical-predictors.html</loc>
+    <lastmod>2026-04-13T20:16:37.419Z</lastmod>
+  </url>
+  <url>
+    <loc>https://infogothic.com/tutorials/nonlinear-regression.html</loc>
+    <lastmod>2026-04-13T20:25:07.782Z</lastmod>
+  </url>
+  <url>
+    <loc>https://infogothic.com/tutorials/moderation.html</loc>
+    <lastmod>2026-04-13T21:21:07.743Z</lastmod>
+  </url>
+  <url>
+    <loc>https://infogothic.com/tutorials/logistic-regression.html</loc>
+    <lastmod>2026-04-13T21:45:56.649Z</lastmod>
   </url>
 </urlset>

@@ -1,0 +1,592 @@
+---
+title: "Multicategorical Predictors"
+author: "Michael Woller"
+format:
+  html:
+    toc: true
+    toc-depth: 3
+execute:
+  echo: true
+  warning: false
+  message: false
+standalone: true
+---
+
+```{r setup, include=FALSE}
+library(dplyr)
+library(mosaic)
+
+covid <- read.csv("covidstress.csv", header = TRUE)
+```
+
+## Introduction
+
+Previously, you learned about single dichotomous predictors, where you have a binary variable with one reference group and a slope that represents the difference between the two groups. It is possible to expand this idea into multicategorical variables that have 3+ groups. This can be done through various coding techniques that we will go over below. These can be used for nominal or ordinal variables, though some of the methods are more preferable for certain variable types over others.
+
+A through line through each method is that we will need to have multiple predictors and multiple slopes in the model, approximately one for each group, except that, like a dichotomous predictor, there is a group that is left out of the model (the details of which are method dependent).
+
+Another through line is that each method can be represented by a coding scheme, a "contrast" matrix. If you have taken the ANOVA course before regression, this concept will hopefully make sense.
+
+At the end of the day, all of these methods are comparing group means of the outcome. What differs is what *combination* of group means are being compared (e.g., mean 1 vs mean 2, means 1 & 2 vs means 3, etc.).
+
+### The Dataset
+
+For this lesson we will use a **COVID stress** dataset. The outcome is `COVID_Concerns` - how concerned an individual is about COVID-19. The predictor of interest is `Educ_Mom` - the mother's education level, which has seven categories:
+
+1.  "None" (no college)
+2.  "Up to 6 years of school"
+3.  "Up to 9 years of school"
+4.  "Up to 12 years of school" (high school degree)
+5.  "Some College or equivalent"
+6.  College degree
+7.  PhD/Doctorate
+
+Note, the dataset that was given to develop the lab lesson proved to not really have any group differences (spoiler), so this isn't the best example to teach with. If I ever get a hold on better data and can be bothered to come back and change some of these, I might in the future.
+
+### Group Descriptives
+
+Since all of these methods will be comparing group means, it is very helpful to check the group descriptive statistics beforehand. We can use the `favstats()` function from the `mosaic` package.
+
+```{r descriptives}
+mosaic::favstats(COVID_Concerns ~ Educ_Mom, data = covid)
+```
+
+In terms of average COVID-19 concern levels, individuals whose mom has a PhD/Doctorate have the highest average level (23.9), whereas individuals whose mom has only a high school degree ("Up to 12 years of school") have the lowest average COVID-19 concern (21.59). This gives us a glimpse of what relationships we might see.
+
+A lot of the explanation will be done in the Dummy/Indicator Coding section below, as dummy coding is by far the most popular method and its rules and options apply to the other coding schemes.
+
+------------------------------------------------------------------------
+
+## 1. Dummy/Indicator Coding
+
+### What Is Dummy Coding?
+
+The most popular method for dealing with multicategorical predictors is to use dummy (or indicator) coding. This builds directly on what you have already learned about dichotomous (0/1) predictors. Previously, a dichotomous variable used 0 and 1 to represent two groups, where the coefficient told us the difference between those groups (with 0 as the reference group). Dummy coding extends this idea to variables with more than two categories by creating multiple 0/1 variables, each comparing one category to a chosen reference group. For example, if a variable has three categories, we would create two dummy variables, each coded 0 or 1, and each coefficient would represent the difference between that category and the reference category.
+
+For the sake of example, we will make the "None" mother's education group the baseline. Therefore, each dummy coded variable will represent the difference between group means for that respective group and the "None" group.
+
+### Dummy Coding with factor()
+
+There are many ways to dummy code in R, but the easiest is to convert your variable to a `factor` class object. R will then automatically apply dummy coding when you include the variable in `lm()`. First, check the class of your variable.
+
+```{r class-check}
+class(covid$Educ_Mom)
+str(covid$Educ_Mom)
+```
+
+`Educ_Mom` is a `character` class variable. If you are ever curious about the structure of a variable or dataset, `str()` is a great function for that.
+
+Now convert it to a factor. We input the variable, define the levels (with names), and specify `ordered = FALSE`. The first level in the list will be the baseline reference group.
+
+```{r factor-setup}
+covid$Educ_Mom_Factor <- factor( 
+  covid$Educ_Mom,
+  levels = c("None", "Up to 6 years of school", "Up to 9 years of school",
+             "Up to 12 years of school",
+             "Some College or equivalent", "College degree",
+             "PhD/Doctorate"), # make sure everything is spelled correctly
+  ordered = FALSE) 
+```
+
+The last argument `ordered = FALSE` dictates whether or not the inputted variable has to be in order. If you want the ability to recode your reference variable, this needs to be set to `FALSE`. Even though our variable is technically ordinal, we want this argument to be `FALSE` so we can change the baseline and use the variable in other coding schemes as well.
+
+If your variable is numeric (no character strings, just numbers), converting it to a factor will be necessary, or else `lm()` will think your variable is continuous. In that case, just list the values in the `levels =` line (e.g. `levels = c(1,2,3,4)`).
+
+```{r factor-check}
+str(covid$Educ_Mom_Factor)
+levels(covid$Educ_Mom_Factor)
+```
+
+Now it is classified as a "Factor" object with 7 levels. The first group in `levels()` is always the reference baseline group.
+
+You can also check the contrast matrix that R will use for dummy coding:
+
+```{r contrasts-check}
+contrasts(covid$Educ_Mom_Factor)
+```
+
+The row with all 0's is the baseline group. Each column represents one dummy variable, and the 1 in each row tells you which dummy code that group gets.
+
+### Fitting the Model
+
+```{r dummy-model}
+Model_Factor <- lm(COVID_Concerns ~ Educ_Mom_Factor, data = covid)
+summary(Model_Factor)
+```
+
+You can see the output is given per dummy coded variable, described as the variable name + the group name. Since "None" is the baseline reference, it is not included as a predictor, and its group mean is the value of the intercept. Each coefficient is the difference between the baseline and the predictor group following the form: Group - Baseline.
+
+### Interpreting Dummy Codes
+
+**Intercept:** The mean COVID-19 concern for individuals whose mothers have no education is about 22.08 points.
+
+**B1:** Individuals whose mothers have up to 6 years of schooling have about .39 more average COVID-19 concern when compared to individuals whose mothers have no education.
+
+**B2:** Individuals whose mothers have up to 9 years of schooling have about .21 less average COVID-19 concern when compared to individuals whose mothers have no education.
+
+**B3:** Individuals whose mothers have up to 12 years of schooling have about .49 less average COVID-19 concern when compared to individuals whose mothers have no education.
+
+**B4:** Individuals whose mothers have some college or equivalent education have about .23 less average COVID-19 concern when compared to individuals whose mothers have no education.
+
+**B5:** Individuals whose mothers have a college degree have about .19 more average COVID-19 concern when compared to individuals whose mothers have no education.
+
+**B6:** Individuals whose mothers have a doctorate degree have about 1.82 more average COVID-19 concern when compared to individuals whose mothers have no education.
+
+However, none of the slopes are significantly different than zero. Therefore, we would fail to reject the null that any of these groups have mean COVID-19 concern differences in the population.
+
+### Coding Unique Variables Manually
+
+Another method is to manually create new dummy coded variables for each group. This involves making a new column variable that has 1's for rows that are part of that group and 0's on everything else. This is not necessary for dummy coded variables, but it can be helpful for other coding schemes covered later. It is also possible some datasets you will work with already have dummy coded variables.
+
+```{r manual-dummies}
+covid <- transform(covid,
+                   d1 = (Educ_Mom == "None"),
+                   d2 = (Educ_Mom == "Up to 6 years of school"),
+                   d3 = (Educ_Mom == "Up to 9 years of school"),
+                   d4 = (Educ_Mom == "Up to 12 years of school"),
+                   d5 = (Educ_Mom == "Some College or equivalent"),
+                   d6 = (Educ_Mom == "College degree"),
+                   d7 = (Educ_Mom == "PhD/Doctorate"))
+
+# Convert TRUE/FALSE to 1/0 for cleaner output
+cols <- c("d1","d2","d3","d4","d5","d6","d7")
+covid[cols] <- lapply(covid[cols], as.integer)
+```
+
+Note that if your categorical variable is numerically coded (e.g., "None" = 1, "Up to 6 years of school" = 2, etc.), you should just do `Educ_Mom == 1`, `Educ_Mom == 2`, etc. in the transform code above.
+
+**PLEASE NOTE** that `lm()` will automatically use the LAST variable as the baseline, so you need to include `d1` very last since we are using "None" education as the baseline.
+
+```{r dummy-model2}
+Model_Dummy <- lm(COVID_Concerns ~ d2 + d3 + d4 + d5 + d6 + d7 + d1, data = covid)
+summary(Model_Dummy)
+```
+
+As you can see, the results for this method are identical to the `factor()` method above.
+
+------------------------------------------------------------------------
+
+### Recoding the Baseline Group
+
+Since dummy variable slopes only give the difference between the baseline and the dummy group, it does not inherently extend flexibility to any group comparison. For example, if you wanted to compare "Some College or equivalent" with "PhD/Doctorate", you would need to change the baseline group to either one of those. There are a few ways to do this.
+
+**Method 1: Using relevel()**
+
+```{r relevel}
+covid$Educ_Mom_Factor2 <- relevel(covid$Educ_Mom_Factor, ref = "College degree")
+levels(covid$Educ_Mom_Factor2)
+```
+
+"College degree" is now first in the list, confirming it is the reference group.
+
+**Method 2: Respecifying the factor() order**
+
+```{r factor-reorder}
+covid$Educ_Mom_Factor2 <- factor( 
+  covid$Educ_Mom,
+  levels = c("College degree", "None", "Up to 6 years of school", 
+             "Up to 9 years of school", "Up to 12 years of school",
+             "Some College or equivalent", "PhD/Doctorate"), 
+  ordered = FALSE)
+
+Model_Factor2 <- lm(COVID_Concerns ~ Educ_Mom_Factor2, data = covid)
+summary(Model_Factor2)
+```
+
+Now the intercept equals the mean COVID-19 concern for individuals whose mothers have a college degree. The slope for the PhD dummy slope is about 1.64, meaning that the mean COVID-19 concern for individuals whose mothers have a doctorate is 1.64 higher than those whose mothers have a college degree. This is not significant.
+
+You can check the contrast matrix for your new factor variable:
+
+```{r contrasts-new}
+contrasts(covid$Educ_Mom_Factor2)
+```
+
+**Method 3: Reordering unique variables**
+
+If you did individual variables for each dummy code, you just need to place the one you want as the baseline last.
+
+```{r dummy-reorder}
+Model_Dummy2 <- lm(COVID_Concerns ~ d1 + d2 + d3 + d4 + d5 + d7 + d6, data = covid) 
+summary(Model_Dummy2)
+```
+
+**Method 4: Numeric coded variables**
+
+```{r numeric-recode}
+covid$Educ_Mom_Numeric <- as.integer(covid$Educ_Mom_Factor)
+covid$Educ_Mom_Numeric2 <- as.integer(covid$Educ_Mom_Factor2)
+```
+
+------------------------------------------------------------------------
+
+### Custom Contrast Method
+
+This section covers how to manually create a contrast matrix. This will become important when learning about other coding schemes, as many compare multiple group averages against others.
+
+To understand how this works, look at the contrast matrix. Whatever group has all 0's across each column is the baseline. For each group row, whatever column has a "1" represents what that dummy code will be.
+
+To change the baseline manually, find the group row you want as the new baseline, change all of its values to 0, then change the original baseline row to be included in a variable.
+
+```{r custom-contrast}
+New_Contrast2 <- matrix(c(
+  0,0,0,0,1,0,  # row 1 ("None" is now X5)
+  1,0,0,0,0,0,  # row 2
+  0,1,0,0,0,0,  # row 3
+  0,0,1,0,0,0,  # row 4
+  0,0,0,1,0,0,  # row 5
+  0,0,0,0,0,0,  # row 6 = baseline ("College Degree")
+  0,0,0,0,0,1   # row 7
+), nrow = 7, byrow = TRUE)
+
+covid$Educ_Mom_Factor3 <- covid$Educ_Mom_Factor
+contrasts(covid$Educ_Mom_Factor3) <- New_Contrast2
+
+contrasts(covid$Educ_Mom_Factor3)
+
+Model_Dummy3 <- lm(COVID_Concerns ~ Educ_Mom_Factor3, data = covid) 
+summary(Model_Dummy3)
+```
+
+**NOTE:** If you use this method, you need to make sure the contrast is correct. If you do not, the results you get will be wrong. Double check the matrix.
+
+------------------------------------------------------------------------
+
+### Adding Covariates
+
+Adding continuous covariates is straightforward. The same rules for the baseline group follow as outlined above. Simply add the variable into `lm()`.
+
+```{r dummy-covariate}
+# Adding COVID_Compliance as a continuous covariate
+Model_Factor3 <- lm(COVID_Concerns ~ Educ_Mom_Factor + COVID_Compliance,
+                    data = covid)
+summary(Model_Factor3)
+```
+
+For the unique dummy variable method, just add the covariate in. R can still distinguish which variables are the dummy variables, and will use the last one as the reference code.
+
+```{r dummy-covariate2}
+Model_Dummy4 <- lm(COVID_Concerns ~ d2 + d3 + d4 + d5 + d6 + d7 + d1 + COVID_Compliance,
+                   data = covid)
+summary(Model_Dummy4)
+```
+
+You can also add multiple multicategorical variables by using the factor method.
+
+```{r multi-cat}
+covid$Educ_Factor <- factor( 
+  covid$Educ,
+  levels = c("None", "Up to 6 years of school", "Up to 9 years of school",
+             "Up to 12 years of school", "Some College or equivalent", 
+             "College degree", "PhD/Doctorate"),
+  ordered = FALSE) 
+
+Model_Dummy5 <- lm(COVID_Concerns ~ Educ_Mom_Factor + Educ_Factor, data = covid)
+summary(Model_Dummy5)
+```
+
+### Interpreting Covariates
+
+If you want to interpret a dummy coded variable with a covariate, you just need to control the covariate by holding the continuous one constant or keeping group membership the same for the categorical variable.
+
+**Example with continuous covariate:**
+
+> Holding COVID-19 compliance constant between individuals, the mean COVID-19 concern score for individuals whose mother has 6 years of school is expected to be .35 higher than the average COVID-19 concern for individuals whose mothers have no education.
+
+**Example with categorical covariate:**
+
+> For individuals who have the same education level, the mean COVID-19 concern score for individuals whose mother has 6 years of school is expected to be .35 higher than the average COVID-19 concern for individuals whose mothers have no education.
+
+Note that with multiple categorical variables, the intercept is the mean outcome at *both* baselines. In general, interpretations for models with multiple categorical variables get messy, and it is usually better to either run interactions or use an ANOVA/ANCOVA for simpler results to interpret.
+
+For inference, it is often of interest to treat all your dummy codes as a group and do a delta-R\^2 test on them to test how much contribution the multicategorical variable added after controlling for the covariate(s). See the Inference lesson for that method.
+
+------------------------------------------------------------------------
+
+## 2. Sequential Coding
+
+### What Is Sequential Coding?
+
+Moving on from dummy codes, sequential coding is an alternative way to structure your categorical predictors. Instead of comparing every group to a single baseline group (like dummy coding does), sequential coding compares groups in a step-by-step fashion. Each category is compared to the one that comes before it in some meaningful order (e.g., education level, time, dosage).
+
+In this context the interpretation of coefficients changes: rather than asking "How is this group different from the baseline?", we ask "How is this group different from the previous group?" This can be especially useful when your categories have a natural ordering (i.e., ordinal variables) and you are interested in incremental changes across levels rather than comparisons to a single reference group. Though, you can still use sequential coding with non-ordinal variables.
+
+In short, dummy coding compares everything to one group, while sequential coding compares each group to the next in line.
+
+*As a side note, if you ever want to do piecewise regression with multiple joints (see the future Nonlinear Regression lab), you should use sequential coding for the joints.*
+
+### Sequential Coding in Base R
+
+Unfortunately, `lm()` defaults to dummy coded variables for categorical variables, so you must code these manually. This method is much easier to do with a numeric coded variable. The coding scheme follows sequentially (e.g., S1 is everything above group 1, S2 is everything above group 2, etc.).
+
+```{r sequential-setup}
+covid <- transform(covid,
+                   s1 = (Educ_Mom_Numeric > 1),
+                   s2 = (Educ_Mom_Numeric > 2),
+                   s3 = (Educ_Mom_Numeric > 3),
+                   s4 = (Educ_Mom_Numeric > 4),
+                   s5 = (Educ_Mom_Numeric > 5),
+                   s6 = (Educ_Mom_Numeric > 6))
+
+# Convert TRUE/FALSE to 1/0
+ss <- lapply(covid[, c("s1","s2","s3","s4","s5","s6")], as.integer)
+covid[, c("s1","s2","s3","s4","s5","s6")] <- ss
+```
+
+Note that, unlike dummy codes, there is no "reference" group with sequential variables, so we include all variables into the model and the order does not matter.
+
+```{r sequential-model}
+model_sequential <- lm(COVID_Concerns ~ s1 + s2 + s3 + s4 + s5 + s6, data = covid)
+summary(model_sequential)
+```
+
+### Custom Contrast Method
+
+Knowing how the sequential coding contrast matrix should look, you can also make the contrast matrix manually and plug it into your factor variable.
+
+```{r sequential-contrast}
+Sequential_Matrix <- c(
+  0,0,0,0,0,0,  # row 1
+  1,0,0,0,0,0,  # row 2
+  1,1,0,0,0,0,  # row 3
+  1,1,1,0,0,0,  # row 4
+  1,1,1,1,0,0,  # row 5
+  1,1,1,1,1,0,  # row 6 
+  1,1,1,1,1,1   # row 7
+)
+Sequential_Contrast <- matrix(Sequential_Matrix, nrow = 7, byrow = TRUE)
+
+covid$Educ_Mom_Factor_Seq <- covid$Educ_Mom_Factor
+contrasts(covid$Educ_Mom_Factor_Seq) <- Sequential_Contrast
+
+model_sequential2 <- lm(COVID_Concerns ~ Educ_Mom_Factor_Seq, data = covid)
+summary(model_sequential2)
+```
+
+This method requires you to specify the matrix correctly. Double check the matrix is correct before interpreting results.
+
+### Interpreting Sequential Codes
+
+The intercept of the sequentially coded groups is the group mean of the "first" group in sequential order, which is the "None" mother's education group. Each coefficient then compares the subsequent group mean to the previous group mean.
+
+**Example b1:**
+
+> Individuals whose mothers have up to 6 years of schooling have about .39 more average COVID-19 concern when compared to individuals whose mothers have no education.
+
+**Example b2:**
+
+> Individuals whose mothers have up to 9 years of schooling have about .61 less average COVID-19 concern when compared to individuals whose mothers have 6 years of education.
+
+**Example b6:**
+
+> Individuals whose mothers have a PhD or doctorate have about 1.64 more average COVID-19 concern when compared to individuals whose mothers have a college degree.
+
+------------------------------------------------------------------------
+
+## 3. Helmert Coding
+
+### What Is Helmert Coding?
+
+Helmert coding is a method to code multicategorical variables where each group is compared to the average of the groups that come after it. Unlike dummy coding, which compares each group to a single reference group, Helmert coding makes a series of sequential comparisons across levels of the variable. For example, the first coefficient compares the first group to the average of all remaining group means, the second coefficient compares the second group average to the average of the group means that follow, and so on.
+
+Helmert coding is useful when there is a meaningful ordering to the categories and you are interested in how earlier groups differ from later ones overall. Note that even though it is helpful for ordinal variables, Helmert coding's order of coefficients is arbitrary and any comparison can be made.
+
+For our example, we want to do the following comparisons:
+
+-   No education vs the rest
+-   PhD vs everything except No Education
+-   6 years vs 9 years, 12 years, Some College, and College
+-   9 years vs 12 years, Some College, and College
+-   12 years vs Some College and College
+-   Some College vs College
+
+> **Important note on "mean of the group means":** Helmert coding compares each group to the *average of the group means* of subsequent groups, not the grand mean of all individuals in those groups. These are only equal when group sizes are equal, which they usually are not. Be precise about this in your interpretations.
+
+### Helmert Coding in Base R
+
+There is no easy built-in way to do Helmert coding in R, so we will manually code unique variables. The coding scheme follows fractions based on a specific pattern. The `|` operator represents "OR".
+
+```{r helmert-setup}
+covid <- transform(
+  covid,
+  h1 = -6/7 * (Educ_Mom_Numeric == 1) +
+        1/7 * (Educ_Mom_Numeric > 1),
+  
+  h2 = -5/6 * (Educ_Mom_Numeric == 7) +
+       1/6 * ((Educ_Mom_Numeric == 2) |
+              (Educ_Mom_Numeric == 3) |
+              (Educ_Mom_Numeric == 4) |
+              (Educ_Mom_Numeric == 5) |
+              (Educ_Mom_Numeric == 6)),
+  
+  h3 = -4/5 * (Educ_Mom_Numeric == 2) +
+       1/5 * ((Educ_Mom_Numeric == 3) |
+              (Educ_Mom_Numeric == 4) |
+              (Educ_Mom_Numeric == 5) |
+              (Educ_Mom_Numeric == 6)),
+  
+  h4 = -3/4 * (Educ_Mom_Numeric == 3) +
+       1/4 * ((Educ_Mom_Numeric == 4) |
+              (Educ_Mom_Numeric == 5) |
+              (Educ_Mom_Numeric == 6)),
+  
+  h5 = -2/3 * (Educ_Mom_Numeric == 4) +
+       1/3 * ((Educ_Mom_Numeric == 5) |
+              (Educ_Mom_Numeric == 6)),
+  
+  h6 = -1/2 * (Educ_Mom_Numeric == 5) +
+       1/2 * (Educ_Mom_Numeric == 6)
+)
+```
+
+Since there is no "baseline" group, the order does not matter when plugging into `lm()`.
+
+```{r helmert-model}
+model_Helmert <- lm(COVID_Concerns ~ h1 + h2 + h3 + h4 + h5 + h6, data = covid)
+summary(model_Helmert)
+```
+
+### Custom Contrast Method
+
+```{r helmert-contrast}
+Helmert_Matrix <- c(
+  -6/7,   0,     0,     0,     0,     0,   # row 1
+   1/7,  1/6,  -4/5,    0,     0,     0,   # row 2
+   1/7,  1/6,   1/5,  -3/4,    0,     0,   # row 3
+   1/7,  1/6,   1/5,   1/4,  -2/3,    0,   # row 4
+   1/7,  1/6,   1/5,   1/4,   1/3,  -1/2,  # row 5
+   1/7,  1/6,   1/5,   1/4,   1/3,   1/2,  # row 6
+   1/7, -5/6,   0,     0,     0,     0     # row 7
+)
+Helmert_Contrast <- matrix(Helmert_Matrix, nrow = 7, byrow = TRUE)
+
+# Note: you can use whole numbers, but you will need to rescale coefficients
+# accordingly. I recommend sticking to fractions.
+
+covid$Educ_Mom_Factor_Helmert2 <- covid$Educ_Mom_Factor
+contrasts(covid$Educ_Mom_Factor_Helmert2) <- Helmert_Contrast
+
+model_Helmert2 <- lm(COVID_Concerns ~ Educ_Mom_Factor_Helmert2, data = covid)
+summary(model_Helmert2)
+```
+
+### Interpreting Helmert Codes
+
+Interpreting Helmert coded groups is comparing one group mean to the average of the other group means (e.g., Mean 1 vs (Mean 2 + Mean 3 + Mean 4) / 3). Note that its often not represented this way due to shorthand, but when you are comparing "groups", you are comparing "group averages."
+
+This is important because it is a *very* common mistake to say you are comparing the "grand mean of group 2, 3, and 4", but this is incorrect. The grand mean is NOT the mean of the group means. They will only be equal when group sample sizes are equal. When group sample sizes are not equal (as they often are not), then the mean of the group means will be different than the grand mean.
+
+The intercept of the Helmert coded groups is the average of the group means. Keep in mind that Helmert coding arithmetic is: later groups - current group. So a negative sign means the current group mean is larger than the average of the other group means.
+
+**Example b1:**
+
+> Individuals whose mothers have no education have an average COVID-19 concern that is about .25 lower than the average of the other education level averages.
+
+**Example b2:**
+
+> Individuals whose mothers have a PhD or doctorate have an average COVID-19 concern that is 1.89 greater than the average of the rest of the education group means.
+
+**Example b6:**
+
+> Individuals whose mothers have some college or equivalent have an average COVID-19 concern that is .41 lower than the average for individuals whose mother has a college degree.
+
+------------------------------------------------------------------------
+
+## 4. Effects Coding
+
+### What Is Effects Coding?
+
+Effects coding is a method for coding multicategorical variables where each category is compared to the mean of the means rather than to a single reference group. Like dummy coding, it uses a series of 0/1-type variables, but with one key difference: the reference category is coded as -1 instead of 0. This ensures that the coefficients represent how much each group differs from the average of all groups, rather than from a specific baseline group.
+
+As a result, the intercept in an effects-coded model represents the mean of the group means, and each coefficient tells us how far a given category is above or below that overall average. This can be especially useful when no single group serves as a natural reference, or when you are interested in understanding how each group compares to the overall pattern rather than to one specific category.
+
+The downside is that you have to leave out one group for the sake of estimating the model. The choice of group you leave out has no practical consequence. It just means that if you want the effects coded coefficient for that group, you have to change the leave-out group and rerun the model.
+
+*As a side note, effects coding is helpful for LASSO, Ridge, or Elastic Net regression because it treats all categories more evenly when coefficients are being shrunk. Unlike dummy coding, which depends on a chosen reference group, effects coding reduces the influence of that arbitrary choice and can lead to more stable results when selecting variables.*
+
+### Effects Coding in Base R
+
+`lm()` defaults to dummy coded variables, so you must code these manually. All you need to do is select the group you are leaving out and subtract it from each other group.
+
+```{r effects-setup}
+# Leave out the PhD/Doctorate group (group 7)
+covid <- transform(covid,
+                   e1 = (Educ_Mom_Numeric == 1) - (Educ_Mom_Numeric == 7),
+                   e2 = (Educ_Mom_Numeric == 2) - (Educ_Mom_Numeric == 7),
+                   e3 = (Educ_Mom_Numeric == 3) - (Educ_Mom_Numeric == 7),
+                   e4 = (Educ_Mom_Numeric == 4) - (Educ_Mom_Numeric == 7),
+                   e5 = (Educ_Mom_Numeric == 5) - (Educ_Mom_Numeric == 7),
+                   e6 = (Educ_Mom_Numeric == 6) - (Educ_Mom_Numeric == 7))
+
+model_effects <- lm(COVID_Concerns ~ e1 + e2 + e3 + e4 + e5 + e6, data = covid)
+summary(model_effects)
+```
+
+If you want to change the leave-out group, you must change which numeric gets subtracted.
+
+```{r effects-relevel}
+# Now leave out the "None" group (group 1) instead
+covid <- transform(covid,
+                   e1 = (Educ_Mom_Numeric == 2) - (Educ_Mom_Numeric == 1),
+                   e2 = (Educ_Mom_Numeric == 3) - (Educ_Mom_Numeric == 1),
+                   e3 = (Educ_Mom_Numeric == 4) - (Educ_Mom_Numeric == 1),
+                   e4 = (Educ_Mom_Numeric == 5) - (Educ_Mom_Numeric == 1),
+                   e5 = (Educ_Mom_Numeric == 6) - (Educ_Mom_Numeric == 1),
+                   e6 = (Educ_Mom_Numeric == 7) - (Educ_Mom_Numeric == 1))
+
+model_effects2 <- lm(COVID_Concerns ~ e1 + e2 + e3 + e4 + e5 + e6, data = covid)
+summary(model_effects2)
+```
+
+As you can see, every coefficient that is not associated with the added PhD group does not change. However, to get the coefficient for the PhD group, we had to recode and rerun everything. This is annoying but not that hard to do.
+
+### Custom Contrast Method
+
+```{r effects-contrast}
+Effects_Matrix <- c(
+  -1, -1, -1, -1, -1, -1,  # row 1 (leave-out)
+   1,  0,  0,  0,  0,  0,  # row 2
+   0,  1,  0,  0,  0,  0,  # row 3
+   0,  0,  1,  0,  0,  0,  # row 4
+   0,  0,  0,  1,  0,  0,  # row 5
+   0,  0,  0,  0,  1,  0,  # row 6
+   0,  0,  0,  0,  0,  1   # row 7
+)
+Effects_Contrast <- matrix(Effects_Matrix, nrow = 7, byrow = TRUE)
+
+covid$Educ_Mom_Factor_Effects2 <- covid$Educ_Mom_Factor
+contrasts(covid$Educ_Mom_Factor_Effects2) <- Effects_Contrast
+
+model_effects3 <- lm(COVID_Concerns ~ Educ_Mom_Factor_Effects2, data = covid)
+summary(model_effects3)
+```
+
+If you want to switch the leave-out group, you need to rearrange the row with -1's and rerun the model.
+
+### Interpreting Effects Codes
+
+The intercept of the effects coded groups is the mean of the group means. Each coefficient is the difference between that group's mean and the mean of the group means (Group - Intercept). So a negative sign means the group mean is *below* the mean of the group means.
+
+This is a *very* common mistake: people often say you are comparing to the "grand mean" or "overall average", but this is incorrect. The grand mean is NOT the mean of the group means. They only equal each other when group sample sizes are equal.
+
+**Example b1 (with PhD as the leave-out group):**
+
+> Individuals whose mothers have no education are expected to have an average COVID-19 concern that is .18 larger than the average COVID-19 concern of the different mother education level means.
+
+**Example b3:**
+
+> Individuals whose mothers have at least 12 years of education are expected to have an average COVID-19 concern that is .70 lower than the average COVID-19 concern of the different mother education level means.
+
+------------------------------------------------------------------------
+
+## Well Done!
+
+You have completed the Multicategorical Predictors tutorial. Here is a summary of what was covered:
+
+-   **Dummy coding** with `factor()` and `relevel()`, manual dummy variables, and custom contrast matrices
+-   **Sequential coding** for step-by-step comparisons between adjacent groups
+-   **Helmert coding** for comparing each group to the average of subsequent groups
+-   **Effects coding** for comparing each group to the mean of all group means
+-   How to interpret the intercept and slopes under each coding scheme
+-   How to add covariates to multicategorical models
+
+The next lesson covers prediction and cross-validation.

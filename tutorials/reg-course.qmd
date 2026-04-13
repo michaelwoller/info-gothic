@@ -10,11 +10,13 @@ By going through these lessons, you should be equipped enough to deal with a lot
 
 For anyone who wishes to dig deeper or is interested in pursuing psychological research as a career and wants to know what are the higher stats courses needed, I would recommend pursuing learning material in the fields of: multilevel modeling, factor analysis, structural equation modeling, item response theory, longitudinal modeling.
 
+I started doing a lot of these as R Shiny apps, only to learn that shinyapps.io caps free accounts to only 5 apps. So I only the first five lessons are interactable. But that's ok, the static lessons are just as good :\^)
+
 ## Introduction to R and Simple Linear Regression
 
 A beginner tutorial covering the basics of R objects and functions and how to do simple linear regression. This lesson will cover important functions and interpretations we will use throughout the course.
 
-[Open Tutorial](https://infogothic.shinyapps.io/simple_linear_regression){target="_blank"}
+[Open Tutorial (Interactable Shiny App)](https://infogothic.shinyapps.io/simple_linear_regression){target="_blank"}
 
 ------------------------------------------------------------------------
 
@@ -22,8 +24,7 @@ A beginner tutorial covering the basics of R objects and functions and how to do
 
 In this lesson, we cover how to run multiple linear regressions and how to interpret their output. We also cover the various different types of model correlations. Including, model correlation $R$, the $R^2$ effect size, and adjusted-$R^2$ , and partial correlations.
 
-
-[Open Tutorial](https://infogothic.shinyapps.io/mlr_tutorial/){target="_blank"}
+[Open Tutorial (Interactable Shiny App)](https://infogothic.shinyapps.io/mlr_tutorial/){target="_blank"}
 
 ------------------------------------------------------------------------
 
@@ -31,11 +32,15 @@ In this lesson, we cover how to run multiple linear regressions and how to inter
 
 In this lesson, we cover how to interpret significance tests of the regression. These involve the *t* test of the slope coefficients, *F* test of the $R^2$ coefficient, and model comparison tests with the $\Delta R^2$ test. We will also cover multiple squared correlations.
 
+[Open Tutorial (Interactable Shiny App)](https://infogothic.shinyapps.io/diagnostics_tutorial/)
+
 ------------------------------------------------------------------------
 
 ## Diagnostics
 
 In this lesson, we cover the basic model assumptions of linear regression and how to check whether or not your regression model upholds or violates these assumptions using graphical diagnostics. We also cover what to do in situations where your model violates important assumptions.
+
+[Open Tutorial (Interactable Shiny App)](https://infogothic.shinyapps.io/diagnostics_tutorial/)
 
 ------------------------------------------------------------------------
 
@@ -43,17 +48,23 @@ In this lesson, we cover the basic model assumptions of linear regression and ho
 
 In this lesson, we cover what makes variables important in the model and how "importance" differs from "significance". We will cover multiple different predictor effect sizes as well as dominance analysis of regression slopes.
 
+[Open Tutorial](variable-importance.html)
+
 ------------------------------------------------------------------------
 
 ## Prediction
 
 In this lesson, we cover predictive statistics and how this differs from the inferential statistics we've been doing previously. This involves covering cross-validation and how to get shrunken-$R^2$'s as well as simple variable selection techniques. It also covers how to generate prediction intervals and how to run simple LASSO regression.
 
+[Open Tutorial](prediction.html)
+
 ------------------------------------------------------------------------
 
 ## Multicategorical Predictors
 
-In this lesson, we cover how to run and interpret multicategorical predictors. This involves covering multiple categorical coding schemes. We will cover the popular dummy coding technique and the lesser known sequential specification, Helmert coding, and effects coding methods.\
+In this lesson, we cover how to run and interpret multicategorical predictors. This involves covering multiple categorical coding schemes. We will cover the popular dummy coding technique and the lesser known sequential specification, Helmert coding, and effects coding methods.
+
+[Open Tutorial](multicategorical-predictors.html)
 
 ------------------------------------------------------------------------
 
@@ -61,14 +72,20 @@ In this lesson, we cover how to run and interpret multicategorical predictors. T
 
 In this lesson, we cover how to fit and analyze nonlinear regression models. These models include polynomial regression, piecewise regression, and log-transformed models.
 
+[Open Tutorial](nonlinear-regression.html)
+
 ------------------------------------------------------------------------
 
 ## Moderation
 
 In this lesson, we cover moderation and interaction terms in regression. This involves covering how to interpret interactions and conditional effects, how to get simple effects, and how to make interaction plots.
 
+[Open Tutorial](moderation.html)
+
 ------------------------------------------------------------------------
 
 ## Logistic Regression
 
 In this lesson, we cover logistic regression of binary outcome variables. This involves covering fitting and interpreting log-odds, how to convert log-odds to odds ratios or probabilities, how to get pseudo-$R^2$ statistics, and how to plot logistic regression models.
+
+[Open Tutorial](logistic-regression.html)

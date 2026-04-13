@@ -2,6 +2,7 @@
 title: "[OLD] How Evolutionary Psychology Turned me into a Loon"
 date: "2024-10-24"
 description: "A soft defense and attack on the field"
+author: "Michael Woller"
 categories: [philosophy, psychology, evolution, analysis]
 image: "loon.webp"
 ---

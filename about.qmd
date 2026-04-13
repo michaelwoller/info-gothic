@@ -25,3 +25,5 @@ This blog serves as a place for me to post written pieces, videos, and code for 
 Here is one of my favorite goth songs:
 
 {{< video https://www.youtube.com/watch?v=AM8SXViIzOI >}}
+
+[Raven image above and magpie web icon have creative common/public domain licences.]{style="font-size: 0.6em;"}
