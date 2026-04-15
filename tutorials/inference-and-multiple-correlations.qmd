@@ -1,0 +1,414 @@
+---
+title: "Inference and Multiple Correlations"
+author: "Michael Woller"
+format:
+  html:
+    toc: true
+    toc-depth: 3
+execute:
+  echo: true
+  warning: false
+  message: false
+standalone: true
+---
+
+```{r setup, include=FALSE}
+rauw <- read.csv("rauw.csv", header = TRUE)
+rauw <- rauw[complete.cases(rauw$Age) & complete.cases(rauw$RL),]
+```
+
+## Introduction
+
+In this lesson we will cover regression inference and multiple correlations. Previously, you learned about interpretations of what we observe. Inference has to do with how what we observe can apply to the population. These are two separate concepts, so keep this in mind.
+
+### The Dataset
+
+Data for this lesson is courtesy of Dr. Egamaria Alacam, an avid reggaeton enjoyer (and I simulated some too). It consists of the variables
+
+-   `Age` — how old the individual is (continuous scale)
+-   `Enjoy` — how much the individual enjoys reggaeton (1--5 continuous)
+-   `RL` — how much the individual likes Rauw Alejandro (1--5 continuous)
+-   `Span` — self reported scale on the individual's Spanish proficiency (1--10 scale)
+-   `LatMed` — how many hours per week the individual spends consuming Latin America media (interval scale)
+-   `LatClub` — how many hours per month the individual spends in a Latin American club (interval)
+
+We will be predicting how much an individual enjoys the music of Rauw Alejandro (`Enjoy`) by their age (`Age`) and how much they like reggaeton (`RL`).
+
+{{< video https://www.youtube.com/watch?v=CFPLIaMpGrY >}}
+
+### 
+
+The dataset is `rauw`. We remove missing values on `Age` and `RL` before proceeding.
+
+```{r data-prep}
+rauw <- rauw[complete.cases(rauw$Age) & complete.cases(rauw$RL),]
+# N = 1549
+```
+
+------------------------------------------------------------------------
+
+## 1. Coefficient Significance
+
+### Coefficient t Tests
+
+All regression output will give you significance tests for the slopes by default. These will be t tests with degrees of freedom equal to $df = N - k - 1$, where $N$ is your sample size and $k$ is the number of predictors in the model.
+
+```{r fit-model}
+model1 <- lm(Enjoy ~ RL + Age, data = rauw)
+summary(model1)
+```
+
+Here we can see that the intercept and slope of `RL` are significant at the $\alpha = .05$ rejection level, however `Age` is not significant.
+
+### Inferential Statements
+
+Inference involves a null hypothesis about the population. "Null" coming from the fact that it assumes a baseline fact about the population, which for a coefficient t test is that the coefficient equals 0.
+
+When addressing inference, "significance" applies to your sample statistic (i.e., the coefficient you estimated from the sample). The null hypothesis is about the population.
+
+-   It is **NOT** appropriate to say you reject/fail to reject the null that your slope equals 0. The hypothesis is that the *population* slope is 0.
+-   It is **NOT** appropriate to say that the slope is significantly different than in the population. Significance applies to what you observe from your regression model.
+-   It **IS** appropriate to say you reject/fail to reject the null that the **population** slope equals 0.
+-   It **IS** appropriate to say that your model's coefficient is significantly different than 0.
+
+A correct inferential statement also ALWAYS includes the test you used (t test), the proper degrees of freedom, and the p value (unless it is below .001, in which case you just say $p < .001$). You should also report confidence intervals and their width (95%).
+
+**Intercept:**
+
+> The intercept was significant $t(1546) = 5.78$, $p < .001$, 95% CI \[.91, 1.85\]. This means that the model intercept was significant, so we reject the null that the intercept is 0 in the population.
+
+**RL Slope:**
+
+> The slope of RL was significant $t(1546) = 22.94$, $p < .001$, 95% CI \[.30, .36\]. This means that the slope of RL was significant, so we reject the null that how much an individual enjoys reggaeton does not predict how much they enjoy Rauw Alejandro in the population.
+
+**Age Slope:**
+
+> The slope of Age was not significant $t(1546) = 1.36$, $p = .17$, 95% CI \[-.01, .03\]. This means that the slope of Age was not significant, so we fail to reject the null that an individual's age does not predict how much an individual enjoys Rauw Alejandro in the population.
+
+### Inference with Confidence Intervals
+
+It is possible to do inference with confidence intervals. To do this, you need to see if the confidence interval contains your null hypothesis. Since our null for the coefficients is 0, and we are using the 95% confidence level (determined by your alpha rejection rate), we will see if the 95% confidence intervals for each coefficient contain 0.
+
+You need to use the `confint()` function, which gives 95% confidence intervals by default.
+
+```{r confint}
+confint(model1)
+```
+
+Looking at the output, we see that the confidence intervals for the intercept and slope of `RL` do not contain 0, while the interval of `Age` does contain 0. So we would conclude that our intercept and slope of `RL` are significant, but the slope of `Age` is not significant.
+
+If you are using a different alpha level than .05, you will need to manually change the confidence interval width.
+
+```{r confint-99}
+# Alpha = .01 and a 99% Confidence Interval
+confint(model1, level = .99)
+```
+
+Even with the new alpha level, we would still reject the null of the intercept and `RL`.
+
+------------------------------------------------------------------------
+
+## 2. $R^2$ F Tests
+
+### $R^2$ F Tests
+
+The $R^2$ coefficient also has a significance test associated with it. It tests whether or not the model explains a significant amount of the variation in the outcome or not. Inference on $R^2$ is about the "population" $R^2$. This can be thought of as the "true" relationship your predictors have on the outcome. Your model only estimates this true relationship, but we want to make direct inferences on it as well.
+
+R will give you the $R^2$ F test as default output. It is at the bottom of the `summary()` output.
+
+```{r r2-ftest}
+summary(model1)
+```
+
+The F-statistic line gives the F test statistic, the degrees of freedom, and p value.
+
+Note the adjusted-$R^2$ value does NOT have a significance test associated with it. All $R^2$ tests are for unadjusted $R^2$s. The degrees of freedom for this F test follow:
+
+$$df_1 = k \qquad df_2 = N - k - 1$$
+
+where $N$ is the sample size and $k$ is the number of predictors.
+
+### $R^2$ Inferential Statements
+
+Inferential statements about $R^2$ follow the same idea that significance is for the statistic from the model, and the null hypothesis conclusion is for the population relationship. A correct inferential statement needs to include both. It also needs to include the F statistic, both degrees of freedom, and the p value.
+
+> The $R^2$ = .25 coefficient was significant $F(2, 1546) = 263.7$, $p < .001$. Thus, we reject the null hypothesis that how much an individual loves reggaeton and the individual's age does not explain variation of how much individuals like Rauw Alejandro in the population.
+
+------------------------------------------------------------------------
+
+## 3. Model Comparison Tests
+
+### Model Comparisons
+
+t tests of model coefficients allow you to test single parameter slopes. However, it is often desirable to test multiple slopes *combined*. To do this, you need to do a model comparison test (or multiple parameter test). A common one is to test the change in $R^2$, or $\Delta R^2$.
+
+If a slope t test determines if a single variable is significant in explaining Y, a $\Delta R^2$ F test can determine if multiple variables at a time are significant in explaining Y.
+
+The default model $R^2$ F test compares all the variables in the model to an "empty" model with no predictors. It is possible to do this type of comparison, but to just test a select subset of variables rather than every variable.
+
+The main model we are going to consider is to predict how much an individual enjoys the music of Rauw Alejandro (`Enjoy`) predicted by their age (`Age`), how much they like reggaeton music (`RL`), and a set of predictors making up "Latin American cultural experience." This set of variables consists of self-report competency in Spanish (`Span`), the amount of hours per week an individual engages with Latin American media (`LatMed`), and the amount of hours per week the individual spends in a Latin American based club (`LatClub`).
+
+We will be looking at whether or not the Latin American cultural experience variable set explains a significant amount of variance in `Enjoy`, after controlling for `Age` and `RL`.
+
+### Model Comparison Using anova()
+
+In order to do a $\Delta R^2$ F test, you need to first save two different models, one being "nested" within the other. "Nested" means that one model is just a reduced version of the other, with a subset of the predictors.
+
+First fit a "full" model that includes all relevant variables.
+
+```{r model-full}
+model_full <- lm(Enjoy ~ RL + Age + Span + LatMed + LatClub, data = rauw)
+```
+
+Then fit a "reduced" model that includes the variables you do NOT want to test. Aka, remove the variables you are testing.
+
+```{r model-reduced}
+model_reduced <- lm(Enjoy ~ RL + Age, data = rauw)
+```
+
+The idea here is that we are going to check how good the reduced model is already, and then see if the extra Latin American cultural variables in the full model significantly increase the $R^2$ or not. If so, then they, as a group, are useful. If not, then they, as a group, are not helpful. Note that we are checking the group, not individual predictors.
+
+To test this, we can use the `anova()` function with the model objects. The order does not really matter, but you can put the reduced model first.
+
+```{r anova-comparison}
+anova(model_reduced, model_full)
+```
+
+This F test compares the $R^2$ between the two models, and as you can see from the $p = .56$ value, our predictor set does not significantly increase the $R^2$. Therefore, we can conclude that the set of variables that make up Latin American cultural experience does not increase our ability to explain enjoyment of Rauw Alejandro. It turns out Rauw is for everybody.
+
+### Manually Checking Model $R^2$s
+
+You can double check the F test above manually.
+
+```{r manual-delta-r2}
+R2_full    <- summary(model_full)$r.squared
+R2_reduced <- summary(model_reduced)$r.squared
+
+# Manually find the difference in the two models (full - reduced)
+delta_r2 <- R2_full - R2_reduced
+delta_r2
+```
+
+This .0009 (very tiny) is the change in $R^2$ that the `anova()` above is testing. You can also test the $\Delta R^2$ manually. This is just for demonstration purposes.
+
+```{r manual-fstat}
+n         <- nrow(rauw)
+df_full    <- length(coef(model_full)) - 1
+df_reduced <- length(coef(model_reduced)) - 1
+
+# Calculate F statistic
+f_stat <- ((R2_full - R2_reduced) / (df_full - df_reduced)) / 
+          ((1 - R2_full) / (n - df_full - 1))
+f_stat
+
+# Check p value
+pf(f_stat, df1 = df_full - df_reduced, df2 = n - df_full - 1, lower.tail = FALSE)
+```
+
+This is the same F statistic and p value as the `anova()` output.
+
+### $\Delta R^2$ Inference
+
+Inferential statements for $\Delta R^2$ tests follow the same idea as other tests. You should report all relevant statistics, make a conclusion based on the p value if the found $\Delta R^2$ is significant or not, then make a conclusion about the change in $R^2$ at the population level.
+
+The degrees of freedom for the $\Delta R^2$ F tests are:
+
+$$df_1 = k_{full} - k_{reduced} \qquad df_2 = N - k_{full} - 1$$
+
+> The $\Delta R^2 = .01$ statistic was not significant $F(3, 1543) = .79$, $p = .56$. Therefore, we fail to reject that an individual's Latin American cultural experience does not explain a significant more amount of variation of their enjoyment of Rauw Alejandro in the population after accounting for their age and how much they like reggaeton.
+
+### Model Comparisons of One Predictor
+
+Something important to mention that will occasionally come back up is doing a $\Delta R^2$ model comparison test for a single variable. That is, the reduced model only differs from the full model by one variable.
+
+**Example:**
+
+-   Full model: `Enjoy = RL + Age + Span + LatMed + LatClub`
+-   Reduced model: `Enjoy = Age + Span + LatMed + LatClub`
+
+If you were to calculate a $\Delta R^2$ F test for the difference of $R^2$ between these two models, this will be analytically equivalent to the t test for the slope of `RL` in the full model.
+
+```{r single-var-comparison}
+model_full2    <- lm(Enjoy ~ RL + Age + Span + LatMed + LatClub, data = rauw)
+model_reduced2 <- lm(Enjoy ~ Age + Span + LatMed + LatClub, data = rauw)
+
+# Calculate F test with anova()
+anova(model_reduced2, model_full2)
+```
+
+```{r t-vs-f}
+# Now look at the t test for RL in the full model
+summary(model_full2)
+
+# If we square the t statistic for RL...
+22.982^2
+```
+
+We get the same F statistic as the `anova()` output! Thus, an F test for a model comparison for a single variable is identical to the t test of the coefficient in the full model. The F statistic is just the t statistic squared.
+
+Conceptually, you can think of the model comparison test as analyzing whether a model that adds `RL` significantly explains more variance in `Enjoy` than a model without `RL`. It turns out that this is exactly what the slope test of `RL` is doing - it checks whether or not `RL` is significant for explaining `Enjoy`.
+
+------------------------------------------------------------------------
+
+## 4. Squared Multiple Correlations
+
+### Squared Multiple Correlations
+
+Previously, we have learned correlations between two variables (e.g., correlation between Y and X). However, it is possible to get a "correlation" between one variable and a set of predictors (e.g., correlation between Y and X1, X2, X3). Since there are multiple predictors in this desired correlation, the only way to format it is by making it a "squared" correlation, akin to an $R^2$ statistic.
+
+### Partialling Out Multiple Variables
+
+Previously, we learned how to partial out one variable from Y and another predictor. However, it is possible to partial multiple variables at a time to get a partial or semi-partial squared multiple correlation. The result is a statistic that explains the relationship between a set of variables and the outcome while removing the influence of other variables.
+
+### Calculating Semi-Partial Multiple Correlations
+
+To calculate multiple squared correlations, there is no easy built-in method in R. Instead, we have to manually calculate these by saving partialled residuals.
+
+Basically, you add the variables you want to partial from as outcomes in many regression models, and the variable(s) you want to partial out as the predictor.
+
+As a running example, we want to partial out `Age` from each other variable besides the outcome of `Enjoy` (since this is "semi-partial").
+
+```{r semi-partial-residuals}
+resid_rl      <- lm(RL      ~ Age, data = rauw)$residuals
+resid_span    <- lm(Span    ~ Age, data = rauw)$residuals
+resid_lat_med  <- lm(LatMed  ~ Age, data = rauw)$residuals
+resid_lat_club <- lm(LatClub ~ Age, data = rauw)$residuals
+```
+
+Then you need to add these residuals as the predictors in a model that predicts `Enjoy`.
+
+```{r semi-partial-model}
+semi_part_model <- lm(Enjoy ~ resid_rl + resid_span + resid_lat_med + resid_lat_club,
+                      data = rauw)
+
+# All you need is the R^2 of this model (everything else is not useful)
+summary(semi_part_model)$r.squared
+```
+
+Thus, the semi-partial squared multiple correlation is .25.
+
+### Semi-Partial Squared Correlations Interpretation
+
+The interpretation of semi-partial squared correlations follows an $R^2$.
+
+> The proportion of variance explained in Rauw Alejandro enjoyment that is uniquely attributed to reggaeton enjoyment and Latin American cultural experience, after we accounted for Age already. So for our example, reggaeton enjoyment and Latin American cultural experience uniquely explain 25% of the variation in Rauw Alejandro enjoyment, after accounting for age.
+
+### Semi-Partial Squared Correlations Equal $\Delta R^2$
+
+An interesting fact about the semi-partial squared multiple correlations is that they actually equal a $\Delta R^2$ test for whatever you are partialling.
+
+Consider the following full and reduced models:
+
+-   Full model: `Enjoy = RL + Age + Span + LatMed + LatClub`
+-   Reduced model: `Enjoy = Age`
+
+The reduced model only has `Age`. When we compare these two models, we are essentially comparing how much the other set of variables can explain `Enjoy` after already accounting for `Age`. To demonstrate:
+
+```{r delta-r2-equivalence}
+model_full3    <- lm(Enjoy ~ RL + Age + Span + LatMed + LatClub, data = rauw)
+model_reduced3 <- lm(Enjoy ~ Age, data = rauw)
+
+R2_full3    <- summary(model_full3)$r.squared
+R2_reduced3 <- summary(model_reduced3)$r.squared
+
+R2_full3 - R2_reduced3
+```
+
+The $\Delta R^2$ is .255. This is identical to the semi-partial squared multiple correlation we found using residuals.
+
+### Squared Partial Multiple Correlations
+
+To get the squared *partial* multiple correlations, we must also partial out `Age` from the `Enjoy` outcome along with the predictors.
+
+```{r partial-multiple}
+resid_enjoy <- lm(Enjoy ~ Age, data = rauw)$residuals
+
+# Run a model with the residuals for each partialled variable
+part_model <- lm(resid_enjoy ~ resid_rl + resid_span + resid_lat_med + resid_lat_club,
+                 data = rauw)
+summary(part_model)$r.squared
+```
+
+From this, we can see that the partial squared correlation is .2551.
+
+### Partial Correlations from Semi-Partial Correlations
+
+It is possible to get the partial squared multiple correlation directly from the semi-partial squared correlations. You need the semi-partial multiple correlation ($\Delta R^2$) and the $R^2$ from the reduced model (the model where we partialled out `Age` from `Enjoy`).
+
+```{r partial-from-semi}
+R2_age <- summary(lm(Enjoy ~ Age, data = rauw))$r.squared
+d_r2   <- summary(semi_part_model)$r.squared
+
+# delta-R^2 / (1 - R^2_reduced)
+d_r2 / (1 - R2_age)
+```
+
+You can see this is identical to the partial squared multiple correlation from Section 4.6.
+
+------------------------------------------------------------------------
+
+## 5. Tolerance and Variance Inflation Factor
+
+### Tolerance
+
+Tolerance is the proportion of variance that is unexplained. In other words: $\text{Tolerance} = 1 - R^2_j$, where $R^2_j$ is the $R^2$ you get from predicting $X_j$ from all the other X's in the model.
+
+```{r r2-rl}
+# Example: R^2_RL
+R2_rl <- summary(lm(RL ~ Age + Span + LatMed + LatClub, data = rauw))$r.squared
+R2_rl
+```
+
+Essentially, this tells you how well we can predict `RL` from the other variables. Tolerance thus is how much unique variance does this predictor still have?
+
+```{r tolerance}
+# Tolerance for RL
+1 - R2_rl
+```
+
+Since the tolerance is so high in `RL`'s case, hardly any of the predictive ability for `RL` is due to the presence of other variables. Tolerance is inherently unrelated to the size of correlation between predictors and outcome. It is typically used as a transitionary step to get other statistics.
+
+### VIF
+
+The Variance Inflation Factor (VIF) is the extent to which a slope coefficient's standard error is affected by the correlation to another variable. It acts as a measure of collinearity:
+
+$$VIF = \frac{1}{\text{Tolerance}} = \frac{1}{1 - R^2_j}$$
+
+```{r vif-manual}
+# VIF for RL
+1 / (1 - R2_rl)
+```
+
+The larger the VIF for a specific slope, the more collinear that predictor is with the other predictors. The traditional cutoff for non-ignorable collinearity is when a predictor's VIF $\geq$ 1.10. Keep in mind that the higher the collinearity of the predictors, the less valid your inference is.
+
+### Getting VIF with vif()
+
+Use the `vif()` function from the `car` package by plugging your model object in.
+
+```{r vif}
+library(car)
+vif(model_full)
+```
+
+As you can see, the VIF for each variable is tiny. So none of the variables are collinear with each other. If you want the tolerance, you can manually calculate it.
+
+```{r tolerance-from-vif}
+1 / vif(model_full)
+```
+
+------------------------------------------------------------------------
+
+## Well Done!
+
+You have completed the Inference and Multiple Correlations tutorial. Here is a summary of what was covered:
+
+-   Coefficient t tests and how to write correct inferential statements
+-   Using confidence intervals for inference with `confint()`
+-   $R^2$ F tests and how to write $R^2$ inferential statements
+-   $\Delta R^2$ model comparison tests with `anova()` and how to do them manually
+-   The equivalence between a single-variable $\Delta R^2$ F test and the coefficient t test
+-   Squared semi-partial and partial multiple correlations computed via saved residuals
+-   The equivalence between semi-partial squared multiple correlations and $\Delta R^2$
+-   Tolerance and VIF with `vif()` from the `car` package
+
+The next lesson covers regression diagnostics.

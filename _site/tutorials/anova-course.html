@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Graduate Level Intro to Regression with R for Psychological Research – InfoGothic</title>
+<title>Graduate Level ANOVA with SPSS for Psychological Research – InfoGothic</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -71,35 +71,6 @@ ul.task-list li input[type="checkbox"] {
   }
 }</script>
 
-  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
-  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
-
-<script type="text/javascript">
-const typesetMath = (el) => {
-  if (window.MathJax) {
-    // MathJax Typeset
-    window.MathJax.typeset([el]);
-  } else if (window.katex) {
-    // KaTeX Render
-    var mathElements = el.getElementsByClassName("math");
-    var macros = [];
-    for (var i = 0; i < mathElements.length; i++) {
-      var texText = mathElements[i].firstChild;
-      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
-        window.katex.render(texText.data, mathElements[i], {
-          displayMode: mathElements[i].classList.contains('display'),
-          throwOnError: false,
-          macros: macros,
-          fleqn: false
-        });
-      }
-    }
-  }
-}
-window.Quarto = {
-  typesetMath
-};
-</script>
 
 <link rel="stylesheet" href="../styles.css">
 </head>
@@ -164,7 +135,7 @@ window.Quarto = {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Graduate Level Intro to Regression with R for Psychological Research</h1>
+<h1 class="title">Graduate Level ANOVA with SPSS for Psychological Research</h1>
 </div>
 
 
@@ -181,73 +152,27 @@ window.Quarto = {
 </header>
 
 
-<p>Below are links to multiple lab lessons for the lessons I gave at UCLA for incoming psychology doctorate students. I was not the main lecturer, but I lead the lab sessions where I taught the students regression in R. So the material here is not the full extent of the course, however it covers a good foundation of what a psychological researcher would need in practical coding. The course was 10 weeks long and there was only so much we could cover in that time frame.</p>
-<p>If you are familiar with R, some of these might seem simple, but I would recommend looking over the lessons as I go over important definitions and functions that build on each other consecutively.</p>
-<p>By going through these lessons, you should be equipped enough to deal with a lot of use cases for regression in psychological research. However, this is an intro level course, and statistics for psychology goes much deeper than what is presented here.</p>
-<p>For anyone who wishes to dig deeper or is interested in pursuing psychological research as a career and wants to know what are the higher stats courses needed, I would recommend pursuing learning material in the fields of: multilevel modeling, factor analysis, structural equation modeling, item response theory, longitudinal modeling.</p>
-<p>I started doing a lot of these as R Shiny apps, only to learn that shinyapps.io caps free accounts to only 5 apps. So I only the first five lessons are interactable. But that’s ok, the static lessons are just as good :^)</p>
-<section id="introduction-to-r-and-simple-linear-regression" class="level2">
-<h2 data-anchor-id="introduction-to-r-and-simple-linear-regression">Introduction to R and Simple Linear Regression</h2>
-<p>A beginner tutorial covering the basics of R objects and functions and how to do simple linear regression. This lesson will cover important functions and interpretations we will use throughout the course.</p>
-<p><a href="https://infogothic.shinyapps.io/simple_linear_regression" target="_blank">Open Tutorial (Interactable Shiny App)</a></p>
-<p><a href="simple-linear-regression.html">Open Tutorial (Static Page )</a></p>
+<p>Below are links to multiple labs I presented for the incoming graduate student cohorts at UCLA. This course revolved around ANOVAs using SPSS. The professor who led the lectures preferred SPSS for ANOVA-based research since its very easy to specify them and SPSS automatically uses the correct statistics (like Type III sum of squares). Some of the simplest models you can also run in other software like R, however, quickly you might see that many of the types of analyses we want to do can’t be done in R (besides hard coding everything yourself, which we didn’t want to teach to psychology students).</p>
+<p>Examples of things SPSS can do that R cannot:</p>
+<p>The caveat of using SPSS is that I can’t run SPSS code natively in Quarto, which is how I am constructing this website. So all lessons will give you the syntax, but output will be done via screenshots as best as I can. But due to this limitation, the quality of the lesson material might ebb and flow depending on the topic.</p>
+<section id="introduction-to-spss-and-anova" class="level2">
+<h2 data-anchor-id="introduction-to-spss-and-anova">Introduction to SPSS and ANOVA</h2>
+<p>Open Tutorial</p>
 <hr>
 </section>
-<section id="multiple-linear-regression" class="level2">
-<h2 data-anchor-id="multiple-linear-regression">Multiple Linear Regression</h2>
-<p>In this lesson, we cover how to run multiple linear regressions and how to interpret their output. We also cover the various different types of model correlations. Including, model correlation <span class="math inline">\(R\)</span>, the <span class="math inline">\(R^2\)</span> effect size, and adjusted-<span class="math inline">\(R^2\)</span> , and partial correlations.</p>
-<p><a href="https://infogothic.shinyapps.io/mlr_tutorial/" target="_blank">Open Tutorial (Interactable Shiny App)</a></p>
-<p><a href="multiple-linear-regression.html">Open Tutorial (Static Page )</a></p>
+<section id="contrast-testing" class="level2">
+<h2 data-anchor-id="contrast-testing">Contrast Testing</h2>
+<p>Open Tutorial</p>
 <hr>
 </section>
-<section id="inference" class="level2">
-<h2 data-anchor-id="inference">Inference</h2>
-<p>In this lesson, we cover how to interpret significance tests of the regression. These involve the <em>t</em> test of the slope coefficients, <em>F</em> test of the <span class="math inline">\(R^2\)</span> coefficient, and model comparison tests with the <span class="math inline">\(\Delta R^2\)</span> test. We will also cover multiple squared correlations.</p>
-<p><a href="https://infogothic.shinyapps.io/diagnostics_tutorial/">Open Tutorial (Interactable Shiny App)</a></p>
-<p><a href="inference-and-multiple-correlations.html">Open Tutorial (Static Page )</a></p>
+<section id="type-i-error-correction-bonferroni-tukey-and-scheffe-corrections" class="level2">
+<h2 data-anchor-id="type-i-error-correction-bonferroni-tukey-and-scheffe-corrections">Type I Error Correction: Bonferroni, Tukey, and Scheffe Corrections</h2>
+<p>Open Tutorial</p>
 <hr>
 </section>
-<section id="diagnostics" class="level2">
-<h2 data-anchor-id="diagnostics">Diagnostics</h2>
-<p>In this lesson, we cover the basic model assumptions of linear regression and how to check whether or not your regression model upholds or violates these assumptions using graphical diagnostics. We also cover what to do in situations where your model violates important assumptions.</p>
-<p><a href="https://infogothic.shinyapps.io/diagnostics_tutorial/">Open Tutorial (Interactable Shiny App)</a></p>
-<p><a href="diagnostics.html">Open Tutorial (Static Page )</a></p>
-<hr>
-</section>
-<section id="variable-importance" class="level2">
-<h2 data-anchor-id="variable-importance">Variable Importance</h2>
-<p>In this lesson, we cover what makes variables important in the model and how “importance” differs from “significance”. We will cover multiple different predictor effect sizes as well as dominance analysis of regression slopes.</p>
-<p><a href="variable-importance.html">Open Tutorial</a></p>
-<hr>
-</section>
-<section id="prediction" class="level2">
-<h2 data-anchor-id="prediction">Prediction</h2>
-<p>In this lesson, we cover predictive statistics and how this differs from the inferential statistics we’ve been doing previously. This involves covering cross-validation and how to get shrunken-<span class="math inline">\(R^2\)</span>’s as well as simple variable selection techniques. It also covers how to generate prediction intervals and how to run simple LASSO regression.</p>
-<p><a href="prediction.html">Open Tutorial</a></p>
-<hr>
-</section>
-<section id="multicategorical-predictors" class="level2">
-<h2 data-anchor-id="multicategorical-predictors">Multicategorical Predictors</h2>
-<p>In this lesson, we cover how to run and interpret multicategorical predictors. This involves covering multiple categorical coding schemes. We will cover the popular dummy coding technique and the lesser known sequential specification, Helmert coding, and effects coding methods.</p>
-<p><a href="multicategorical-predictors.html">Open Tutorial</a></p>
-<hr>
-</section>
-<section id="nonlinear-regression" class="level2">
-<h2 data-anchor-id="nonlinear-regression">Nonlinear Regression</h2>
-<p>In this lesson, we cover how to fit and analyze nonlinear regression models. These models include polynomial regression, piecewise regression, and log-transformed models.</p>
-<p><a href="nonlinear-regression.html">Open Tutorial</a></p>
-<hr>
-</section>
-<section id="moderation" class="level2">
-<h2 data-anchor-id="moderation">Moderation</h2>
-<p>In this lesson, we cover moderation and interaction terms in regression. This involves covering how to interpret interactions and conditional effects, how to get simple effects, and how to make interaction plots.</p>
-<p><a href="moderation.html">Open Tutorial</a></p>
-<hr>
-</section>
-<section id="logistic-regression" class="level2">
-<h2 data-anchor-id="logistic-regression">Logistic Regression</h2>
-<p>In this lesson, we cover logistic regression of binary outcome variables. This involves covering fitting and interpreting log-odds, how to convert log-odds to odds ratios or probabilities, how to get pseudo-<span class="math inline">\(R^2\)</span> statistics, and how to plot logistic regression models.</p>
-<p><a href="logistic-regression.html">Open Tutorial</a></p>
+<section id="trend-analysis-linear-and-nonlineary-trajectories" class="level2">
+<h2 data-anchor-id="trend-analysis-linear-and-nonlineary-trajectories">Trend Analysis: Linear and Nonlineary Trajectories</h2>
+<p>Open Tutorial</p>
 
 
 </section>

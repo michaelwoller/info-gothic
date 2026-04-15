@@ -190,7 +190,7 @@ dominanceMatrix(da, type = "complete")
 Running this code on the Big 5 dataset produces the following dominance matrix:
 
 |   | OpenMindedness | Conscientiousness | Extraversion | Agreeableness | NegativeEmotionality |
-|------------|:----------:|:----------:|:----------:|:----------:|:----------:|
+|----|:--:|:--:|:--:|:--:|:--:|
 | OpenMindedness | 0.5 | 0 | 0 | 0 | 0 |
 | Conscientiousness | 1 | 0.5 | 0 | 1 | 0 |
 | Extraversion | 1 | 0 | 0.5 | 1 | 0 |
@@ -294,7 +294,7 @@ coef(big5_model)["NegativeEmotionality"] - coef(big5_model)["Conscientiousness"]
 The three approaches in this lesson all address variable importance, but they answer slightly different questions:
 
 | Method | Question answered |
-|------------------------------------|------------------------------------|
+|----|----|
 | **Effect sizes** ($\eta^2$, partial $\eta^2$, $f^2$) | How much variance does each predictor explain? |
 | **Dominance analysis** | Which predictor is more important across all model contexts? |
 | **Standardized coefficients** | How do predictors compare in standard deviation units? |

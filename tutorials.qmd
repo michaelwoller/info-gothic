@@ -1,7 +1,9 @@
 ---
-title: "Tutorials"
+title: "Courses & Tutorials"
 ---
 
-Here are links to lesson material I've created and decided to turn into interactable tutorials.
+Here are links to lesson material I've created and decided to turn into interactable tutorials (well some of them are interactable). These were used to teach incoming graduate students at UCLA's psychology program.
 
 ## [Graduate Level Intro to Regression with R for Psychological Research](tutorials/reg-course.html)
+
+## [Graduate Level ANOVA with SPSS for Psychological Research](tutorials/anova-course.html)
