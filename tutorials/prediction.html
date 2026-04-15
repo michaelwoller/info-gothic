@@ -163,7 +163,7 @@ window.Quarto = {
   </li>  
   <li class="nav-item">
     <a class="nav-link" href="../tutorials.html"> 
-<span class="menu-text">Tutorials</span></a>
+<span class="menu-text">Courses &amp; Tutorials</span></a>
   </li>  
   <li class="nav-item">
     <a class="nav-link" href="../blog-posts.html"> 
@@ -203,6 +203,7 @@ window.Quarto = {
   <ul class="collapse">
   <li><a href="#the-dataset" id="toc-the-dataset" class="nav-link" data-scroll-target="#the-dataset">The Dataset</a></li>
   </ul></li>
+  <li><a href="#section" id="toc-section" class="nav-link" data-scroll-target="#section"></a></li>
   <li><a href="#cross-validation-and-shrunken-r" id="toc-cross-validation-and-shrunken-r" class="nav-link" data-scroll-target="#cross-validation-and-shrunken-r">1. Cross-Validation and Shrunken R</a>
   <ul class="collapse">
   <li><a href="#what-is-cross-validation" id="toc-what-is-cross-validation" class="nav-link" data-scroll-target="#what-is-cross-validation">What Is Cross-Validation?</a></li>
@@ -265,18 +266,25 @@ window.Quarto = {
 <h2 data-anchor-id="introduction">Introduction</h2>
 <p>Most of this course has focused on <strong>inference</strong>, which involves using a model to make conclusions about population-level relationships. But there is another goal in regression: <strong>prediction</strong>. For predictive models, we are often less concerned with how well the model fits the data we already have, and more concerned with how well it will perform on new, unseen data. A model can fit the current dataset very well simply by capturing noise (overfitting), but this does not guarantee it will generalize to future datasets.</p>
 <p>In this lesson we will cover cross-validation methods for evaluating predictive accuracy, variable selection techniques for building optimal models, prediction intervals, and LASSO regression.</p>
+<p>Note, prior we’ve used the term “prediction” to mean getting predicted scores from a regression model, but in this case “prediction” has a specific connotation about minimizing predictive error. So when, previously, I’ve said “use X to predict Y”, were were doing prediction, but not with a model specifically tailored for accurate prediction.</p>
+<p>The shift in focus is now we are trying to get as accurate as a prediction to new, unseen datasets as possible. To do this, we need to minimize <em>error</em> (aka, how far off our prediction would be from the true new value). We’ll go over many methods on how to minimize this prediction error.</p>
 <section id="the-dataset" class="level3">
 <h3 data-anchor-id="the-dataset">The Dataset</h3>
 <p>For this lesson we continue with the <strong>Big 5</strong> personality dataset, predicting <code>ExistentialWellBeing</code> from the five personality traits:</p>
 <ul>
-<li><code>OpenMindedness</code></li>
-<li><code>Conscientiousness</code></li>
-<li><code>Extraversion</code></li>
-<li><code>Agreeableness</code></li>
-<li><code>NegativeEmotionality</code></li>
+<li><code>ExistentialWellBeing</code> — how well would you rate your existential well being (1–5 scale)</li>
+<li><code>OpenMindedness</code> — how open minded you are (1–5 scale)</li>
+<li><code>Conscientiousness</code> — how conscientious you are (1–5 scale)</li>
+<li><code>Extraversion</code> — how extroverted you are (1–5 scale)</li>
+<li><code>Agreeableness</code> — how agreeable you are (1–5 scale)</li>
+<li><code>NegativeEmotionality</code> — how neurotic you are (1–5 scale)</li>
 </ul>
 <hr>
 </section>
+</section>
+<section id="section" class="level2">
+<h2 data-anchor-id="section"></h2>
+<hr>
 </section>
 <section id="cross-validation-and-shrunken-r" class="level2">
 <h2 data-anchor-id="cross-validation-and-shrunken-r">1. Cross-Validation and Shrunken R</h2>
