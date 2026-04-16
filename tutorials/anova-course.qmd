@@ -15,11 +15,11 @@ The caveat of using SPSS is that I can't run SPSS code natively in Quarto, which
 
 ## Introduction to SPSS and ANOVA
 
-[Open Tutorial](SPSS-ANOVA-Intro.html)
+[Open Tutorial](anova-lessons/SPSS-ANOVA-Intro.html)
 
 ## Contrast Testing
 
-[Open Tutorial](Contrasts.html)
+[Open Tutorial](anova-lessons/Contrasts.html)
 
 ------------------------------------------------------------------------
 
