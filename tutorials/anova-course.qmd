@@ -6,25 +6,22 @@ Below are links to multiple labs I presented for the incoming graduate student c
 
 Examples of things SPSS can do that R cannot:
 
-- In between-subjects designs, R functions like `anova()` give wrong results when you have unequal group sizes (which is very common).
-- In within-subject designs, functions such as `manova()` rely on assumptions such as homskedasticity and sphericity, which are often violated in real data. 
+-   In between-subjects designs, R functions like `anova()` give wrong results when you have unequal group sizes (which is very common).
+-   In within-subject designs, functions such as `manova()` rely on assumptions such as homskedasticity and sphericity, which are often violated in real data.
 
 Software such as SPSS or SAS provide better solutions. It's possible to do these ANOVAs in R, but it will require fine grain math and coding skills from the researchers.
 
 The caveat of using SPSS is that I can't run SPSS code natively in Quarto, which is how I am constructing this website. So all lessons will give you the syntax, but output will be done via screenshots as best as I can. But due to this limitation, the quality of the lesson material might ebb and flow depending on the topic.
 
+## Introduction to SPSS and ANOVA
 
-## Introduction to SPSS and ANOVA 
-
-Open Tutorial
-
------------------------------------------------------------------------
+[Open Tutorial](SPSS-ANOVA-Intro.html)
 
 ## Contrast Testing
 
-Open Tutorial
+[Open Tutorial](Contrasts.html)
 
------------------------------------------------------------------------
+------------------------------------------------------------------------
 
 ## Type I Error Correction: Bonferroni, Tukey, and Scheffe Corrections
 

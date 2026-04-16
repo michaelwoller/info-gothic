@@ -30,7 +30,6 @@ In this lesson, we cover how to run multiple linear regressions and how to inter
 
 [Open Tutorial (Static Page )](multiple-linear-regression.html)
 
-
 ------------------------------------------------------------------------
 
 ## Inference
@@ -40,7 +39,6 @@ In this lesson, we cover how to interpret significance tests of the regression. 
 [Open Tutorial (Interactable Shiny App)](https://infogothic.shinyapps.io/diagnostics_tutorial/)
 
 [Open Tutorial (Static Page )](inference-and-multiple-correlations.html)
-
 
 ------------------------------------------------------------------------
 

@@ -154,6 +154,11 @@ ul.task-list li input[type="checkbox"] {
 
 <p>Below are links to multiple labs I presented for the incoming graduate student cohorts at UCLA. This course revolved around ANOVAs using SPSS. The professor who led the lectures preferred SPSS for ANOVA-based research since its very easy to specify them and SPSS automatically uses the correct statistics (like Type III sum of squares). Some of the simplest models you can also run in other software like R, however, quickly you might see that many of the types of analyses we want to do can’t be done in R (besides hard coding everything yourself, which we didn’t want to teach to psychology students).</p>
 <p>Examples of things SPSS can do that R cannot:</p>
+<ul>
+<li>In between-subjects designs, R functions like <code>anova()</code> give wrong results when you have unequal group sizes (which is very common).</li>
+<li>In within-subject designs, functions such as <code>manova()</code> rely on assumptions such as homskedasticity and sphericity, which are often violated in real data.</li>
+</ul>
+<p>Software such as SPSS or SAS provide better solutions. It’s possible to do these ANOVAs in R, but it will require fine grain math and coding skills from the researchers.</p>
 <p>The caveat of using SPSS is that I can’t run SPSS code natively in Quarto, which is how I am constructing this website. So all lessons will give you the syntax, but output will be done via screenshots as best as I can. But due to this limitation, the quality of the lesson material might ebb and flow depending on the topic.</p>
 <section id="introduction-to-spss-and-anova" class="level2">
 <h2 data-anchor-id="introduction-to-spss-and-anova">Introduction to SPSS and ANOVA</h2>
