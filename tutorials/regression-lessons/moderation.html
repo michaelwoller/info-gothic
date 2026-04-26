@@ -1,0 +1,1407 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.9.36">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Michael Woller">
+
+<title>Moderation and Interaction Effects – InfoGothic</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<link href="../../images/favicon.ico" rel="icon">
+<script src="../../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-dark-f418161beb48e0141c760e455f12af2c.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap-4d14f3be7bc8eb7ec2287338953877e0.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="dark">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+  var nav = document.querySelector(".navbar-nav");
+  var li = document.createElement("li");
+  li.className = "nav-item";
+  li.innerHTML = '<a class="nav-link ml-onclick-form" href="javascript:void(0)" onclick="ml(\'show\', \'18mxag\', true)">Mail List</a>';
+  var icons = nav.querySelector(".nav-item:has(.bi)");
+  nav.insertBefore(li, icons);
+});
+</script>
+
+
+<link rel="stylesheet" href="../../styles.css">
+</head>
+
+<body class="nav-fixed quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="../../index.html">
+    <span class="navbar-title">InfoGothic</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../about.html"> 
+<span class="menu-text">About</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../tutorials.html"> 
+<span class="menu-text">Courses &amp; Tutorials</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../blog-posts.html"> 
+<span class="menu-text">Blog Posts</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="https://notes.infogothic.com"> 
+<span class="menu-text">Obsidian Notes</span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/michaelwoller"> <i class="bi bi-github" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://bsky.app/profile/infogothic.bsky.social"> <i class="bi bi-bluesky" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction">Introduction</a>
+  <ul class="collapse">
+  <li><a href="#the-dataset" id="toc-the-dataset" class="nav-link" data-scroll-target="#the-dataset">The Dataset</a></li>
+  </ul></li>
+  <li><a href="#creating-interaction-models" id="toc-creating-interaction-models" class="nav-link" data-scroll-target="#creating-interaction-models">1. Creating Interaction Models</a>
+  <ul class="collapse">
+  <li><a href="#method-1-creating-a-product-variable" id="toc-method-1-creating-a-product-variable" class="nav-link" data-scroll-target="#method-1-creating-a-product-variable">Method 1: Creating a Product Variable</a></li>
+  <li><a href="#method-2-using-the-operator-in-lm" id="toc-method-2-using-the-operator-in-lm" class="nav-link" data-scroll-target="#method-2-using-the-operator-in-lm">Method 2: Using the * Operator in <code>lm()</code></a></li>
+  <li><a href="#adding-covariates" id="toc-adding-covariates" class="nav-link" data-scroll-target="#adding-covariates">Adding Covariates</a></li>
+  <li><a href="#multicategorical-moderators" id="toc-multicategorical-moderators" class="nav-link" data-scroll-target="#multicategorical-moderators">Multicategorical Moderators</a></li>
+  </ul></li>
+  <li><a href="#interpreting-moderation-models" id="toc-interpreting-moderation-models" class="nav-link" data-scroll-target="#interpreting-moderation-models">2. Interpreting Moderation Models</a></li>
+  <li><a href="#mean-centering" id="toc-mean-centering" class="nav-link" data-scroll-target="#mean-centering">3. Mean Centering</a></li>
+  <li><a href="#simpleconditional-effects" id="toc-simpleconditional-effects" class="nav-link" data-scroll-target="#simpleconditional-effects">4. Simple/Conditional Effects</a>
+  <ul class="collapse">
+  <li><a href="#what-are-simple-effects" id="toc-what-are-simple-effects" class="nav-link" data-scroll-target="#what-are-simple-effects">What Are Simple Effects?</a></li>
+  <li><a href="#simple-slopes-for-categorical-moderators" id="toc-simple-slopes-for-categorical-moderators" class="nav-link" data-scroll-target="#simple-slopes-for-categorical-moderators">Simple Slopes for Categorical Moderators</a></li>
+  <li><a href="#simple-slopes-for-interval-moderators" id="toc-simple-slopes-for-interval-moderators" class="nav-link" data-scroll-target="#simple-slopes-for-interval-moderators">Simple Slopes for Interval Moderators</a></li>
+  <li><a href="#simple-slopes-for-continuous-moderators" id="toc-simple-slopes-for-continuous-moderators" class="nav-link" data-scroll-target="#simple-slopes-for-continuous-moderators">Simple Slopes for Continuous Moderators</a></li>
+  </ul></li>
+  <li><a href="#interaction-plots" id="toc-interaction-plots" class="nav-link" data-scroll-target="#interaction-plots">5. Interaction Plots</a>
+  <ul class="collapse">
+  <li><a href="#why-plot-interactions" id="toc-why-plot-interactions" class="nav-link" data-scroll-target="#why-plot-interactions">Why Plot Interactions?</a></li>
+  <li><a href="#gf_point-from-ggformula" id="toc-gf_point-from-ggformula" class="nav-link" data-scroll-target="#gf_point-from-ggformula"><code>gf_point()</code> from <code>ggformula</code></a></li>
+  <li><a href="#interact_plot-from-the-interactions-package" id="toc-interact_plot-from-the-interactions-package" class="nav-link" data-scroll-target="#interact_plot-from-the-interactions-package"><code>interact_plot()</code> from the <code>interactions</code> Package</a></li>
+  </ul></li>
+  <li><a href="#simple-effect-probing" id="toc-simple-effect-probing" class="nav-link" data-scroll-target="#simple-effect-probing">6. Simple Effect Probing</a>
+  <ul class="collapse">
+  <li><a href="#what-is-probing" id="toc-what-is-probing" class="nav-link" data-scroll-target="#what-is-probing">What Is Probing?</a></li>
+  <li><a href="#pick-a-point-probing" id="toc-pick-a-point-probing" class="nav-link" data-scroll-target="#pick-a-point-probing">Pick a Point Probing</a></li>
+  <li><a href="#johnson-neyman-approach" id="toc-johnson-neyman-approach" class="nav-link" data-scroll-target="#johnson-neyman-approach">Johnson-Neyman Approach</a></li>
+  </ul></li>
+  <li><a href="#well-done" id="toc-well-done" class="nav-link" data-scroll-target="#well-done">Well Done!</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Moderation and Interaction Effects</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Michael Woller </p>
+          </div>
+  </div>
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="introduction" class="level2">
+<h2 data-anchor-id="introduction">Introduction</h2>
+<p><strong>Moderation</strong> (also called an interaction effect) occurs when the effect one predictor has on the outcome depends on the value of another predictor in the model. For example, the effect of study time on exam scores might depend on whether a student has a tutor. With a tutor, more study time may strongly boost scores, but without one, the same extra study time might have a weaker effect. This “it depends” relationship between predictors is what we call an interaction.</p>
+<p>To test for moderation, we create an interaction term by multiplying two predictors together and adding it to the regression model.</p>
+<p>Typically in psychological research, one variable of the interaction is designated as the <strong>focal predictor</strong> (X) - the focus of the experiment and interpretation. The other predictor is considered the <strong>moderator</strong> (M). The choice of which variable is the focal predictor or the moderator makes no difference on the outcome, only the interpretation.</p>
+<p>A significant interaction term tells us the relationship between the focal predictor and the outcome genuinely changes across levels of the moderator.</p>
+<section id="the-dataset" class="level3">
+<h3 data-anchor-id="the-dataset">The Dataset</h3>
+<p>For this lesson we continue with the <strong>Big 5</strong> personality dataset. The variables of interest are</p>
+<ul>
+<li><code>Conservatism</code> — self report measure of one’s political conservatism (1–5 scale)</li>
+<li><code>RightWingAuthoritarianism</code> — measure on one’s favorability to right wing authoritarianism (1–9 scale)</li>
+<li><code>PeerStatus</code> — self report on one’s perceived status among their peers (1–7 scale)</li>
+<li><code>FamilyNotUnemployed</code> — binary indicator on whether one’s family has employment or not (0 = no employment, 1 = employment)</li>
+<li><code>Immigrant</code> — a biary indicator on whether one’s family comes from immigrants or not (0 = not immigrant, 1 = immigrant)</li>
+<li><code>Religiousness</code> — measure of one’s level of religiousness (1–5 continuous scale)</li>
+</ul>
+<p>The focal model of interest is whether the effect of an individual’s political conservatism (<code>Conservatism</code>) on their favorability to right wing authoritarianism (<code>RightWingAuthoritarianism</code>) is moderated by their perceived social status among their peers (<code>PeerStatus</code>). However, we will be exploring other models as well.</p>
+<hr>
+</section>
+</section>
+<section id="creating-interaction-models" class="level2">
+<h2 data-anchor-id="creating-interaction-models">1. Creating Interaction Models</h2>
+<section id="method-1-creating-a-product-variable" class="level3">
+<h3 data-anchor-id="method-1-creating-a-product-variable">Method 1: Creating a Product Variable</h3>
+<p>One way to create an interaction is to manually create a new variable that is the product of the two predictors.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>big5<span class="sc">$</span>ConPeer <span class="ot">&lt;-</span> big5<span class="sc">$</span>Conservatism <span class="sc">*</span> big5<span class="sc">$</span>PeerStatus</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>model1 <span class="ot">&lt;-</span> <span class="fu">lm</span>(RightWingAuthoritarianism <span class="sc">~</span> Conservatism <span class="sc">+</span> PeerStatus <span class="sc">+</span> ConPeer, </span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>             <span class="at">data =</span> big5)</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(model1)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+lm(formula = RightWingAuthoritarianism ~ Conservatism + PeerStatus + 
+    ConPeer, data = big5)
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-3.7494 -0.9595  0.0963  0.8529  5.4545 
+
+Coefficients:
+             Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept)  -1.66109    0.51353  -3.235  0.00124 ** 
+Conservatism  3.08574    0.27038  11.413  &lt; 2e-16 ***
+PeerStatus    0.24530    0.10435   2.351  0.01887 *  
+ConPeer      -0.11817    0.05465  -2.162  0.03076 *  
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 1.343 on 1545 degrees of freedom
+  (1 observation deleted due to missingness)
+Multiple R-squared:  0.3126,    Adjusted R-squared:  0.3113 
+F-statistic: 234.2 on 3 and 1545 DF,  p-value: &lt; 2.2e-16</code></pre>
+</div>
+</div>
+<p><strong>IMPORTANT:</strong> You MUST include both original variables in the model along with the interaction term. You cannot include <code>ConPeer</code> without also including <code>Conservatism</code> and <code>PeerStatus</code> individually. Leaving out a main effect forces its influence into the interaction term, which will bias your results and make coefficients very difficult to interpret.</p>
+</section>
+<section id="method-2-using-the-operator-in-lm" class="level3">
+<h3 data-anchor-id="method-2-using-the-operator-in-lm">Method 2: Using the * Operator in <code>lm()</code></h3>
+<p>The cleaner approach is to use the <code>*</code> operator directly in <code>lm()</code>, which includes the main effects automatically.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>model2 <span class="ot">&lt;-</span> <span class="fu">lm</span>(RightWingAuthoritarianism <span class="sc">~</span> Conservatism <span class="sc">+</span> PeerStatus <span class="sc">+</span> </span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>               Conservatism<span class="sc">*</span>PeerStatus, <span class="at">data =</span> big5)</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(model2)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+lm(formula = RightWingAuthoritarianism ~ Conservatism + PeerStatus + 
+    Conservatism * PeerStatus, data = big5)
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-3.7494 -0.9595  0.0963  0.8529  5.4545 
+
+Coefficients:
+                        Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept)             -1.66109    0.51353  -3.235  0.00124 ** 
+Conservatism             3.08574    0.27038  11.413  &lt; 2e-16 ***
+PeerStatus               0.24530    0.10435   2.351  0.01887 *  
+Conservatism:PeerStatus -0.11817    0.05465  -2.162  0.03076 *  
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 1.343 on 1545 degrees of freedom
+  (1 observation deleted due to missingness)
+Multiple R-squared:  0.3126,    Adjusted R-squared:  0.3113 
+F-statistic: 234.2 on 3 and 1545 DF,  p-value: &lt; 2.2e-16</code></pre>
+</div>
+</div>
+<p>However, it is generally good practice to include the main effects independently as well.</p>
+<p>Which of the above two methods you use depends on how helpful or important it has to save the product as its own independent variable in your dataset. However, many fuctions we will be using require the use of <code>*</code> like in <code>model2</code> above.</p>
+</section>
+<section id="adding-covariates" class="level3">
+<h3 data-anchor-id="adding-covariates">Adding Covariates</h3>
+<p>To add a covariate that is NOT part of the interaction, simply include it in the model.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>model3 <span class="ot">&lt;-</span> <span class="fu">lm</span>(RightWingAuthoritarianism <span class="sc">~</span> Conservatism <span class="sc">+</span> PeerStatus <span class="sc">+</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>               Conservatism<span class="sc">*</span>PeerStatus <span class="sc">+</span> PeersAcceptanceFriendship, <span class="at">data =</span> big5)</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(model3)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+lm(formula = RightWingAuthoritarianism ~ Conservatism + PeerStatus + 
+    Conservatism * PeerStatus + PeersAcceptanceFriendship, data = big5)
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-3.7572 -0.9584  0.0848  0.8568  5.4374 
+
+Coefficients:
+                          Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept)               -1.69763    0.51788  -3.278  0.00107 ** 
+Conservatism               3.08782    0.27049  11.416  &lt; 2e-16 ***
+PeerStatus                 0.24054    0.10489   2.293  0.02197 *  
+PeersAcceptanceFriendship  0.01006    0.02009   0.501  0.61644    
+Conservatism:PeerStatus   -0.11835    0.05468  -2.165  0.03058 *  
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 1.344 on 1543 degrees of freedom
+  (2 observations deleted due to missingness)
+Multiple R-squared:  0.3129,    Adjusted R-squared:  0.3111 
+F-statistic: 175.7 on 4 and 1543 DF,  p-value: &lt; 2.2e-16</code></pre>
+</div>
+</div>
+<p>An example of a non-significant interaction:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>model4 <span class="ot">&lt;-</span> <span class="fu">lm</span>(RightWingAuthoritarianism <span class="sc">~</span> Conservatism <span class="sc">+</span> FamilyNotUnemployed <span class="sc">+</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>               Conservatism<span class="sc">*</span>FamilyNotUnemployed, <span class="at">data =</span> big5)</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(model4)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+lm(formula = RightWingAuthoritarianism ~ Conservatism + FamilyNotUnemployed + 
+    Conservatism * FamilyNotUnemployed, data = big5)
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-3.7770 -0.9713  0.1117  0.8615  5.5557 
+
+Coefficients:
+                                 Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept)                       -0.6923     0.4744  -1.459    0.145    
+Conservatism                       2.6779     0.2536  10.558   &lt;2e-16 ***
+FamilyNotUnemployed                0.1657     0.5146   0.322    0.748    
+Conservatism:FamilyNotUnemployed  -0.1510     0.2743  -0.550    0.582    
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 1.346 on 1544 degrees of freedom
+  (2 observations deleted due to missingness)
+Multiple R-squared:  0.3107,    Adjusted R-squared:  0.3093 
+F-statistic:   232 on 3 and 1544 DF,  p-value: &lt; 2.2e-16</code></pre>
+</div>
+</div>
+</section>
+<section id="multicategorical-moderators" class="level3">
+<h3 data-anchor-id="multicategorical-moderators">Multicategorical Moderators</h3>
+<p>In R, you can add any type of variable as the moderator. For a multicategorical moderator, you will need multiple dummy variables, each interacting with your focal predictor. If you make the moderator a factor class variable, the dummy interactions will be included automatically.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>big5<span class="sc">$</span>Humor_Factor <span class="ot">&lt;-</span> <span class="fu">as.factor</span>(big5<span class="sc">$</span>Humor)</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>model5 <span class="ot">&lt;-</span> <span class="fu">lm</span>(RightWingAuthoritarianism <span class="sc">~</span> Conservatism <span class="sc">+</span> Humor_Factor <span class="sc">+</span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>               Conservatism<span class="sc">*</span>Humor_Factor, <span class="at">data =</span> big5)</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(model5)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+lm(formula = RightWingAuthoritarianism ~ Conservatism + Humor_Factor + 
+    Conservatism * Humor_Factor, data = big5)
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-3.8314 -0.9607  0.0631  0.8685  5.6167 
+
+Coefficients:
+                           Estimate Std. Error t value Pr(&gt;|t|)   
+(Intercept)                  4.3383     1.6295   2.662  0.00784 **
+Conservatism                 0.2561     0.8131   0.315  0.75286   
+Humor_Factor2               -5.7105     1.7940  -3.183  0.00149 **
+Humor_Factor3               -4.7106     1.6668  -2.826  0.00477 **
+Humor_Factor4               -5.1378     1.6526  -3.109  0.00191 **
+Humor_Factor5               -4.5333     1.6777  -2.702  0.00697 **
+Conservatism:Humor_Factor2   2.7373     0.9055   3.023  0.00255 **
+Conservatism:Humor_Factor3   2.2438     0.8333   2.693  0.00717 **
+Conservatism:Humor_Factor4   2.4057     0.8262   2.912  0.00365 **
+Conservatism:Humor_Factor5   2.0735     0.8396   2.470  0.01364 * 
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 1.342 on 1539 degrees of freedom
+  (1 observation deleted due to missingness)
+Multiple R-squared:  0.3169,    Adjusted R-squared:  0.3129 
+F-statistic: 79.32 on 9 and 1539 DF,  p-value: &lt; 2.2e-16</code></pre>
+</div>
+</div>
+<p>Note there will still be a left-out baseline category. If you want to use other multicategorical coding schemes for the moderator, follow the methods in the Multicategorical Predictors lesson.</p>
+<hr>
+</section>
+</section>
+<section id="interpreting-moderation-models" class="level2">
+<h2 data-anchor-id="interpreting-moderation-models">2. Interpreting Moderation Models</h2>
+<p>Coefficients of moderation models follow similar interpretations to what you have learned before, but with some important distinctions. Since we are incorporating the interaction, the conditional effects are <em>conditional</em> on a specific level of the other predictor in the interaction - typically when the moderator equals 0.</p>
+<ul>
+<li><strong>b1</strong> is the <em>conditional</em> effect of X <strong>when M = 0</strong>. It is NOT when M is “held constant.”</li>
+<li>The <strong>interaction effect</strong> is interpreted as the change in the effect of X between two individuals who differ in one unit of M.</li>
+</ul>
+<p>Using <code>model1</code>:</p>
+<p><strong>Intercept:</strong> The average level of favorability of right wing authoritarianism when an individual has no political conservatism and no status among their peers is expected to be -1.66. Note that this doesn’t make sense on the variable’s scale.</p>
+<p><strong>Slope of Conservatism:</strong> For individuals that have no status among peers, two individuals who differ in political conservatism by one unit are expected to differ by favorability of right wing authoritarianism by about 3.09, with the more conservative individual being more favorable.</p>
+<p><strong>Slope of PeerStatus:</strong> For individuals that are not political conservatives, two individuals who differ in their self-perceived peer status are expected to differ in favorability of right wing authoritarianism by about .25, with the higher peer status individual being more favorable.</p>
+<p><strong>Slope of Interaction:</strong> For two people who differ on self-perceived peer status by 1 unit, the conditional effect of political conservatism on favorability of right wing authoritarianism is expected to change by -.118 for the person higher in peer status.</p>
+<p>The conditional effects are dependent on the level of the other predictor. We are not controlling for the other predictor in entirety because by including the interaction, we assume the main effects are not constant, so they <em>cannot</em> be “controlled.” Instead, we discuss them at a certain level of the other predictor.</p>
+<hr>
+</section>
+<section id="mean-centering" class="level2">
+<h2 data-anchor-id="mean-centering">3. Mean Centering</h2>
+<p>As a final note on interaction effects, it is often said that centering your interaction terms (X and M) at their means can be beneficial. It is a <strong>MYTH</strong> that this will reduce multicollinearity in the sense of reducing true relationships within the data. However, centering at the mean can be very helpful for interpretations.</p>
+<p>Recall how the default conditional effect is when the moderator = 0. This is often nonsensical. Recentering at the mean gives the conditional effect of X at an average M, which is much more intuitive.</p>
+<p>“Centering” just means to position your variable with a specific value in the middle by subtracting that value. Let’s recenter both predictors at their means.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>big5<span class="sc">$</span>PeerStatus_mc   <span class="ot">&lt;-</span> big5<span class="sc">$</span>PeerStatus <span class="sc">-</span> <span class="fu">mean</span>(big5<span class="sc">$</span>PeerStatus)</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>big5<span class="sc">$</span>Conservatism_mc <span class="ot">&lt;-</span> big5<span class="sc">$</span>Conservatism <span class="sc">-</span> <span class="fu">mean</span>(big5<span class="sc">$</span>Conservatism)</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>model6 <span class="ot">&lt;-</span> <span class="fu">lm</span>(RightWingAuthoritarianism <span class="sc">~</span> Conservatism_mc <span class="sc">+</span> PeerStatus_mc <span class="sc">+</span></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>               Conservatism_mc<span class="sc">*</span>PeerStatus_mc, </span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>             <span class="at">data =</span> big5)</span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(model6)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+lm(formula = RightWingAuthoritarianism ~ Conservatism_mc + PeerStatus_mc + 
+    Conservatism_mc * PeerStatus_mc, data = big5)
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-3.7494 -0.9595  0.0963  0.8529  5.4545 
+
+Coefficients:
+                              Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept)                    4.21643    0.03416 123.434   &lt;2e-16 ***
+Conservatism_mc                2.54200    0.09649  26.344   &lt;2e-16 ***
+PeerStatus_mc                  0.02454    0.01844   1.331   0.1835    
+Conservatism_mc:PeerStatus_mc -0.11817    0.05465  -2.162   0.0308 *  
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 1.343 on 1545 degrees of freedom
+  (1 observation deleted due to missingness)
+Multiple R-squared:  0.3126,    Adjusted R-squared:  0.3113 
+F-statistic: 234.2 on 3 and 1545 DF,  p-value: &lt; 2.2e-16</code></pre>
+</div>
+</div>
+<p>Now the slope of <code>Conservatism_mc</code> can be understood as the conditional effect of political conservatism when an individual has <strong>average peer status</strong>. This is called a simple effect, which we explore in more detail in the next section.</p>
+<hr>
+</section>
+<section id="simpleconditional-effects" class="level2">
+<h2 data-anchor-id="simpleconditional-effects">4. Simple/Conditional Effects</h2>
+<section id="what-are-simple-effects" class="level3">
+<h3 data-anchor-id="what-are-simple-effects">What Are Simple Effects?</h3>
+<p>When a significant interaction is found, the next step is to unpack it using <strong>simple effects analysis</strong>. A significant interaction means the effect of X is not constant across levels of M. Simple effects let us describe the relationship of X on Y separately at meaningful levels of the moderator.</p>
+<p>For <strong>continuous moderators</strong>, we typically examine three levels: one standard deviation below the mean, at the mean, and one standard deviation above the mean.</p>
+<p>For <strong>categorical moderators</strong>, we typically assess the simple effects at all levels.</p>
+<p>Simple slopes are just: slope of X + (slope of the interaction) * a certain level of M.</p>
+</section>
+<section id="simple-slopes-for-categorical-moderators" class="level3">
+<h3 data-anchor-id="simple-slopes-for-categorical-moderators">Simple Slopes for Categorical Moderators</h3>
+<p>For dummy coded categorical moderators, all that needs to be done is to change the reference group. The conditional effect of X will naturally be at the reference group.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>big5<span class="sc">$</span>Humor_Factor_2Ref <span class="ot">&lt;-</span> <span class="fu">relevel</span>(big5<span class="sc">$</span>Humor_Factor, <span class="at">ref =</span> <span class="dv">5</span>)</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>model7 <span class="ot">&lt;-</span> <span class="fu">lm</span>(RightWingAuthoritarianism <span class="sc">~</span> Conservatism <span class="sc">+</span> Humor_Factor_2Ref <span class="sc">+</span> </span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>               Conservatism<span class="sc">*</span>Humor_Factor_2Ref, <span class="at">data =</span> big5)</span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(model7)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+lm(formula = RightWingAuthoritarianism ~ Conservatism + Humor_Factor_2Ref + 
+    Conservatism * Humor_Factor_2Ref, data = big5)
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-3.8314 -0.9607  0.0631  0.8685  5.6167 
+
+Coefficients:
+                                Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept)                      -0.1949     0.3993  -0.488  0.62549    
+Conservatism                      2.3296     0.2094  11.125  &lt; 2e-16 ***
+Humor_Factor_2Ref1                4.5333     1.6777   2.702  0.00697 ** 
+Humor_Factor_2Ref2               -1.1773     0.8501  -1.385  0.16628    
+Humor_Factor_2Ref3               -0.1773     0.5315  -0.334  0.73871    
+Humor_Factor_2Ref4               -0.6046     0.4852  -1.246  0.21291    
+Conservatism:Humor_Factor_2Ref1  -2.0735     0.8396  -2.470  0.01364 *  
+Conservatism:Humor_Factor_2Ref2   0.6637     0.4502   1.474  0.14058    
+Conservatism:Humor_Factor_2Ref3   0.1702     0.2777   0.613  0.53996    
+Conservatism:Humor_Factor_2Ref4   0.3321     0.2556   1.299  0.19402    
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 1.342 on 1539 degrees of freedom
+  (1 observation deleted due to missingness)
+Multiple R-squared:  0.3169,    Adjusted R-squared:  0.3129 
+F-statistic: 79.32 on 9 and 1539 DF,  p-value: &lt; 2.2e-16</code></pre>
+</div>
+</div>
+<p>For dichotomous moderators, there are only two conditional effects. To find the significance of the other slope, just switch the baseline. Switching a 0/1 binary variable is easy. Just do <code>1 - variable</code>:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>model8 <span class="ot">&lt;-</span> <span class="fu">lm</span>(RightWingAuthoritarianism <span class="sc">~</span> Conservatism <span class="sc">+</span> Immigrant <span class="sc">+</span> </span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>               Conservatism<span class="sc">*</span>Immigrant, <span class="at">data =</span> big5)</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(model8)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+lm(formula = RightWingAuthoritarianism ~ Conservatism + Immigrant + 
+    Conservatism * Immigrant, data = big5)
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-3.7012 -0.9593  0.0888  0.8637  5.3543 
+
+Coefficients:
+                       Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept)             -0.6299     0.1939  -3.248  0.00119 ** 
+Conservatism             2.5858     0.1017  25.417  &lt; 2e-16 ***
+Immigrant                0.8128     0.6112   1.330  0.18378    
+Conservatism:Immigrant  -0.3822     0.3272  -1.168  0.24296    
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 1.345 on 1544 degrees of freedom
+  (2 observations deleted due to missingness)
+Multiple R-squared:  0.3108,    Adjusted R-squared:  0.3095 
+F-statistic: 232.1 on 3 and 1544 DF,  p-value: &lt; 2.2e-16</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Switch the baseline</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>big5<span class="sc">$</span>Immigrant2 <span class="ot">&lt;-</span> <span class="dv">1</span> <span class="sc">-</span> big5<span class="sc">$</span>Immigrant</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>model9 <span class="ot">&lt;-</span> <span class="fu">lm</span>(RightWingAuthoritarianism <span class="sc">~</span> Conservatism <span class="sc">+</span> </span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>               Immigrant2 <span class="sc">+</span> Conservatism<span class="sc">*</span>Immigrant2, <span class="at">data =</span> big5)</span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(model9)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+lm(formula = RightWingAuthoritarianism ~ Conservatism + Immigrant2 + 
+    Conservatism * Immigrant2, data = big5)
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-3.7012 -0.9593  0.0888  0.8637  5.3543 
+
+Coefficients:
+                        Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept)               0.1829     0.5796   0.316    0.752    
+Conservatism              2.2036     0.3110   7.085  2.1e-12 ***
+Immigrant2               -0.8128     0.6112  -1.330    0.184    
+Conservatism:Immigrant2   0.3822     0.3272   1.168    0.243    
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 1.345 on 1544 degrees of freedom
+  (2 observations deleted due to missingness)
+Multiple R-squared:  0.3108,    Adjusted R-squared:  0.3095 
+F-statistic: 232.1 on 3 and 1544 DF,  p-value: &lt; 2.2e-16</code></pre>
+</div>
+</div>
+<p>Note how only the slope of <code>Conservatism</code> changes in magnitude. Now this is the simple effect of <code>Conservatism</code> when immigrant status = 1. The interaction term slope changes sign because we changed the reference group.</p>
+</section>
+<section id="simple-slopes-for-interval-moderators" class="level3">
+<h3 data-anchor-id="simple-slopes-for-interval-moderators">Simple Slopes for Interval Moderators</h3>
+<p>For interval moderators (like a Likert scale with discrete levels), use <code>sim_slopes()</code> from the <code>interactions</code> package. Specify the values to probe at in the <code>modx.values</code> argument. The <code>:</code> operator means “through” (e.g., <code>1:7</code> means 1 through 7). Make sure you use the model with the interaction calculated from the <code>*</code> operator (<code>model2</code>).</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>model2 <span class="ot">&lt;-</span> <span class="fu">lm</span>(RightWingAuthoritarianism <span class="sc">~</span> Conservatism <span class="sc">+</span> PeerStatus <span class="sc">+</span> </span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>               Conservatism<span class="sc">*</span>PeerStatus, <span class="at">data =</span> big5)</span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a><span class="fu">sim_slopes</span>(model2,</span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>           <span class="at">pred =</span> Conservatism,</span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a>           <span class="at">modx =</span> PeerStatus,</span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a>           <span class="at">modx.values =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">7</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>JOHNSON-NEYMAN INTERVAL
+
+When PeerStatus is OUTSIDE the interval [15.82, 236.25], the slope of
+Conservatism is p &lt; .05.
+
+Note: The range of observed values of PeerStatus is [1.00, 7.00]
+
+SIMPLE SLOPES ANALYSIS
+
+Slope of Conservatism when PeerStatus = 1: 
+
+  Est.   S.E.   t val.      p
+------ ------ -------- ------
+  2.97   0.22    13.48   0.00
+
+Slope of Conservatism when PeerStatus = 2: 
+
+  Est.   S.E.   t val.      p
+------ ------ -------- ------
+  2.85   0.17    16.50   0.00
+
+Slope of Conservatism when PeerStatus = 3: 
+
+  Est.   S.E.   t val.      p
+------ ------ -------- ------
+  2.73   0.13    20.85   0.00
+
+Slope of Conservatism when PeerStatus = 4: 
+
+  Est.   S.E.   t val.      p
+------ ------ -------- ------
+  2.61   0.10    25.55   0.00
+
+Slope of Conservatism when PeerStatus = 5: 
+
+  Est.   S.E.   t val.      p
+------ ------ -------- ------
+  2.49   0.10    25.28   0.00
+
+Slope of Conservatism when PeerStatus = 6: 
+
+  Est.   S.E.   t val.      p
+------ ------ -------- ------
+  2.38   0.12    19.41   0.00
+
+Slope of Conservatism when PeerStatus = 7: 
+
+  Est.   S.E.   t val.      p
+------ ------ -------- ------
+  2.26   0.16    13.95   0.00</code></pre>
+</div>
+</div>
+<p>For confidence intervals (but not p-values), use <code>emtrends()</code> from the <code>emmeans</code> package:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="fu">emtrends</span>(model2,</span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>         <span class="at">var =</span> <span class="st">"Conservatism"</span>,</span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>         <span class="at">specs =</span> <span class="st">"PeerStatus"</span>,</span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>         <span class="at">at =</span> <span class="fu">list</span>(<span class="at">PeerStatus =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">7</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> PeerStatus Conservatism.trend     SE   df lower.CL upper.CL
+          1               2.97 0.2200 1545     2.54     3.40
+          2               2.85 0.1730 1545     2.51     3.19
+          3               2.73 0.1310 1545     2.47     2.99
+          4               2.61 0.1020 1545     2.41     2.81
+          5               2.49 0.0987 1545     2.30     2.69
+          6               2.38 0.1220 1545     2.14     2.62
+          7               2.26 0.1620 1545     1.94     2.58
+
+Confidence level used: 0.95 </code></pre>
+</div>
+</div>
+</section>
+<section id="simple-slopes-for-continuous-moderators" class="level3">
+<h3 data-anchor-id="simple-slopes-for-continuous-moderators">Simple Slopes for Continuous Moderators</h3>
+<p>For continuous moderators, it is typical to examine the conditional effect at the mean and ±1 standard deviation.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>model10 <span class="ot">&lt;-</span> <span class="fu">lm</span>(RightWingAuthoritarianism <span class="sc">~</span> Conservatism <span class="sc">+</span> Religiousness <span class="sc">+</span> </span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>                Conservatism<span class="sc">*</span>Religiousness, <span class="at">data =</span> big5)</span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(model10)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+lm(formula = RightWingAuthoritarianism ~ Conservatism + Religiousness + 
+    Conservatism * Religiousness, data = big5)
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-3.7564 -0.8601  0.0767  0.8117  4.6328 
+
+Coefficients:
+                           Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept)                 -1.7860     0.5002  -3.571 0.000367 ***
+Conservatism                 2.4304     0.2807   8.660  &lt; 2e-16 ***
+Religiousness                0.8049     0.1573   5.116  3.5e-07 ***
+Conservatism:Religiousness  -0.1713     0.0832  -2.058 0.039733 *  
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 1.264 on 1545 degrees of freedom
+  (1 observation deleted due to missingness)
+Multiple R-squared:  0.3918,    Adjusted R-squared:  0.3906 
+F-statistic: 331.7 on 3 and 1545 DF,  p-value: &lt; 2.2e-16</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>m <span class="ot">&lt;-</span> <span class="fu">mean</span>(big5<span class="sc">$</span>Religiousness)</span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>s <span class="ot">&lt;-</span> <span class="fu">sd</span>(big5<span class="sc">$</span>Religiousness)</span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Using sim_slopes at mean and ±1 sd</span></span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a><span class="fu">sim_slopes</span>(model10,</span>
+<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a>           <span class="at">pred =</span> Conservatism,</span>
+<span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a>           <span class="at">modx =</span> Religiousness,</span>
+<span id="cb25-8"><a href="#cb25-8" aria-hidden="true" tabindex="-1"></a>           <span class="at">modx.values =</span> <span class="fu">c</span>(m <span class="sc">-</span> s, m, m <span class="sc">+</span> s))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>JOHNSON-NEYMAN INTERVAL
+
+When Religiousness is OUTSIDE the interval [8.74, 238.24], the slope of
+Conservatism is p &lt; .05.
+
+Note: The range of observed values of Religiousness is [1.00, 5.00]
+
+SIMPLE SLOPES ANALYSIS
+
+Slope of Conservatism when Religiousness = 2.017691: 
+
+  Est.   S.E.   t val.      p
+------ ------ -------- ------
+  2.08   0.14    15.08   0.00
+
+Slope of Conservatism when Religiousness = 3.067817: 
+
+  Est.   S.E.   t val.      p
+------ ------ -------- ------
+  1.91   0.10    18.72   0.00
+
+Slope of Conservatism when Religiousness = 4.117943: 
+
+  Est.   S.E.   t val.      p
+------ ------ -------- ------
+  1.73   0.13    13.28   0.00</code></pre>
+</div>
+</div>
+<p>You can also recenter the moderator at a specific value directly in <code>lm()</code> using the <code>I()</code> function:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Conditional effect at +1 sd above the mean</span></span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>model11 <span class="ot">&lt;-</span> <span class="fu">lm</span>(RightWingAuthoritarianism <span class="sc">~</span> Conservatism <span class="sc">+</span> <span class="fu">I</span>(Religiousness <span class="sc">-</span> (m <span class="sc">+</span> s)) <span class="sc">+</span> </span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>                Conservatism <span class="sc">*</span> <span class="fu">I</span>(Religiousness <span class="sc">-</span> (m <span class="sc">+</span> s)), <span class="at">data =</span> big5)</span>
+<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(model11)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+lm(formula = RightWingAuthoritarianism ~ Conservatism + I(Religiousness - 
+    (m + s)) + Conservatism * I(Religiousness - (m + s)), data = big5)
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-3.7564 -0.8601  0.0767  0.8117  4.6328 
+
+Coefficients:
+                                        Estimate Std. Error t value Pr(&gt;|t|)
+(Intercept)                               1.5286     0.2666   5.733 1.19e-08
+Conservatism                              1.7253     0.1299  13.283  &lt; 2e-16
+I(Religiousness - (m + s))                0.8049     0.1573   5.116 3.50e-07
+Conservatism:I(Religiousness - (m + s))  -0.1713     0.0832  -2.058   0.0397
+                                           
+(Intercept)                             ***
+Conservatism                            ***
+I(Religiousness - (m + s))              ***
+Conservatism:I(Religiousness - (m + s)) *  
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 1.264 on 1545 degrees of freedom
+  (1 observation deleted due to missingness)
+Multiple R-squared:  0.3918,    Adjusted R-squared:  0.3906 
+F-statistic: 331.7 on 3 and 1545 DF,  p-value: &lt; 2.2e-16</code></pre>
+</div>
+</div>
+<hr>
+</section>
+</section>
+<section id="interaction-plots" class="level2">
+<h2 data-anchor-id="interaction-plots">5. Interaction Plots</h2>
+<section id="why-plot-interactions" class="level3">
+<h3 data-anchor-id="why-plot-interactions">Why Plot Interactions?</h3>
+<p>Plotting interactions is an easy way to visualize what the moderation looks like. It can also give a quick idea of whether an interaction exists and at what levels of the moderator it is present. However, plots are not a foolproof way of demonstrating interactions. You should always rely on the significance tests first.</p>
+<p>There’s many, many ways you can plot these interactions. I will go over a few methods.</p>
+</section>
+<section id="gf_point-from-ggformula" class="level3">
+<h3 data-anchor-id="gf_point-from-ggformula"><code>gf_point()</code> from <code>ggformula</code></h3>
+<p><code>gf_point()</code> works well for discrete or factor moderators, though it can’t handle continuous moderators very well. The moderator must be a factor class variable for the color grouping to work properly. Make sure you have the <code>dplyr</code> package loaded in order to use the <code>%&gt;%</code> operator.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="fu">gf_point</span>(RightWingAuthoritarianism <span class="sc">~</span> Conservatism, </span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>         <span class="at">data =</span> big5, </span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a>         <span class="at">color =</span> <span class="sc">~</span><span class="fu">factor</span>(PeerStatus)) <span class="sc">%&gt;%</span> <span class="co"># specify the factor here</span></span>
+<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_lm</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="moderation_files/figure-html/gf-point-plot-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Each group is separated by color and each simple effect is represented by a different color slope. This plot shows why the conditional effect of Conservatism was significant at every level of <code>PeerStatus</code> even though the interaction was significant. The effect is present across all levels, but the slopes differ in magnitude from level to level.</p>
+<p>Here is an example of a non-significant interaction for comparison:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="fu">gf_point</span>(RightWingAuthoritarianism <span class="sc">~</span> Conservatism, </span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>         <span class="at">data =</span> big5, </span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a>         <span class="at">color =</span> <span class="sc">~</span><span class="fu">factor</span>(FamilyNotUnemployed)) <span class="sc">%&gt;%</span></span>
+<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_lm</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="moderation_files/figure-html/gf-point-nonsig-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>The slopes are very similar to each other, meaning the conditional effect of Conservatism did not depend on the family employment variable.</p>
+<p>If you need help with these, AI is really good at doing plots these days if you know what to describe.</p>
+</section>
+<section id="interact_plot-from-the-interactions-package" class="level3">
+<h3 data-anchor-id="interact_plot-from-the-interactions-package"><code>interact_plot()</code> from the <code>interactions</code> Package</h3>
+<p><code>interact_plot()</code> from the <code>interactions</code> package handles continuous moderators more easily. If your moderator is interval, you need to specify what the levels are in the <code>modx.values</code> argument. Make sure your moderator is calculatied using the <code>*</code> operator in your <code>lm()</code> function.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="fu">interact_plot</span>(<span class="at">model =</span> model2, <span class="at">pred =</span> Conservatism, <span class="at">modx =</span> PeerStatus, </span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>              <span class="at">modx.values =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">5</span>, <span class="dv">6</span>, <span class="dv">7</span>),</span>
+<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a>              <span class="at">data =</span> big5)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="moderation_files/figure-html/interact-plot-interval-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>For continuous moderators, the default is mean and ±1 sd:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="fu">interact_plot</span>(<span class="at">model =</span> model10, <span class="at">pred =</span> Conservatism, </span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>              <span class="at">modx =</span> Religiousness, </span>
+<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a>              <span class="at">data =</span> big5)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="moderation_files/figure-html/interact-plot-continuous-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>To check more SD levels, manually calculate them:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>m <span class="ot">&lt;-</span> <span class="fu">mean</span>(big5<span class="sc">$</span>Religiousness) <span class="co"># mean</span></span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>s <span class="ot">&lt;-</span> <span class="fu">sd</span>(big5<span class="sc">$</span>Religiousness)   <span class="co"># standard deviation</span></span>
+<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a>mod_levels <span class="ot">&lt;-</span> <span class="fu">c</span>((m <span class="sc">-</span> <span class="dv">3</span><span class="sc">*</span>s),    <span class="co"># -3sd below mean</span></span>
+<span id="cb33-5"><a href="#cb33-5" aria-hidden="true" tabindex="-1"></a>                (m <span class="sc">-</span> <span class="dv">2</span><span class="sc">*</span>s),    <span class="co"># -2sd below mean</span></span>
+<span id="cb33-6"><a href="#cb33-6" aria-hidden="true" tabindex="-1"></a>                (m <span class="sc">-</span> s),      <span class="co"># -1sd below mean</span></span>
+<span id="cb33-7"><a href="#cb33-7" aria-hidden="true" tabindex="-1"></a>                m,            <span class="co"># the mean</span></span>
+<span id="cb33-8"><a href="#cb33-8" aria-hidden="true" tabindex="-1"></a>                (m <span class="sc">+</span> s),      <span class="co"># +1sd below mean</span></span>
+<span id="cb33-9"><a href="#cb33-9" aria-hidden="true" tabindex="-1"></a>                (m <span class="sc">+</span> <span class="dv">2</span><span class="sc">*</span>s),    <span class="co"># +2sd below mean</span></span>
+<span id="cb33-10"><a href="#cb33-10" aria-hidden="true" tabindex="-1"></a>                (m <span class="sc">+</span> <span class="dv">3</span><span class="sc">*</span>s))    <span class="co"># +3sd below mean</span></span>
+<span id="cb33-11"><a href="#cb33-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-12"><a href="#cb33-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-13"><a href="#cb33-13" aria-hidden="true" tabindex="-1"></a><span class="co"># It isn't necessary, but it helps to label your interaction levels using modx.labels</span></span>
+<span id="cb33-14"><a href="#cb33-14" aria-hidden="true" tabindex="-1"></a><span class="fu">interact_plot</span>(<span class="at">model =</span> model10, <span class="at">pred =</span> Conservatism, <span class="at">modx =</span> Religiousness,</span>
+<span id="cb33-15"><a href="#cb33-15" aria-hidden="true" tabindex="-1"></a>              <span class="at">modx.values =</span> mod_levels,</span>
+<span id="cb33-16"><a href="#cb33-16" aria-hidden="true" tabindex="-1"></a>              <span class="at">modx.labels =</span> <span class="fu">c</span>(<span class="st">"-3SD"</span>, <span class="st">"-2SD"</span>, <span class="st">"-1SD"</span>, <span class="st">"mean"</span>, <span class="st">"1SD"</span>, <span class="st">"2SD"</span>, <span class="st">"3SD"</span>),</span>
+<span id="cb33-17"><a href="#cb33-17" aria-hidden="true" tabindex="-1"></a>              <span class="at">data =</span> big5)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="moderation_files/figure-html/interact-plot-custom-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Looking at this plot, it seems there is a difference in slope for -3sd and +3sd, albeit not by much. This makes sense since the interaction was barely significant. Knowing the strength of an effect from the significance tests helps you correctly interpret what the plot is showing you.</p>
+<hr>
+</section>
+</section>
+<section id="simple-effect-probing" class="level2">
+<h2 data-anchor-id="simple-effect-probing">6. Simple Effect Probing</h2>
+<section id="what-is-probing" class="level3">
+<h3 data-anchor-id="what-is-probing">What Is Probing?</h3>
+<p>“Probing” refers to picking specific values of the moderator to test where the significance of an interaction comes from. A significant interaction tells us the conditional effect of X is not consistent across M, but it does not tell us <em>where</em> in M it is not consistent.</p>
+</section>
+<section id="pick-a-point-probing" class="level3">
+<h3 data-anchor-id="pick-a-point-probing">Pick a Point Probing</h3>
+<p>Pick a point probing involves figuring out specific values of the moderator that would be of interest, either based on theory, natural scale values, or the mean and ±1 SD. There is nothing new to this method. It is just centering your moderator at the desired value as discussed in previous sections.</p>
+<p>The points you probe can be due to previously established theory (e.g., we expect the average peer status person to behave differently than those with high or low status) or natural reasons (e.g., it’s likely that the extremes of peer status probably have differing effects than each other, so we should check those).</p>
+<p>Generally, this is the recommended approach.</p>
+</section>
+<section id="johnson-neyman-approach" class="level3">
+<h3 data-anchor-id="johnson-neyman-approach">Johnson-Neyman Approach</h3>
+<p>The Johnson-Neyman method uses analytical math that scans across the moderator data to find points where the conditional effect of X switches from non-significant to significant. Imagine it like a helicopter spotlight sweep rather than a private eye detective.</p>
+<p>The method produces no values, one value, or two values of the moderator where the focal predictor switches significance. These values are called <strong>transition points</strong>.</p>
+<p>You can get this automatically with <code>sim_slopes()</code>. When you do not specify <code>modx.values</code>, it uses the Johnson-Neyman method by default (note, you need to have a interaction via <code>*</code> to use this function):</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sim_slopes</span>(model2,</span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a>           <span class="at">pred =</span> Conservatism,</span>
+<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a>           <span class="at">modx =</span> PeerStatus)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>JOHNSON-NEYMAN INTERVAL
+
+When PeerStatus is OUTSIDE the interval [15.82, 236.25], the slope of
+Conservatism is p &lt; .05.
+
+Note: The range of observed values of PeerStatus is [1.00, 7.00]
+
+SIMPLE SLOPES ANALYSIS
+
+Slope of Conservatism when PeerStatus = 2.747299 (- 1 SD): 
+
+  Est.   S.E.   t val.      p
+------ ------ -------- ------
+  2.76   0.14    19.62   0.00
+
+Slope of Conservatism when PeerStatus = 4.601033 (Mean): 
+
+  Est.   S.E.   t val.      p
+------ ------ -------- ------
+  2.54   0.10    26.34   0.00
+
+Slope of Conservatism when PeerStatus = 6.454767 (+ 1 SD): 
+
+  Est.   S.E.   t val.      p
+------ ------ -------- ------
+  2.32   0.14    16.70   0.00</code></pre>
+</div>
+</div>
+<p>The output will tell you whether there were any transition points within the observed range of the moderator. In this example, since the conditional effect of Conservatism was significant at every level of PeerStatus, there were no transition points within the observed range.</p>
+<p>AKA - If no values turn up: The conditional effect of X is consistently significant/non-significant across all values of M. - If one value turns up: The conditional effect of X is non-significant above/below M and significant below/above M (one or the other). - If two values turn up: The conditional effect is either significant between the two values of M or it is non-significant between those two values.</p>
+<p>You can also use the <code>johnson_neyman()</code> function from the <code>interactions</code> package too (also use a function with <code>*</code> interaction specification). This function gives you a plot that shows you where significance happens.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="fu">johnson_neyman</span>(model2, <span class="at">pred =</span> <span class="st">"Conservatism"</span>, <span class="at">modx =</span> <span class="st">"PeerStatus"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>JOHNSON-NEYMAN INTERVAL
+
+When PeerStatus is OUTSIDE the interval [15.82, 236.25], the slope of
+Conservatism is p &lt; .05.
+
+Note: The range of observed values of PeerStatus is [1.00, 7.00]</code></pre>
+</div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="moderation_files/figure-html/unnamed-chunk-1-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>What this plot means is that across the range of observed <code>PeerStatus</code> (1-7), every slope of <code>Conservatism</code> is significant. If some values of <code>PeerStatus</code> were not significant, they’d appear as a red line and red area. This means that we got the “no values turn up” scenario above. The focal predictor was significant across all values of the moderator.</p>
+<p>In general, its better to use theory for why you are looking at specific values of the moderator. It’s possible the conditional effect of X is significant at multiple levels of M. The Johnson-Neyman approach might miss the more interesting or theoretically noteworthy levels by putting emphasis on other values of M. It also doesn’t show you the different strengths of effects, rather just if they are significant or not. That is, even if multiple points of M have a significant X, that does not mean that they meaningfully differ from one another (keep in mind, you can have a significant interaction with ALL levels of the moderator being significant).</p>
+<hr>
+</section>
+</section>
+<section id="well-done" class="level2">
+<h2 data-anchor-id="well-done">Well Done!</h2>
+<p>You have completed the Moderation and Interaction Effects tutorial. Here is a summary of what was covered:</p>
+<ul>
+<li>Creating interaction models with product variables and the <code>*</code> operator in <code>lm()</code></li>
+<li>Interpreting main effects and interaction coefficients in moderation models</li>
+<li>Mean centering predictors for more interpretable conditional effects</li>
+<li>Getting simple slopes for categorical, interval, and continuous moderators</li>
+<li>Plotting interactions with <code>gf_point()</code> and <code>interact_plot()</code></li>
+<li>Pick a point and Johnson-Neyman probing</li>
+</ul>
+<p>The next lesson covers nonlinear regression.</p>
+
+
+</section>
+
+</main> <!-- /main -->
+<!-- MailerLite Universal -->
+<script>
+    (function(w,d,e,u,f,l,n){w[f]=w[f]||function(){(w[f].q=w[f].q||[])
+    .push(arguments);},l=d.createElement(e),l.async=1,l.src=u,
+    n=d.getElementsByTagName(e)[0],n.parentNode.insertBefore(l,n);})
+    (window,document,'script','https://assets.mailerlite.com/js/universal.js','ml');
+    ml('account', '2295583');
+</script>
+<!-- End MailerLite Universal -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/infogothic\.com");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>
