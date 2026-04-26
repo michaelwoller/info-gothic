@@ -23,16 +23,17 @@
 }
 
 /* Inter for all metadata/small text */
-.metadata, .quarto-post .metadata {
+.metadata, .quarto-post .metadata,
+.metadata a, .quarto-post .metadata a,
+.metadata .listing-date, .metadata .listing-author {
   font-family: 'Inter', sans-serif;
   font-size: 0.65rem;
   font-weight: 300;
   letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: #4a4540;
+  color: white !important;
 }
 
-/* About page left of center */
-.about-contents {
-  text-align: left !important;
+.quarto-category {
+  color: white !important;
 }

@@ -1,0 +1,318 @@
+---
+title: "Variable Importance"
+author: "Michael Woller"
+format:
+  html:
+    toc: true
+    toc-depth: 3
+execute:
+  echo: true
+  warning: false
+  message: false
+---
+
+```{r setup, include=FALSE}
+library(ggplot2)
+library(dplyr)
+library(effectsize)
+library(car)
+library(dominanceanalysis)
+library(parameters)
+big5 <- read.csv("big5data.csv", header = TRUE)
+big5_model <- lm(ExistentialWellBeing ~ OpenMindedness + Conscientiousness + Extraversion + Agreeableness + NegativeEmotionality, data = big5) 
+```
+
+## Introduction
+
+Knowing that a predictor is statistically significant tells you its effect is probably not zero in the population. But it does not tell you how *important* that predictor is relative to the others. Two predictors can both be significant while one explains ten times more variance than the other.
+
+**Variable importance** methods answer the question: among all the predictors in a model, which ones contribute the most to explaining the outcome? This is especially relevant in psychology, where models often include multiple theoretically meaningful predictors and researchers want to know which constructs matter most.
+
+In this lesson we will cover three approaches: predictor effect sizes ($\eta^2$, partial $\eta^2$, and Cohen's $f^2$), dominance analysis, and direct comparison of standardized and unstandardized coefficients.
+
+------------------------------------------------------------------------
+
+### The Dataset
+
+We continue with the **Big 5** personality dataset, predicting `ExistentialWellBeing` from the five personality traits. The full model is already fit as `big5_model`.
+
+-   `ExistentialWellBeing` — how well would you rate your existential well being (1--5 scale)
+-   `OpenMindedness` — how open minded you are (1--5 scale)
+-   `Conscientiousness` — how conscientious you are (1--5 scale)
+-   `Extraversion` — how extroverted you are (1--5 scale)
+-   `Agreeableness` — how agreeable you are (1--5 scale)
+-   `NegativeEmotionality` — how neurotic you are (1--5 scale)
+
+------------------------------------------------------------------------
+
+## 1. Predictor Effect Sizes
+
+### Why Effect Sizes?
+
+The overall $R^2$ tells you how well all predictors together explain the outcome. Significance tests tell you whether individual predictors differ from zero. But neither of these tells you the *relative* contribution of each predictor. Effect sizes fill this gap by quantifying how much variance each predictor uniquely accounts for.
+
+We will focus on three effect sizes:
+
+-   $\eta^2$ (eta-squared): The proportion of total outcome variance explained by this predictor. This is equivalent to the squared semi-partial correlation for that predictor.
+-   **Partial** $\eta^2$: The proportion of *remaining* outcome variance (after removing other predictors) explained by this predictor. This is equivalent to the squared partial correlation.
+-   **Cohen's** $f^2$: The ratio of the variance explained by this predictor to the unexplained variance in the full model. It is derived from $\eta^2$ and the full model $R^2$.
+
+------------------------------------------------------------------------
+
+### Getting Effect Sizes with the effectsize Package
+
+The `eta_squared()` and `cohens_f_squared()` functions from the `effectsize` package make this easy. However, they require **Type III sums of squares**, which must be computed first using `Anova()` from the `car` package (capital A --not the same as the base R `anova()`). These functions will give us partial-$\eta^2$ and $f^2$ effect sizes, but we will have to get $\eta^2$ another method (Note, that using `eta_squared()` with `partial = FALSE` does not give you the appropriate effect size. .
+
+So you know, Type III sums of squares is just a method for calculating how much variance each predictor explains while **controlling for all other predictors in the model**. This is what we want for regression, since our goal is to isolate each predictor's unique contribution. The alternative (Type I) tests predictors in the order you entered them, which means the results change depending on which variable you listed first, which is not ideal. So always use Type III for regression effect sizes.
+
+```{r es-example, echo=TRUE}
+anova1 <- Anova(big5_model, type = 3)
+
+# Make sure partial = TRUE for both
+eta_squared(anova1, partial = TRUE)
+cohens_f_squared(anova1, partial = TRUE)
+```
+
+You can ignore the confidence intervals in the output for now.
+
+As mentioned before, getting $eta^2$ is trickier. Setting `partial = FALSE` gives the $eta^2$ for the ANOVA not the regression. However, if you recall back to when we learned about squared multiple correlations, it just so happens that the semi-partial squared multiple correlation is equivalent to the $eta^2$ effect size. So we need to follow the steps we did in the Inference and Multiple Correlations lesson by partialling out each predictor from the others (review that lesson for more details).
+
+```{r eta-example, echo=TRUE}
+# eta^2 for OpenMindedness
+residOpen <- lm(OpenMindedness ~ Conscientiousness + 
+                Extraversion + Agreeableness + NegativeEmotionality,
+                data = big5)$residuals
+summary(lm(ExistentialWellBeing ~ residOpen, data = big5))$r.squared
+
+# eta^2 for Conscientiousness
+residCon <- lm(Conscientiousness ~ OpenMindedness + 
+                  Extraversion + Agreeableness + NegativeEmotionality,
+                data = big5)$residuals
+summary(lm(ExistentialWellBeing ~ residCon, data = big5))$r.squared
+
+# eta^2 for Extraversion
+residExt <- lm(Extraversion ~ OpenMindedness + 
+                 Conscientiousness + Agreeableness + NegativeEmotionality,
+               data = big5)$residuals
+summary(lm(ExistentialWellBeing ~ residExt, data = big5))$r.squared
+
+# eta^2 for Agreeableness
+residAgree <- lm(Agreeableness ~ OpenMindedness + 
+                 Extraversion + Conscientiousness + NegativeEmotionality,
+               data = big5)$residuals
+summary(lm(ExistentialWellBeing ~ residAgree, data = big5))$r.squared
+
+# eta^2 for NegativeEmotionality
+residNeg <- lm(NegativeEmotionality ~ Conscientiousness + 
+                  Extraversion + Agreeableness + OpenMindedness,
+                data = big5)$residuals
+summary(lm(ExistentialWellBeing ~ residNeg, data = big5))$r.squared
+```
+
+------------------------------------------------------------------------
+
+### Interpreting Effect Sizes
+
+Using `NegativeEmotionality` as an example:
+
+$\eta^2 = .17$
+
+> The proportion of existential well-being variance explained by negative emotionality is about .17. So 17% of all variance in existential well-being is explained by negative emotionality.
+
+**Partial** $\eta^2 = .21$
+
+> The proportion of existential well-being variance that is uniquely explained by negative emotionality is about .21. After the other big 5 traits have taken their share, 21% of existential wellbeing that is left over is accounted for by negative emotionality.
+
+**Cohen's** $f^2 = .27$
+
+> The variance explained by negative emotionality is about .27 times the size of the unexplained variance in the model. Negative emotionality explains about 27% of the variance that remains unexplained after accounting for the other predictors.
+
+### Relative Importance from Effect Sizes
+
+You can express the relative importance of one predictor compared to another by dividing their effect sizes:
+
+```{r relative-es, echo=TRUE}
+# How much more important is NegativeEmotionality than Agreeableness?
+.1672 / .0035   # eta^2 ratio
+.2123 / .0056   # partial eta^2 ratio
+.2695 / .0057   # f^2 ratio
+```
+
+> According to $\eta^2$, negative emotionality is about 47 times more important in explaining existential well-being than agreeableness.
+
+Note that the relative importance from $\eta^2$ and Cohen's $f^2$ will always be the same (Need to use the unrounded values to get this equality). Partial $\eta^2$ may differ slightly.
+
+### Rank Ordering by Effect Size
+
+Listing predictors from most to least important based on effect size magnitude is called **rank ordering**. It's as simple as creating a ranking from "highest effect size" to "lowest effect size".
+
+In this dataset, our rank ordering is:
+
+1.  `NegativeEmotionality`
+2.  `Conscientiousness`
+3.  `Agreeableness`
+4.  `Extraversion`
+5.  `OpenMindedness`
+
+The rank order is the same regardless of which of the three effect sizes you use. This is a mathematical property of how they are calculated. Note, that two predictors also cannot tie in rank ordering.
+
+In conclusion, `NegativeEmotionality` was the most important variable and `OpenMindedness`.
+
+------------------------------------------------------------------------
+
+## 2. Dominance Analysis
+
+### What Is Dominance Analysis?
+
+Effect sizes rank predictors by how much variance they explain in one specific model. But this ranking can change depending on which other predictors are in the model. **Dominance analysis** addresses this by asking: is one predictor more important than another *across all possible model combinations*?
+
+For each pair of predictors, dominance analysis checks how much each one improves $R^2$ when added to models of different sizes: empty models, one-predictor models, two-predictor models, and so on. A predictor is **dominant** over another if it consistently adds more explanatory power across all possible model contexts.
+
+This gives a more complete and stable picture of importance than looking at a single model, because it accounts for shared variance between predictors across many configurations.
+
+Dominance analysis is a rare technique used in the social sciences, but it has its vocal advocates who are pushing for its adoption.
+
+------------------------------------------------------------------------
+
+### Running Dominance Analysis
+
+*Note: The* `dominanceanalysis` *package has a known compatibility issue with interactive Shiny/learnr environments, so the code below cannot be run live in this tutorial. You can run it yourself in a regular R script with your own dataset.*
+
+```{r da-example, echo=TRUE, eval=FALSE}
+da_model <- lm(ExistentialWellBeing ~ OpenMindedness + Conscientiousness +
+                 Extraversion + Agreeableness + NegativeEmotionality,
+               data = big5)
+da <- dominanceAnalysis(da_model)
+dominanceMatrix(da, type = "complete")
+```
+
+Running this code on the Big 5 dataset produces the following dominance matrix:
+
+|   | OpenMindedness | Conscientiousness | Extraversion | Agreeableness | NegativeEmotionality |
+|----|:--:|:--:|:--:|:--:|:--:|
+| OpenMindedness | 0.5 | 0 | 0 | 0 | 0 |
+| Conscientiousness | 1 | 0.5 | 0 | 1 | 0 |
+| Extraversion | 1 | 0 | 0.5 | 1 | 0 |
+| Agreeableness | 1 | 0 | 0 | 0.5 | 0 |
+| NegativeEmotionality | 1 | 1 | 1 | 1 | 0.5 |
+
+------------------------------------------------------------------------
+
+### Reading the Dominance Matrix
+
+The matrix shows, for each pair of predictors, the proportion of models in which the row variable was more important than the column variable.
+
+-   **1** means the row variable is dominant (more important in all possible models)
+-   **0** means the row variable was never more important
+-   **A decimal** means partial importance (more important in some models)
+
+You only care about the **1s**. Decimals do not count as dominance.
+
+From the output:
+
+-   `NegativeEmotionality` dominates all four other predictors (four 1s in its row)
+-   `Conscientiousness` dominates `OpenMindedness` and `Agreeableness` (two 1s)
+-   `Extraversion` and `Agreeableness` each dominate `OpenMindedness` (one 1 each)
+-   `OpenMindedness` dominates nobody (all 0s)
+
+So we can tell that `NegativeEmotionality` was simply the more dominant variable in every single possible model that could be ran with these Big 5 predictors.
+
+------------------------------------------------------------------------
+
+### Rank Ordering from Dominance
+
+To rank order with dominance analysis, count the number of 1s per row to rank order the predictors:
+
+1.  NegativeEmotionality (4 dominance wins)
+2.  Conscientiousness (2 wins)
+3.  Agreeableness and Extraversion (tied at 1 win each)
+4.  OpenMindedness (0 wins)
+
+Unlike effect size rank ordering, **ties are possible** in dominance analysis. Also note this rank order differs slightly from the effect size ranking. Dominance analysis and effect sizes can disagree because they measure importance differently.
+
+------------------------------------------------------------------------
+
+## 3. Comparing Coefficients Directly
+
+### Why Compare Coefficients?
+
+Sometimes you want to go beyond ranking predictors by effect size and ask whether two specific predictors' effects are *significantly different* from each other. For example: is `NegativeEmotionality` a significantly stronger predictor of well-being than `Conscientiousness`, or is the difference within sampling variability?
+
+There are two approaches: using **standardized coefficients** to put predictors on the same scale, or directly testing the difference between unstandardized coefficients.
+
+------------------------------------------------------------------------
+
+### Standardized Coefficients
+
+Standardized coefficients rescale predictors to have a mean of 0 and a standard deviation of 1 before fitting the model. This puts all predictors on the same "standard deviation" scale, making their coefficients directly comparable.
+
+The `model_parameters()` function from the `parameters` package is one convenient way to get these, though there are many methods:
+
+```{r std-coef, echo=TRUE}
+model_parameters(big5_model, standardize = "refit")
+```
+
+Note there is no intercept in the output. The intercept of a standardized model is always 0 since all predictors are centered at 0.
+
+Intepretations of standardized variables follow what was dicsussed in the Multiple Linear Regression lecture, but now we are talking about differences in standard deviations rather than raw score units.
+
+**Example interpretation:**
+
+> Between two individuals who differ by one standard deviation in negative emotionality, the individual with more negative emotions is expected to be about 0.51 standard deviations lower in existential well-being, holding the other predictors constant.
+
+Because the units are now standard deviations, you can compare coefficients directly. `NegativeEmotionality` has a standardized coefficient of about -0.51, while `Conscientiousness` is about 0.11, so `NegativeEmotionality` has a larger effect in absolute terms.
+
+There are limitations in being able to do this. Keep in mind, that even though the variables are now on the same metric, it still is arbitrary to a degree, and it won't make sense to compare every variable in every situation. Also, the more heavily correlated the variables are with each other, the more difficult it is to compare their standardized effects while holding others "constant." This is always true with regression coefficients, however.
+
+------------------------------------------------------------------------
+
+### Direct Coefficient Comparison with linearHypothesis()
+
+Standardized coefficients let you visually compare magnitudes, but they do not give a formal significance test of whether the two coefficients are different from each other. The `linearHypothesis()` function from the `car` package does:
+
+```{r linhyp-example, echo=TRUE}
+linearHypothesis(big5_model, "NegativeEmotionality - Conscientiousness = 0")
+```
+
+This tests whether the slope of `NegativeEmotionality` minus the slope of `Conscientiousness` equals zero. A significant result means the two predictors' effects are significantly different. This is similar to how a t test checks to see if the difference between two means is 0 or not.
+
+To get the actual difference in coefficients:
+
+```{r coef-diff, echo=TRUE}
+coef(big5_model)["NegativeEmotionality"] - coef(big5_model)["Conscientiousness"]
+```
+
+**Interpretation:**
+
+> Individuals who are one unit higher in negative emotionality are expected to differ from individuals who are one unit higher in conscientiousness by about 0.56 units in existential well-being. This difference is statistically significant.
+
+------------------------------------------------------------------------
+
+## 4. Summary: Which Method to Use?
+
+The three approaches in this lesson all address variable importance, but they answer slightly different questions:
+
+| Method | Question answered |
+|----|----|
+| **Effect sizes** ($\eta^2$, partial $\eta^2$, $f^2$) | How much variance does each predictor explain? |
+| **Dominance analysis** | Which predictor is more important across all model contexts? |
+| **Standardized coefficients** | How do predictors compare in standard deviation units? |
+| **linearHypothesis()** | Are two specific predictors' effects significantly different? |
+
+In practice, often none of these methods are used, which is something psychologists need to reconsider! It's not enough to worry about significance. With the rise of research that can't be replicated, less and less emphasis needs to be put on significance and more on importance.
+
+Effect sizes and standardized coefficients are the most commonly reported. Dominance analysis is more thorough but less widely used. Direct coefficient comparison with `linearHypothesis()` is useful when you have a specific hypothesis about two predictors.
+
+------------------------------------------------------------------------
+
+## Well Done!
+
+You have completed the Variable Importance tutorial. Here is a summary of what was covered:
+
+-   Computing $\eta^2$, partial $\eta^2$, and Cohen's $f^2$ using the `effectsize` package with Type III sums of squares from `car::Anova()`
+-   Interpreting relative importance by comparing effect sizes across predictors
+-   Running dominance analysis with `dominanceAnalysis()` and reading the dominance matrix
+-   Getting standardized coefficients with `model_parameters()` and interpreting them in standard deviation units
+-   Testing whether two coefficients are significantly different with `linearHypothesis()`
+
+The next lesson covers moderation and interaction effects.

@@ -1,0 +1,1450 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.9.36">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Michael Woller">
+
+<title>Prediction – InfoGothic</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<link href="../../images/favicon.ico" rel="icon">
+<script src="../../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-dark-f418161beb48e0141c760e455f12af2c.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap-4d14f3be7bc8eb7ec2287338953877e0.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="dark">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<link rel="stylesheet" href="../../styles.css">
+</head>
+
+<body class="nav-fixed quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="../../index.html">
+    <span class="navbar-title">InfoGothic</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../about.html"> 
+<span class="menu-text">About</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../tutorials.html"> 
+<span class="menu-text">Courses &amp; Tutorials</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../blog-posts.html"> 
+<span class="menu-text">Blog Posts</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="https://notes.infogothic.com"> 
+<span class="menu-text">Obsidian Notes</span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/michaelwoller"> <i class="bi bi-github" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://bsky.app/profile/infogothic.bsky.social"> <i class="bi bi-bluesky" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item">
+    <span class="nav-link">
+<span class="menu-text">&lt;a class='ml-onclick-form' href='javascript:void(0)' onclick="ml('show', '18mxag', true)"&gt;Mail List&lt;/a&gt;</span>
+    </span>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction">Introduction</a>
+  <ul class="collapse">
+  <li><a href="#the-dataset" id="toc-the-dataset" class="nav-link" data-scroll-target="#the-dataset">The Dataset</a></li>
+  </ul></li>
+  <li><a href="#section" id="toc-section" class="nav-link" data-scroll-target="#section"></a></li>
+  <li><a href="#cross-validation-and-shrunken-r" id="toc-cross-validation-and-shrunken-r" class="nav-link" data-scroll-target="#cross-validation-and-shrunken-r">1. Cross-Validation and Shrunken R</a>
+  <ul class="collapse">
+  <li><a href="#what-is-cross-validation" id="toc-what-is-cross-validation" class="nav-link" data-scroll-target="#what-is-cross-validation">What Is Cross-Validation?</a></li>
+  <li><a href="#splitting-trainingtesting-data" id="toc-splitting-trainingtesting-data" class="nav-link" data-scroll-target="#splitting-trainingtesting-data">Splitting Training/Testing Data</a></li>
+  <li><a href="#simple-cross-validation" id="toc-simple-cross-validation" class="nav-link" data-scroll-target="#simple-cross-validation">Simple Cross-Validation</a></li>
+  <li><a href="#double-cross-validation" id="toc-double-cross-validation" class="nav-link" data-scroll-target="#double-cross-validation">Double Cross-Validation</a></li>
+  <li><a href="#k-fold-cross-validation" id="toc-k-fold-cross-validation" class="nav-link" data-scroll-target="#k-fold-cross-validation">K-Fold Cross-Validation</a></li>
+  <li><a href="#leave-one-out-validation" id="toc-leave-one-out-validation" class="nav-link" data-scroll-target="#leave-one-out-validation">Leave-One-Out Validation</a></li>
+  </ul></li>
+  <li><a href="#variable-selection" id="toc-variable-selection" class="nav-link" data-scroll-target="#variable-selection">2. Variable Selection</a>
+  <ul class="collapse">
+  <li><a href="#forward-selection" id="toc-forward-selection" class="nav-link" data-scroll-target="#forward-selection">Forward Selection</a></li>
+  <li><a href="#backward-selection" id="toc-backward-selection" class="nav-link" data-scroll-target="#backward-selection">Backward Selection</a></li>
+  <li><a href="#stepwise-selection" id="toc-stepwise-selection" class="nav-link" data-scroll-target="#stepwise-selection">Stepwise Selection</a></li>
+  <li><a href="#all-subsets-regression" id="toc-all-subsets-regression" class="nav-link" data-scroll-target="#all-subsets-regression">All Subsets Regression</a></li>
+  </ul></li>
+  <li><a href="#prediction-intervals" id="toc-prediction-intervals" class="nav-link" data-scroll-target="#prediction-intervals">3. Prediction Intervals</a>
+  <ul class="collapse">
+  <li><a href="#getting-prediction-intervals" id="toc-getting-prediction-intervals" class="nav-link" data-scroll-target="#getting-prediction-intervals">Getting Prediction Intervals</a></li>
+  <li><a href="#specific-predictions" id="toc-specific-predictions" class="nav-link" data-scroll-target="#specific-predictions">Specific Predictions</a></li>
+  </ul></li>
+  <li><a href="#lasso-regression" id="toc-lasso-regression" class="nav-link" data-scroll-target="#lasso-regression">4. LASSO Regression</a>
+  <ul class="collapse">
+  <li><a href="#ridge-vs-lasso-vs-elastic-net" id="toc-ridge-vs-lasso-vs-elastic-net" class="nav-link" data-scroll-target="#ridge-vs-lasso-vs-elastic-net">Ridge vs LASSO vs Elastic Net</a></li>
+  <li><a href="#lasso-with-cv.glmnet" id="toc-lasso-with-cv.glmnet" class="nav-link" data-scroll-target="#lasso-with-cv.glmnet">LASSO with cv.glmnet()</a></li>
+  </ul></li>
+  <li><a href="#well-done" id="toc-well-done" class="nav-link" data-scroll-target="#well-done">Well Done!</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Prediction</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Michael Woller </p>
+          </div>
+  </div>
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="introduction" class="level2">
+<h2 data-anchor-id="introduction">Introduction</h2>
+<p>Most of this course has focused on <strong>inference</strong>, which involves using a model to make conclusions about population-level relationships. But there is another goal in regression: <strong>prediction</strong>. For predictive models, we are often less concerned with how well the model fits the data we already have, and more concerned with how well it will perform on new, unseen data. A model can fit the current dataset very well simply by capturing noise (overfitting), but this does not guarantee it will generalize to future datasets.</p>
+<p>In this lesson we will cover cross-validation methods for evaluating predictive accuracy, variable selection techniques for building optimal models, prediction intervals, and LASSO regression.</p>
+<p>Note, prior we’ve used the term “prediction” to mean getting predicted scores from a regression model, but in this case “prediction” has a specific connotation about minimizing predictive error. So when, previously, I’ve said “use X to predict Y”, were were doing prediction, but not with a model specifically tailored for accurate prediction.</p>
+<p>The shift in focus is now we are trying to get as accurate as a prediction to new, unseen datasets as possible. To do this, we need to minimize <em>error</em> (aka, how far off our prediction would be from the true new value). We’ll go over many methods on how to minimize this prediction error.</p>
+<section id="the-dataset" class="level3">
+<h3 data-anchor-id="the-dataset">The Dataset</h3>
+<p>For this lesson we continue with the <strong>Big 5</strong> personality dataset, predicting <code>ExistentialWellBeing</code> from the five personality traits:</p>
+<ul>
+<li><code>ExistentialWellBeing</code> — how well would you rate your existential well being (1–5 scale)</li>
+<li><code>OpenMindedness</code> — how open minded you are (1–5 scale)</li>
+<li><code>Conscientiousness</code> — how conscientious you are (1–5 scale)</li>
+<li><code>Extraversion</code> — how extroverted you are (1–5 scale)</li>
+<li><code>Agreeableness</code> — how agreeable you are (1–5 scale)</li>
+<li><code>NegativeEmotionality</code> — how neurotic you are (1–5 scale)</li>
+</ul>
+<hr>
+</section>
+</section>
+<section id="section" class="level2">
+<h2 data-anchor-id="section"></h2>
+<hr>
+</section>
+<section id="cross-validation-and-shrunken-r" class="level2">
+<h2 data-anchor-id="cross-validation-and-shrunken-r">1. Cross-Validation and Shrunken R</h2>
+<section id="what-is-cross-validation" class="level3">
+<h3 data-anchor-id="what-is-cross-validation">What Is Cross-Validation?</h3>
+<p>Cross-validation is a method for evaluating how well a model is likely to perform in predicting new data. It involves splitting the data into two parts:</p>
+<ol type="1">
+<li>A <strong>training set</strong>, used to fit the model</li>
+<li>A <strong>testing (hold-out) set</strong>, used to evaluate the model’s predictive accuracy</li>
+</ol>
+<p>The model is fit on the training data, then used to predict outcomes in the testing data. The relationship between the predicted and actual values in the testing set provides a more realistic estimate of model performance than evaluating on the same data the model was trained on.</p>
+<p>This typically results in a smaller <span class="math inline">\(R^2\)</span> than the original model, because the model is no longer being evaluated on the same data it was trained on. This reduced value is often referred to as the <strong>shrunken R</strong> or <span class="math inline">\(R^2\)</span>. It gives the relationship between the observed and predicted data.</p>
+</section>
+<section id="splitting-trainingtesting-data" class="level3">
+<h3 data-anchor-id="splitting-trainingtesting-data">Splitting Training/Testing Data</h3>
+<p>The first thing you need to do is set your seed. This is a <strong>very important step</strong>. You need to be able to replicate with the exact same data splits. Your choice of seed number does not matter, but you must use one.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">8675309</span>)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>n           <span class="ot">&lt;-</span> <span class="fu">nrow</span>(big5)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a random index of which rows will be in the training data</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>train_index <span class="ot">&lt;-</span> <span class="fu">sample</span>(<span class="dv">1</span><span class="sc">:</span>n, <span class="at">size =</span> <span class="fu">floor</span>(<span class="fl">0.5</span> <span class="sc">*</span> n))</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>train_data <span class="ot">&lt;-</span> big5[train_index, ]  <span class="co"># subsets big5 training data</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>test_data  <span class="ot">&lt;-</span> big5[<span class="sc">-</span>train_index, ] <span class="co"># subsets big5 testing data</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Note: '-train_index' means all rows that DON'T include these values</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Here we are doing a 50/50 split for demonstration purposes. In practice it is more common to use 80/20 or 90/10. Note that the results of your shrunken R will differ for simple, double, and k-fold cross-validation depending on your seed. Leave-one-out cross-validation is insensitive to the seed, as you will see below.</p>
+<hr>
+</section>
+<section id="simple-cross-validation" class="level3">
+<h3 data-anchor-id="simple-cross-validation">Simple Cross-Validation</h3>
+<p>This method simply trains a model with the training data, then tries to predict the testing data by funneling the testing data into the trained model. The closer the model’s predictions are to the true testing data, the better the model is. We will use shrunken R to determine this.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Fit the model on the training data</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>training_fit <span class="ot">&lt;-</span> <span class="fu">lm</span>(ExistentialWellBeing <span class="sc">~</span> OpenMindedness <span class="sc">+</span> Conscientiousness </span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>                   <span class="sc">+</span> Extraversion <span class="sc">+</span> Agreeableness <span class="sc">+</span> NegativeEmotionality,</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>                   <span class="at">data =</span> train_data)</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Predict on the testing data using "newdata ="</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>tested <span class="ot">&lt;-</span> <span class="fu">predict</span>(training_fit, <span class="at">newdata =</span> test_data)</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Shrunken R: correlate the testing data outcomes with the model's predictions</span></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>shrunkenR <span class="ot">&lt;-</span> <span class="fu">cor</span>(test_data<span class="sc">$</span>ExistentialWellBeing, tested, <span class="at">use =</span> <span class="st">"complete.obs"</span>)</span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>shrunkenR</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.599186</code></pre>
+</div>
+</div>
+<p>Our model’s predictions have a moderate positive correlation (~0.60) with actual existential well-being in new data.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Shrunken R^2</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>shrunkenR2 <span class="ot">&lt;-</span> shrunkenR<span class="sc">^</span><span class="dv">2</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>shrunkenR2</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.3590239</code></pre>
+</div>
+</div>
+<p>About 36% of the variance in existential well-being is associated with the model’s predictions in new data.</p>
+<p>We can also compute the <strong>out-of-sample</strong> <span class="math inline">\(R^2\)</span>, which is calculated from sums of squares rather than correlations. It asks “how much variance in <span class="math inline">\(Y\)</span> would this model explain if taken to a new sample from the same population?”</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>SSE    <span class="ot">&lt;-</span> <span class="fu">sum</span>((test_data<span class="sc">$</span>ExistentialWellBeing <span class="sc">-</span> tested)<span class="sc">^</span><span class="dv">2</span>)</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>SST    <span class="ot">&lt;-</span> <span class="fu">sum</span>((test_data<span class="sc">$</span>ExistentialWellBeing <span class="sc">-</span> <span class="fu">mean</span>(test_data<span class="sc">$</span>ExistentialWellBeing))<span class="sc">^</span><span class="dv">2</span>)</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>R2_oos <span class="ot">&lt;-</span> <span class="dv">1</span> <span class="sc">-</span> SSE <span class="sc">/</span> SST</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>R2_oos</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.3576984</code></pre>
+</div>
+</div>
+<p>The model explains about 36% of the variance in existential well-being in the test dataset.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># RMSE: average size of prediction error (common in predictive statistics)</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>rmse <span class="ot">&lt;-</span> <span class="fu">sqrt</span>(<span class="fu">mean</span>((test_data<span class="sc">$</span>ExistentialWellBeing <span class="sc">-</span> tested)<span class="sc">^</span><span class="dv">2</span>))</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>rmse</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.5902557</code></pre>
+</div>
+</div>
+<p>On average, the model’s predictions are off by about 0.59 units of existential well-being.</p>
+<hr>
+</section>
+<section id="double-cross-validation" class="level3">
+<h3 data-anchor-id="double-cross-validation">Double Cross-Validation</h3>
+<p>Double cross-validation is the same as simple cross-validation, but you train two models and test each one on the data used to train the other. This requires a 50/50 split, which is why we split the data in halves above.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Model 1: trained on train_data, tested on test_data (same as above)</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>training_fit <span class="ot">&lt;-</span> <span class="fu">lm</span>(ExistentialWellBeing <span class="sc">~</span> OpenMindedness <span class="sc">+</span> Conscientiousness </span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>                   <span class="sc">+</span> Extraversion <span class="sc">+</span> Agreeableness <span class="sc">+</span> NegativeEmotionality,</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>                   <span class="at">data =</span> train_data)</span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Model 2: trained on test_data, tested on train_data (swap the halves)</span></span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>second_fit <span class="ot">&lt;-</span> <span class="fu">lm</span>(ExistentialWellBeing <span class="sc">~</span> OpenMindedness <span class="sc">+</span> Conscientiousness </span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>                 <span class="sc">+</span> Extraversion <span class="sc">+</span> Agreeableness <span class="sc">+</span> NegativeEmotionality,</span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>                 <span class="at">data =</span> test_data)</span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Predictions</span></span>
+<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a>tested  <span class="ot">&lt;-</span> <span class="fu">predict</span>(training_fit, <span class="at">newdata =</span> test_data)</span>
+<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a>tested2 <span class="ot">&lt;-</span> <span class="fu">predict</span>(second_fit,   <span class="at">newdata =</span> train_data)</span>
+<span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-15"><a href="#cb10-15" aria-hidden="true" tabindex="-1"></a><span class="co"># Shrunken R for each model</span></span>
+<span id="cb10-16"><a href="#cb10-16" aria-hidden="true" tabindex="-1"></a>shrunkenR  <span class="ot">&lt;-</span> <span class="fu">cor</span>(test_data<span class="sc">$</span>ExistentialWellBeing,  tested,  <span class="at">use =</span> <span class="st">"complete.obs"</span>)</span>
+<span id="cb10-17"><a href="#cb10-17" aria-hidden="true" tabindex="-1"></a>shrunkenR2 <span class="ot">&lt;-</span> <span class="fu">cor</span>(train_data<span class="sc">$</span>ExistentialWellBeing, tested2, <span class="at">use =</span> <span class="st">"complete.obs"</span>)</span>
+<span id="cb10-18"><a href="#cb10-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-19"><a href="#cb10-19" aria-hidden="true" tabindex="-1"></a><span class="co"># Final shrunken R is the average of the two</span></span>
+<span id="cb10-20"><a href="#cb10-20" aria-hidden="true" tabindex="-1"></a>shrunkenR_dcv <span class="ot">&lt;-</span> <span class="fu">mean</span>(<span class="fu">c</span>(shrunkenR, shrunkenR2))</span>
+<span id="cb10-21"><a href="#cb10-21" aria-hidden="true" tabindex="-1"></a>shrunkenR_dcv</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.6102768</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Shrunken R^2</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>shrunkenR_dcv<span class="sc">^</span><span class="dv">2</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.3724378</code></pre>
+</div>
+</div>
+<p>Interpretations follow the same logic as simple cross-validation.</p>
+<hr>
+</section>
+<section id="k-fold-cross-validation" class="level3">
+<h3 data-anchor-id="k-fold-cross-validation">K-Fold Cross-Validation</h3>
+<p>K-fold cross-validation does the same thing as double cross-validation, but instead of doing it twice, you do it <span class="math inline">\(k\)</span> number of times. Typically <span class="math inline">\(k = 10\)</span>, as there are diminishing returns when it gets much higher. This is probably the most common form of validation for regression.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>k  <span class="ot">&lt;-</span> <span class="dv">5</span>           <span class="co"># number of folds</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>N  <span class="ot">&lt;-</span> <span class="fu">nrow</span>(big5)  <span class="co"># sample size</span></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>nk <span class="ot">&lt;-</span> N <span class="sc">/</span> k       <span class="co"># participants per fold</span></span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Insert fold indices into data</span></span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>big5<span class="sc">$</span>fold <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="dv">1</span><span class="sc">:</span>k, <span class="at">times =</span> nk <span class="sc">+</span> <span class="dv">1</span>)[<span class="dv">1</span><span class="sc">:</span>N]</span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Empty vector to store shrunken R per fold</span></span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a>shrunkenRCV_kfold <span class="ot">&lt;-</span> <span class="fu">vector</span>(<span class="at">mode =</span> <span class="st">"numeric"</span>, <span class="at">length =</span> k)</span>
+<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">8675309</span>)</span>
+<span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-13"><a href="#cb14-13" aria-hidden="true" tabindex="-1"></a><span class="co"># The loop does the cross-validation k times automatically</span></span>
+<span id="cb14-14"><a href="#cb14-14" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>k) {</span>
+<span id="cb14-15"><a href="#cb14-15" aria-hidden="true" tabindex="-1"></a>  train     <span class="ot">&lt;-</span> big5[big5<span class="sc">$</span>fold <span class="sc">!=</span> i, ]               <span class="co"># training data (all folds except i)</span></span>
+<span id="cb14-16"><a href="#cb14-16" aria-hidden="true" tabindex="-1"></a>  test      <span class="ot">&lt;-</span> big5[big5<span class="sc">$</span>fold <span class="sc">==</span> i, ]               <span class="co"># testing data (fold i)</span></span>
+<span id="cb14-17"><a href="#cb14-17" aria-hidden="true" tabindex="-1"></a>  modeltest <span class="ot">&lt;-</span> <span class="fu">lm</span>(ExistentialWellBeing <span class="sc">~</span> OpenMindedness </span>
+<span id="cb14-18"><a href="#cb14-18" aria-hidden="true" tabindex="-1"></a>                  <span class="sc">+</span> Conscientiousness <span class="sc">+</span> Extraversion </span>
+<span id="cb14-19"><a href="#cb14-19" aria-hidden="true" tabindex="-1"></a>                  <span class="sc">+</span> Agreeableness <span class="sc">+</span> NegativeEmotionality,</span>
+<span id="cb14-20"><a href="#cb14-20" aria-hidden="true" tabindex="-1"></a>                  <span class="at">data =</span> train)</span>
+<span id="cb14-21"><a href="#cb14-21" aria-hidden="true" tabindex="-1"></a>  Ypredcv   <span class="ot">&lt;-</span> <span class="fu">predict</span>(modeltest, <span class="at">newdata =</span> test)</span>
+<span id="cb14-22"><a href="#cb14-22" aria-hidden="true" tabindex="-1"></a>  shrunkenRCV_kfold[i] <span class="ot">&lt;-</span> <span class="fu">cor</span>(Ypredcv, test<span class="sc">$</span>ExistentialWellBeing)</span>
+<span id="cb14-23"><a href="#cb14-23" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb14-24"><a href="#cb14-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-25"><a href="#cb14-25" aria-hidden="true" tabindex="-1"></a><span class="co"># Average shrunken R across all k folds</span></span>
+<span id="cb14-26"><a href="#cb14-26" aria-hidden="true" tabindex="-1"></a>shrunkenR_kfold <span class="ot">&lt;-</span> <span class="fu">mean</span>(shrunkenRCV_kfold)</span>
+<span id="cb14-27"><a href="#cb14-27" aria-hidden="true" tabindex="-1"></a>shrunkenR_kfold</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.6126861</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Shrunken R^2</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>shrunkenR_kfold<span class="sc">^</span><span class="dv">2</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.3753843</code></pre>
+</div>
+</div>
+<p>Don’t worry too much about the <code>for</code> loop syntax. If you aren’t familiar with creating loops in R this will be a bit too complicated for now. The key idea is that it just automates the cross-validation process <span class="math inline">\(k\)</span> times and averages the results.</p>
+<hr>
+</section>
+<section id="leave-one-out-validation" class="level3">
+<h3 data-anchor-id="leave-one-out-validation">Leave-One-Out Validation</h3>
+<p>Leave-one-out (LOO) validation evaluates a model by using all but one observation to fit the model, then testing it on the single left-out observation, repeating this for every data point in the dataset. In simple terms: “Train on almost all the data, test on one point, and repeat for every point.”</p>
+<p>Since we are testing on every single point, we don’t need a seed. We start by estimating the model on all data.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>full_model <span class="ot">&lt;-</span> <span class="fu">lm</span>(ExistentialWellBeing <span class="sc">~</span> OpenMindedness </span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>                 <span class="sc">+</span> Conscientiousness <span class="sc">+</span> Extraversion  </span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>                 <span class="sc">+</span> Agreeableness <span class="sc">+</span> NegativeEmotionality,</span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>                 <span class="at">data =</span> big5)</span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Save residuals and hat values</span></span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a>e <span class="ot">&lt;-</span> <span class="fu">resid</span>(full_model)</span>
+<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a>h <span class="ot">&lt;-</span> <span class="fu">hatvalues</span>(full_model) <span class="co"># a measure of leverage</span></span>
+<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Get LOO predicted value for each case</span></span>
+<span id="cb18-11"><a href="#cb18-11" aria-hidden="true" tabindex="-1"></a>yhat_loo <span class="ot">&lt;-</span> big5<span class="sc">$</span>ExistentialWellBeing <span class="sc">-</span> e <span class="sc">/</span> (<span class="dv">1</span> <span class="sc">-</span> h)</span>
+<span id="cb18-12"><a href="#cb18-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-13"><a href="#cb18-13" aria-hidden="true" tabindex="-1"></a><span class="co"># LOO Shrunken R</span></span>
+<span id="cb18-14"><a href="#cb18-14" aria-hidden="true" tabindex="-1"></a>shrunkenR_LOO <span class="ot">&lt;-</span> <span class="fu">cor</span>(big5<span class="sc">$</span>ExistentialWellBeing, yhat_loo, <span class="at">use =</span> <span class="st">"complete.obs"</span>)</span>
+<span id="cb18-15"><a href="#cb18-15" aria-hidden="true" tabindex="-1"></a>shrunkenR_LOO</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.6120392</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="co"># LOO Shrunken R^2</span></span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>shrunkenR_LOO<span class="sc">^</span><span class="dv">2</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.374592</code></pre>
+</div>
+</div>
+<hr>
+</section>
+</section>
+<section id="variable-selection" class="level2">
+<h2 data-anchor-id="variable-selection">2. Variable Selection</h2>
+<p>Since the purpose of prediction is to have the most accurate predictions, models need to focus on <strong>minimizing error variance</strong> rather than getting unbiased estimates.</p>
+<ul>
+<li>Unbiased estimates -&gt; Valid inference of the population</li>
+<li>Minimized error variance -&gt; More accurate and consistent predictions of samples</li>
+</ul>
+<p>Unfortunately, when doing statistics, you generally have to choose one or the other. This is the infamous <strong>bias-variance trade-off</strong>.</p>
+<p>The process of minimizing error variance requires techniques called <strong>variable selection</strong>, which involves step-by-step algorithmic techniques to select which variables are best suited for minimizing error variance.</p>
+<p>All an “algorithm” is is just a step-by-step guide to get a specific outcome. Machine learning methods are just automated algorithms to minimize error variance. Some are more “black box” than others, meaning the intermediate steps are unknown to us. Ridge and LASSO regression (discussed later) are examples of non-black-box automated algorithms.</p>
+<p>The following methods are very out of date and should not really be used in practice. However, you may still encounter them in published work, so it is worth knowing how they work. In psychology, you could most likely get away with using Ridge or LASSO regression in most cases.</p>
+<hr>
+<section id="forward-selection" class="level3">
+<h3 data-anchor-id="forward-selection">Forward Selection</h3>
+<p>Forward selection starts with no predictors and adds them one at a time. At each step, the predictor that provides the most significant improvement (<span class="math inline">\(\Delta R^2\)</span> F test) is added. The process stops when no remaining variable significantly improves the model. We use <code>add1()</code> with <code>test = "F"</code>.</p>
+<p>Note that <code>~1</code> in <code>lm()</code> means a model with only the intercept and no predictors.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>modelnone <span class="ot">&lt;-</span> <span class="fu">lm</span>(ExistentialWellBeing <span class="sc">~</span> <span class="dv">1</span>, <span class="at">data =</span> big5)</span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a><span class="fu">add1</span>(modelnone, <span class="at">scope =</span> <span class="sc">~</span> OpenMindedness <span class="sc">+</span> Conscientiousness <span class="sc">+</span> Extraversion <span class="sc">+</span> </span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>       Agreeableness <span class="sc">+</span> NegativeEmotionality, <span class="at">test =</span> <span class="st">"F"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Single term additions
+
+Model:
+ExistentialWellBeing ~ 1
+                     Df Sum of Sq    RSS      AIC F value    Pr(&gt;F)    
+&lt;none&gt;                            850.09  -929.04                      
+OpenMindedness        1     9.639 840.45  -944.71  17.754 2.659e-05 ***
+Conscientiousness     1   120.445 729.64 -1163.86 255.535 &lt; 2.2e-16 ***
+Extraversion          1   106.661 743.43 -1134.85 222.094 &lt; 2.2e-16 ***
+Agreeableness         1    76.546 773.54 -1073.30 153.184 &lt; 2.2e-16 ***
+NegativeEmotionality  1   303.423 546.66 -1611.37 859.208 &lt; 2.2e-16 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
+</div>
+</div>
+<p><code>NegativeEmotionality</code> has the highest F/lowest p, so it is added first. Use <code>update()</code> with a <code>+</code> in front of the variable name to add it. Make sure every variable is in <code>scope =</code>.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="fu">add1</span>(<span class="fu">update</span>(modelnone, <span class="sc">~</span>. <span class="sc">+</span> NegativeEmotionality), </span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>     <span class="at">scope =</span> <span class="sc">~</span> OpenMindedness <span class="sc">+</span> Conscientiousness <span class="sc">+</span> Extraversion</span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>             <span class="sc">+</span> Agreeableness <span class="sc">+</span> NegativeEmotionality, <span class="at">test =</span> <span class="st">"F"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Single term additions
+
+Model:
+ExistentialWellBeing ~ NegativeEmotionality
+                  Df Sum of Sq    RSS     AIC F value    Pr(&gt;F)    
+&lt;none&gt;                         546.66 -1611.4                      
+OpenMindedness     1    2.9432 543.72 -1617.7  8.3742 0.0038593 ** 
+Conscientiousness  1   15.2054 531.46 -1653.1 44.2608 3.977e-11 ***
+Extraversion       1    3.9161 542.75 -1620.5 11.1621 0.0008548 ***
+Agreeableness      1    9.9049 536.76 -1637.7 28.5469 1.051e-07 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
+</div>
+</div>
+<p><code>Conscientiousness</code> is next most significant, so it is added.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="fu">add1</span>(<span class="fu">update</span>(modelnone, <span class="sc">~</span>. <span class="sc">+</span> NegativeEmotionality <span class="sc">+</span> Conscientiousness), </span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>     <span class="at">scope =</span> <span class="sc">~</span> OpenMindedness <span class="sc">+</span> Conscientiousness <span class="sc">+</span> Extraversion </span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>             <span class="sc">+</span> Agreeableness <span class="sc">+</span> NegativeEmotionality, <span class="at">test =</span> <span class="st">"F"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Single term additions
+
+Model:
+ExistentialWellBeing ~ NegativeEmotionality + Conscientiousness
+               Df Sum of Sq    RSS     AIC F value   Pr(&gt;F)   
+&lt;none&gt;                      531.46 -1653.1                    
+OpenMindedness  1    0.4690 530.99 -1652.5  1.3655 0.242771   
+Extraversion    1    1.0283 530.43 -1654.1  2.9972 0.083610 . 
+Agreeableness   1    3.2693 528.19 -1660.7  9.5692 0.002014 **
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
+</div>
+</div>
+<p><code>Agreeableness</code> is significant, so it is added.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="fu">add1</span>(<span class="fu">update</span>(modelnone, <span class="sc">~</span>. <span class="sc">+</span> NegativeEmotionality <span class="sc">+</span> Conscientiousness <span class="sc">+</span> Agreeableness), </span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>     <span class="at">scope =</span> <span class="sc">~</span> OpenMindedness <span class="sc">+</span> Conscientiousness <span class="sc">+</span> Extraversion </span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>             <span class="sc">+</span> Agreeableness <span class="sc">+</span> NegativeEmotionality, <span class="at">test =</span> <span class="st">"F"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Single term additions
+
+Model:
+ExistentialWellBeing ~ NegativeEmotionality + Conscientiousness + 
+    Agreeableness
+               Df Sum of Sq    RSS     AIC F value Pr(&gt;F)
+&lt;none&gt;                      528.19 -1660.7               
+OpenMindedness  1   0.02255 528.17 -1658.7   0.066 0.7973
+Extraversion    1   0.86899 527.32 -1661.2   2.546 0.1108</code></pre>
+</div>
+</div>
+<p>No significant variables are left to add, so forward selection stops. The final model is:</p>
+<p><code>ExistentialWellBeing ~ NegativeEmotionality + Conscientiousness + Agreeableness</code></p>
+<hr>
+</section>
+<section id="backward-selection" class="level3">
+<h3 data-anchor-id="backward-selection">Backward Selection</h3>
+<p>Backward selection starts with the full model and removes predictors one at a time. At each step the least useful variable (highest p-value) is dropped. The process stops when all remaining predictors are significant. We use <code>drop1()</code> with <code>test = "F"</code>. Use <code>update()</code> with a <code>-</code> in front of the variable name to remove it.</p>
+<p>This is probably the “best” of the simple variable selection methods, though it is still not recommended to use these days.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>full_model <span class="ot">&lt;-</span> <span class="fu">lm</span>(ExistentialWellBeing <span class="sc">~</span> OpenMindedness <span class="sc">+</span> Conscientiousness </span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>                 <span class="sc">+</span> Extraversion <span class="sc">+</span> Agreeableness <span class="sc">+</span> NegativeEmotionality,</span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a>                 <span class="at">data =</span> big5)</span>
+<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a><span class="fu">drop1</span>(full_model, <span class="at">test =</span> <span class="st">"F"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Single term deletions
+
+Model:
+ExistentialWellBeing ~ OpenMindedness + Conscientiousness + Extraversion + 
+    Agreeableness + NegativeEmotionality
+                     Df Sum of Sq    RSS     AIC  F value    Pr(&gt;F)    
+&lt;none&gt;                            527.30 -1659.3                       
+OpenMindedness        1     0.022 527.32 -1661.2   0.0633  0.801403    
+Conscientiousness     1     7.020 534.32 -1640.8  20.5549 6.242e-06 ***
+Extraversion          1     0.868 528.17 -1658.7   2.5417  0.111077    
+Agreeableness         1     2.980 530.28 -1652.5   8.7254  0.003186 ** 
+NegativeEmotionality  1   142.115 669.41 -1291.4 416.1307 &lt; 2.2e-16 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
+</div>
+</div>
+<p><code>OpenMindedness</code> has the highest p-value so it is dropped first.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="fu">drop1</span>(<span class="fu">update</span>(full_model, <span class="sc">~</span> . <span class="sc">-</span> OpenMindedness), <span class="at">test =</span> <span class="st">"F"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Single term deletions
+
+Model:
+ExistentialWellBeing ~ Conscientiousness + Extraversion + Agreeableness + 
+    NegativeEmotionality
+                     Df Sum of Sq    RSS     AIC  F value    Pr(&gt;F)    
+&lt;none&gt;                            527.32 -1661.2                       
+Conscientiousness     1     7.005 534.33 -1642.8  20.5225 6.346e-06 ***
+Extraversion          1     0.869 528.19 -1660.7   2.5460  0.110775    
+Agreeableness         1     3.110 530.43 -1654.1   9.1119  0.002581 ** 
+NegativeEmotionality  1   149.727 677.05 -1275.8 438.6869 &lt; 2.2e-16 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
+</div>
+</div>
+<p><code>Extraversion</code> should be dropped next.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="fu">drop1</span>(<span class="fu">update</span>(full_model, <span class="sc">~</span> . <span class="sc">-</span> OpenMindedness <span class="sc">-</span> Extraversion), <span class="at">test =</span> <span class="st">"F"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Single term deletions
+
+Model:
+ExistentialWellBeing ~ Conscientiousness + Agreeableness + NegativeEmotionality
+                     Df Sum of Sq    RSS     AIC  F value    Pr(&gt;F)    
+&lt;none&gt;                            528.19 -1660.7                       
+Conscientiousness     1     8.570 536.76 -1637.7  25.0838 6.119e-07 ***
+Agreeableness         1     3.269 531.46 -1653.1   9.5692  0.002014 ** 
+NegativeEmotionality  1   184.415 712.61 -1198.5 539.7794 &lt; 2.2e-16 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
+</div>
+</div>
+<p>All remaining variables are significant so backward selection stops. The final model matches forward selection:</p>
+<p><code>ExistentialWellBeing ~ NegativeEmotionality + Conscientiousness + Agreeableness</code></p>
+<hr>
+</section>
+<section id="stepwise-selection" class="level3">
+<h3 data-anchor-id="stepwise-selection">Stepwise Selection</h3>
+<p>Stepwise (bidirectional) selection combines forward and backward selection. Predictors are added one at a time, but after each addition the procedure also checks whether any predictors already in the model should be removed. Variables can both enter and leave the model at different steps.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a>modelnone <span class="ot">&lt;-</span> <span class="fu">lm</span>(ExistentialWellBeing <span class="sc">~</span> <span class="dv">1</span>, <span class="at">data =</span> big5)</span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a><span class="fu">add1</span>(modelnone, <span class="at">scope =</span> <span class="sc">~</span> OpenMindedness <span class="sc">+</span> Conscientiousness <span class="sc">+</span> Extraversion <span class="sc">+</span> </span>
+<span id="cb36-4"><a href="#cb36-4" aria-hidden="true" tabindex="-1"></a>       Agreeableness <span class="sc">+</span> NegativeEmotionality, <span class="at">test =</span> <span class="st">"F"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Single term additions
+
+Model:
+ExistentialWellBeing ~ 1
+                     Df Sum of Sq    RSS      AIC F value    Pr(&gt;F)    
+&lt;none&gt;                            850.09  -929.04                      
+OpenMindedness        1     9.639 840.45  -944.71  17.754 2.659e-05 ***
+Conscientiousness     1   120.445 729.64 -1163.86 255.535 &lt; 2.2e-16 ***
+Extraversion          1   106.661 743.43 -1134.85 222.094 &lt; 2.2e-16 ***
+Agreeableness         1    76.546 773.54 -1073.30 153.184 &lt; 2.2e-16 ***
+NegativeEmotionality  1   303.423 546.66 -1611.37 859.208 &lt; 2.2e-16 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
+</div>
+</div>
+<p><code>NegativeEmotionality</code> is added first (same as forward selection).</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="fu">add1</span>(<span class="fu">update</span>(modelnone, <span class="sc">~</span>. <span class="sc">+</span> NegativeEmotionality), </span>
+<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a>     <span class="at">scope =</span> <span class="sc">~</span> OpenMindedness <span class="sc">+</span> Conscientiousness <span class="sc">+</span> Extraversion </span>
+<span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a>             <span class="sc">+</span> Agreeableness <span class="sc">+</span> NegativeEmotionality, <span class="at">test =</span> <span class="st">"F"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Single term additions
+
+Model:
+ExistentialWellBeing ~ NegativeEmotionality
+                  Df Sum of Sq    RSS     AIC F value    Pr(&gt;F)    
+&lt;none&gt;                         546.66 -1611.4                      
+OpenMindedness     1    2.9432 543.72 -1617.7  8.3742 0.0038593 ** 
+Conscientiousness  1   15.2054 531.46 -1653.1 44.2608 3.977e-11 ***
+Extraversion       1    3.9161 542.75 -1620.5 11.1621 0.0008548 ***
+Agreeableness      1    9.9049 536.76 -1637.7 28.5469 1.051e-07 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
+</div>
+</div>
+<p><code>Conscientiousness</code> is added. Now check whether <code>NegativeEmotionality</code> should be dropped.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb40"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="fu">drop1</span>(<span class="fu">update</span>(modelnone, <span class="sc">~</span>. <span class="sc">+</span> NegativeEmotionality <span class="sc">+</span> Conscientiousness), <span class="at">test =</span> <span class="st">"F"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Single term deletions
+
+Model:
+ExistentialWellBeing ~ NegativeEmotionality + Conscientiousness
+                     Df Sum of Sq    RSS     AIC F value    Pr(&gt;F)    
+&lt;none&gt;                            531.46 -1653.1                      
+NegativeEmotionality  1   198.184 729.64 -1163.9 576.883 &lt; 2.2e-16 ***
+Conscientiousness     1    15.205 546.66 -1611.4  44.261 3.977e-11 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
+</div>
+</div>
+<p>Both are significant, so don’t drop either. Continue adding.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb42"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a><span class="fu">add1</span>(<span class="fu">update</span>(modelnone, <span class="sc">~</span>. <span class="sc">+</span> NegativeEmotionality <span class="sc">+</span> Conscientiousness), </span>
+<span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a>     <span class="at">scope =</span> <span class="sc">~</span> OpenMindedness <span class="sc">+</span> Conscientiousness <span class="sc">+</span> Extraversion </span>
+<span id="cb42-3"><a href="#cb42-3" aria-hidden="true" tabindex="-1"></a>             <span class="sc">+</span> Agreeableness <span class="sc">+</span> NegativeEmotionality, <span class="at">test =</span> <span class="st">"F"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Single term additions
+
+Model:
+ExistentialWellBeing ~ NegativeEmotionality + Conscientiousness
+               Df Sum of Sq    RSS     AIC F value   Pr(&gt;F)   
+&lt;none&gt;                      531.46 -1653.1                    
+OpenMindedness  1    0.4690 530.99 -1652.5  1.3655 0.242771   
+Extraversion    1    1.0283 530.43 -1654.1  2.9972 0.083610 . 
+Agreeableness   1    3.2693 528.19 -1660.7  9.5692 0.002014 **
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
+</div>
+</div>
+<p><code>Agreeableness</code> is added. Check again whether any predictor should be dropped.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb44"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a><span class="fu">drop1</span>(<span class="fu">update</span>(modelnone, <span class="sc">~</span>. <span class="sc">+</span> NegativeEmotionality <span class="sc">+</span> Conscientiousness </span>
+<span id="cb44-2"><a href="#cb44-2" aria-hidden="true" tabindex="-1"></a>             <span class="sc">+</span> Agreeableness), <span class="at">test =</span> <span class="st">"F"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Single term deletions
+
+Model:
+ExistentialWellBeing ~ NegativeEmotionality + Conscientiousness + 
+    Agreeableness
+                     Df Sum of Sq    RSS     AIC  F value    Pr(&gt;F)    
+&lt;none&gt;                            528.19 -1660.7                       
+NegativeEmotionality  1   184.415 712.61 -1198.5 539.7794 &lt; 2.2e-16 ***
+Conscientiousness     1     8.570 536.76 -1637.7  25.0838 6.119e-07 ***
+Agreeableness         1     3.269 531.46 -1653.1   9.5692  0.002014 ** 
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
+</div>
+</div>
+<p>All still significant. Check if any remaining variables can be added.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb46"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a><span class="fu">add1</span>(<span class="fu">update</span>(modelnone, <span class="sc">~</span>. <span class="sc">+</span> NegativeEmotionality <span class="sc">+</span> Conscientiousness <span class="sc">+</span> Agreeableness), </span>
+<span id="cb46-2"><a href="#cb46-2" aria-hidden="true" tabindex="-1"></a>     <span class="at">scope =</span> <span class="sc">~</span> OpenMindedness <span class="sc">+</span> Conscientiousness </span>
+<span id="cb46-3"><a href="#cb46-3" aria-hidden="true" tabindex="-1"></a>             <span class="sc">+</span> Extraversion <span class="sc">+</span> Agreeableness <span class="sc">+</span> NegativeEmotionality, <span class="at">test =</span> <span class="st">"F"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Single term additions
+
+Model:
+ExistentialWellBeing ~ NegativeEmotionality + Conscientiousness + 
+    Agreeableness
+               Df Sum of Sq    RSS     AIC F value Pr(&gt;F)
+&lt;none&gt;                      528.19 -1660.7               
+OpenMindedness  1   0.02255 528.17 -1658.7   0.066 0.7973
+Extraversion    1   0.86899 527.32 -1661.2   2.546 0.1108</code></pre>
+</div>
+</div>
+<p>None are significant, so stepwise selection is done. The final model is:</p>
+<p><code>ExistentialWellBeing ~ NegativeEmotionality + Conscientiousness + Agreeableness</code></p>
+<hr>
+</section>
+<section id="all-subsets-regression" class="level3">
+<h3 data-anchor-id="all-subsets-regression">All Subsets Regression</h3>
+<p>All subsets regression evaluates every possible combination of predictors and identifies the best model for each possible number of predictors, using adjusted <span class="math inline">\(R^2\)</span> as the criterion. Unlike the step-by-step methods above, this finds the globally optimal model at each size.</p>
+<p>We use <code>regsubsets()</code> from the <code>leaps</code> package. First subset your dataset to just the variables of interest.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb48"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a>big5small <span class="ot">&lt;-</span> big5 <span class="sc">%&gt;%</span> <span class="fu">select</span>(ExistentialWellBeing, OpenMindedness, </span>
+<span id="cb48-2"><a href="#cb48-2" aria-hidden="true" tabindex="-1"></a>                              Conscientiousness, Extraversion,</span>
+<span id="cb48-3"><a href="#cb48-3" aria-hidden="true" tabindex="-1"></a>                              Agreeableness, NegativeEmotionality)</span>
+<span id="cb48-4"><a href="#cb48-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb48-5"><a href="#cb48-5" aria-hidden="true" tabindex="-1"></a>subsetmodels <span class="ot">&lt;-</span> <span class="fu">regsubsets</span>(ExistentialWellBeing <span class="sc">~</span> ., <span class="at">data =</span> big5small)</span>
+<span id="cb48-6"><a href="#cb48-6" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(subsetmodels)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Subset selection object
+Call: regsubsets.formula(ExistentialWellBeing ~ ., data = big5small)
+5 Variables  (and intercept)
+                     Forced in Forced out
+OpenMindedness           FALSE      FALSE
+Conscientiousness        FALSE      FALSE
+Extraversion             FALSE      FALSE
+Agreeableness            FALSE      FALSE
+NegativeEmotionality     FALSE      FALSE
+1 subsets of each size up to 5
+Selection Algorithm: exhaustive
+         OpenMindedness Conscientiousness Extraversion Agreeableness
+1  ( 1 ) " "            " "               " "          " "          
+2  ( 1 ) " "            "*"               " "          " "          
+3  ( 1 ) " "            "*"               " "          "*"          
+4  ( 1 ) " "            "*"               "*"          "*"          
+5  ( 1 ) "*"            "*"               "*"          "*"          
+         NegativeEmotionality
+1  ( 1 ) "*"                 
+2  ( 1 ) "*"                 
+3  ( 1 ) "*"                 
+4  ( 1 ) "*"                 
+5  ( 1 ) "*"                 </code></pre>
+</div>
+</div>
+<p>The bottom table shows the best model for each number of predictors. The number on the left is how many predictors are in the model, and <code>*</code> means that variable is included. For example, the best one-predictor model includes only <code>NegativeEmotionality</code>, and the best two-predictor model includes <code>NegativeEmotionality</code> and <code>Conscientiousness</code>.</p>
+<p>To find the overall best model, extract the adjusted <span class="math inline">\(R^2\)</span> for each:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb50"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(subsetmodels)<span class="sc">$</span>adjr2</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.3565161 0.3740101 0.3774585 0.3780805 0.3777032</code></pre>
+</div>
+</div>
+<p>The model with the highest adjusted <span class="math inline">\(R^2\)</span> wins. In this dataset the four-predictor model has the highest adjusted <span class="math inline">\(R^2\)</span>, giving a final model of:</p>
+<p><code>ExistentialWellBeing ~ NegativeEmotionality + Conscientiousness + Agreeableness + Extraversion</code></p>
+<p>Note this differs slightly from forward/backward/stepwise selection, which is expected since all subsets finds the globally optimal model rather than following one sequential path.</p>
+<hr>
+</section>
+</section>
+<section id="prediction-intervals" class="level2">
+<h2 data-anchor-id="prediction-intervals">3. Prediction Intervals</h2>
+<p>Prediction intervals are used when we want to estimate not just the average outcome, but the value of a <em>new individual observation</em> given a set of predictor values. There is always uncertainty around any prediction. A <strong>prediction interval</strong> provides a range of values within which we expect a single future observation to fall, with a certain level of confidence (typically 95%).</p>
+<p>It is important to distinguish prediction intervals from confidence intervals. A <strong>confidence interval</strong> gives a range for the <em>mean</em> outcome at a given set of predictors, whereas a <strong>prediction interval</strong> gives a range for an <em>individual</em> outcome. Because individual observations vary more than averages, prediction intervals are always wider than confidence intervals.</p>
+<p>Conceptually, a prediction interval accounts for two sources of uncertainty: (1) uncertainty in estimating the regression line itself, and (2) the random error variance around that line.</p>
+<p>If most of what we covered in this lesson is out of date, prediction intervals are the main thing you should take away. These are used everywhere and you will always need to generate some kind of interval estimate when doing anything that involves real-world prediction.</p>
+<section id="getting-prediction-intervals" class="level3">
+<h3 data-anchor-id="getting-prediction-intervals">Getting Prediction Intervals</h3>
+<p>Use <code>predict()</code> with <code>interval = "prediction"</code>. The <code>fit</code> column is the predicted value, <code>lwr</code> is the lower bound, and <code>upr</code> is the upper bound of the 95% prediction interval.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb52"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb52-1"><a href="#cb52-1" aria-hidden="true" tabindex="-1"></a>full_model <span class="ot">&lt;-</span> <span class="fu">lm</span>(ExistentialWellBeing <span class="sc">~</span> OpenMindedness <span class="sc">+</span> Conscientiousness </span>
+<span id="cb52-2"><a href="#cb52-2" aria-hidden="true" tabindex="-1"></a>                 <span class="sc">+</span> Extraversion <span class="sc">+</span> Agreeableness <span class="sc">+</span> NegativeEmotionality,</span>
+<span id="cb52-3"><a href="#cb52-3" aria-hidden="true" tabindex="-1"></a>                 <span class="at">data =</span> big5)</span>
+<span id="cb52-4"><a href="#cb52-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb52-5"><a href="#cb52-5" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(<span class="fu">predict</span>(full_model, big5, <span class="at">interval =</span> <span class="st">"prediction"</span>)) <span class="co"># using head() to prevent printing hundreds of lines</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>       fit      lwr      upr
+1 3.153296 2.005024 4.301568
+2 3.162984 2.009782 4.316185
+3 4.039420 2.889556 5.189283
+4 2.877630 1.730560 4.024699
+5 3.042007 1.894629 4.189385
+6 3.176778 2.022871 4.330685</code></pre>
+</div>
+</div>
+<p>To change the confidence level, use <code>level =</code> (default is .95):</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb54"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb54-1"><a href="#cb54-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 90% prediction interval</span></span>
+<span id="cb54-2"><a href="#cb54-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(<span class="fu">predict</span>(full_model, big5, <span class="at">interval =</span> <span class="st">"prediction"</span>, <span class="at">level =</span> .<span class="dv">9</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>       fit      lwr      upr
+1 3.153296 2.189813 4.116779
+2 3.162984 2.195365 4.130603
+3 4.039420 3.074602 5.004238
+4 2.877630 1.915156 3.840104
+5 3.042007 2.079274 4.004740
+6 3.176778 2.208567 4.144989</code></pre>
+</div>
+</div>
+<p>For comparison, here is the 95% confidence interval per predicted score:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb56"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb56-1"><a href="#cb56-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(<span class="fu">predict</span>(full_model, big5, <span class="at">interval =</span> <span class="st">"confidence"</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>       fit      lwr      upr
+1 3.153296 3.085819 3.220773
+2 3.162984 3.036898 3.289070
+3 4.039420 3.948813 4.130027
+4 2.877630 2.835295 2.919965
+5 3.042007 2.991999 3.092016
+6 3.176778 3.044393 3.309162</code></pre>
+</div>
+</div>
+</section>
+<section id="specific-predictions" class="level3">
+<h3 data-anchor-id="specific-predictions">Specific Predictions</h3>
+<p>Prediction intervals also let you estimate the uncertainty for a specific hypothetical individual. Save their predictor values in a new data frame and plug it into <code>predict()</code>.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb58"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb58-1"><a href="#cb58-1" aria-hidden="true" tabindex="-1"></a>newdata <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">OpenMindedness =</span> <span class="dv">1</span>, <span class="at">Conscientiousness =</span> <span class="dv">2</span>,</span>
+<span id="cb58-2"><a href="#cb58-2" aria-hidden="true" tabindex="-1"></a>                      <span class="at">Extraversion =</span> <span class="dv">3</span>, <span class="at">Agreeableness =</span> <span class="dv">0</span>, </span>
+<span id="cb58-3"><a href="#cb58-3" aria-hidden="true" tabindex="-1"></a>                      <span class="at">NegativeEmotionality =</span> <span class="dv">2</span>)</span>
+<span id="cb58-4"><a href="#cb58-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb58-5"><a href="#cb58-5" aria-hidden="true" tabindex="-1"></a><span class="fu">predict</span>(full_model, newdata, <span class="at">interval =</span> <span class="st">"prediction"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>       fit      lwr      upr
+1 3.029406 1.863558 4.195255</code></pre>
+</div>
+</div>
+<p>We predict this individual has an existential well-being score of about 3, with a 95% prediction interval of [1.86, 4.19].</p>
+<p>For multiple hypothetical individuals, just add more rows to the data frame:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb60"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb60-1"><a href="#cb60-1" aria-hidden="true" tabindex="-1"></a>newdata <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">OpenMindedness      =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">0</span>), </span>
+<span id="cb60-2"><a href="#cb60-2" aria-hidden="true" tabindex="-1"></a>                      <span class="at">Conscientiousness   =</span> <span class="fu">c</span>(<span class="dv">2</span>, <span class="dv">1</span>), </span>
+<span id="cb60-3"><a href="#cb60-3" aria-hidden="true" tabindex="-1"></a>                      <span class="at">Extraversion        =</span> <span class="fu">c</span>(<span class="dv">3</span>, <span class="dv">2</span>), </span>
+<span id="cb60-4"><a href="#cb60-4" aria-hidden="true" tabindex="-1"></a>                      <span class="at">Agreeableness       =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>), </span>
+<span id="cb60-5"><a href="#cb60-5" aria-hidden="true" tabindex="-1"></a>                      <span class="at">NegativeEmotionality =</span> <span class="fu">c</span>(<span class="dv">3</span>, <span class="dv">2</span>))</span>
+<span id="cb60-6"><a href="#cb60-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb60-7"><a href="#cb60-7" aria-hidden="true" tabindex="-1"></a><span class="fu">predict</span>(full_model, newdata, <span class="at">interval =</span> <span class="st">"prediction"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>       fit      lwr      upr
+1 2.588098 1.424191 3.752005
+2 2.964597 1.799168 4.130025</code></pre>
+</div>
+</div>
+<hr>
+</section>
+</section>
+<section id="lasso-regression" class="level2">
+<h2 data-anchor-id="lasso-regression">4. LASSO Regression</h2>
+<section id="ridge-vs-lasso-vs-elastic-net" class="level3">
+<h3 data-anchor-id="ridge-vs-lasso-vs-elastic-net">Ridge vs LASSO vs Elastic Net</h3>
+<p>Ridge and LASSO regression are more modern automated selection methods for predictive models. Instead of removing variables one at a time like forward/backward selection, these approaches keep all predictors in the model but reduce their influence based on how useful they are for prediction. This process of intentionally penalizing large coefficients is called <strong>regularization</strong>.</p>
+<p><strong>Ridge regression</strong> shrinks all coefficients toward zero but never fully removes any predictor from the model. It keeps everything but gives more weight to more important variables.</p>
+<p><strong>LASSO regression</strong> also shrinks coefficients, but unlike Ridge it can shrink some all the way to exactly zero, effectively removing those predictors from the model. This makes LASSO especially useful when you have many predictors or when some are not very important, because it creates a simpler, more interpretable model while reducing overfitting.</p>
+<p>A helpful way to think about the difference: backward selection makes “yes or no” decisions about each variable, whereas Ridge and LASSO adjust how much each variable matters. LASSO can still make “drop” decisions by zeroing out coefficients, while Ridge only reduces their importance.</p>
+<p><strong>Elastic Net</strong> is a mix of LASSO and Ridge that can both shrink and remove variables. It is especially useful when predictors are highly correlated, but it is more complicated to use since you have to make additional choices about how to balance shrinkage versus removal.</p>
+<p>In this lesson we will focus on LASSO. Note that the coefficients from LASSO should not be interpreted in the same way as standard regression coefficients. LASSO seeks to minimize prediction error, not produce unbiased estimates, so the coefficients may differ substantially from what you would get with <code>lm()</code>.</p>
+</section>
+<section id="lasso-with-cv.glmnet" class="level3">
+<h3 data-anchor-id="lasso-with-cv.glmnet">LASSO with cv.glmnet()</h3>
+<p>To do LASSO in R, use <code>cv.glmnet()</code> from the <code>glmnet</code> package. The <code>cv</code> stands for cross-validation, which is the process for choosing the optimal <span class="math inline">\(\lambda\)</span> before LASSO is run. The predictors must be in <strong>matrix</strong> format.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb62"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb62-1"><a href="#cb62-1" aria-hidden="true" tabindex="-1"></a>predictors <span class="ot">&lt;-</span> <span class="fu">as.matrix</span>(big5small <span class="sc">%&gt;%</span> <span class="fu">select</span>(<span class="sc">-</span>ExistentialWellBeing))</span>
+<span id="cb62-2"><a href="#cb62-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb62-3"><a href="#cb62-3" aria-hidden="true" tabindex="-1"></a>lasso_model <span class="ot">&lt;-</span> <span class="fu">cv.glmnet</span>(<span class="at">x      =</span> predictors,</span>
+<span id="cb62-4"><a href="#cb62-4" aria-hidden="true" tabindex="-1"></a>                         <span class="at">y      =</span> big5<span class="sc">$</span>ExistentialWellBeing, </span>
+<span id="cb62-5"><a href="#cb62-5" aria-hidden="true" tabindex="-1"></a>                         <span class="at">family =</span> <span class="st">"gaussian"</span>,  <span class="co"># ordinary regression</span></span>
+<span id="cb62-6"><a href="#cb62-6" aria-hidden="true" tabindex="-1"></a>                         <span class="at">alpha  =</span> <span class="dv">1</span>)           <span class="co"># alpha = 1 specifies LASSO</span></span>
+<span id="cb62-7"><a href="#cb62-7" aria-hidden="true" tabindex="-1"></a><span class="co"># </span><span class="al">NOTE</span><span class="co">: alpha = 0 fits Ridge, alpha between 0 and 1 fits Elastic Net</span></span>
+<span id="cb62-8"><a href="#cb62-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb62-9"><a href="#cb62-9" aria-hidden="true" tabindex="-1"></a>lasso_model<span class="sc">$</span>lambda.min</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.004635115</code></pre>
+</div>
+</div>
+<p>The optimal <span class="math inline">\(\lambda\)</span> was about .02. This value does not have a direct interpretation on its own.</p>
+<p>To visualize how prediction error changes across <span class="math inline">\(\lambda\)</span> values:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb64"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb64-1"><a href="#cb64-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(lasso_model)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="prediction_files/figure-html/lasso-plot-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>The Y-axis is mean-squared prediction error (lower is better). The X-axis shows <span class="math inline">\(-\log(\lambda)\)</span>, so moving right corresponds to smaller <span class="math inline">\(\lambda\)</span> (less shrinking, more complex). The numbers at the top indicate how many predictors are included at each point. The vertical dotted line marks the optimal <span class="math inline">\(\lambda\)</span>.</p>
+<p>To extract the model coefficients:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb65"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb65-1"><a href="#cb65-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Best predictive performance</span></span>
+<span id="cb65-2"><a href="#cb65-2" aria-hidden="true" tabindex="-1"></a><span class="fu">coef</span>(lasso_model, <span class="at">s =</span> <span class="st">"lambda.min"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>6 x 1 sparse Matrix of class "dgCMatrix"
+                      lambda.min
+(Intercept)           3.58072170
+OpenMindedness        .         
+Conscientiousness     0.11561031
+Extraversion          0.03598063
+Agreeableness         0.08164591
+NegativeEmotionality -0.44021022</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb67"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb67-1"><a href="#cb67-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Simpler model that performs nearly as well</span></span>
+<span id="cb67-2"><a href="#cb67-2" aria-hidden="true" tabindex="-1"></a><span class="fu">coef</span>(lasso_model, <span class="at">s =</span> <span class="st">"lambda.1se"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>6 x 1 sparse Matrix of class "dgCMatrix"
+                      lambda.1se
+(Intercept)           3.93463768
+OpenMindedness        .         
+Conscientiousness     0.08077601
+Extraversion          .         
+Agreeableness         0.02121283
+NegativeEmotionality -0.40607926</code></pre>
+</div>
+</div>
+<p>In this case they are the same, meaning allowing more complexity does not meaningfully improve prediction. LASSO kept only <code>NegativeEmotionality</code> and zeroed out everything else, which aligns with the Variable Importance lesson where <code>NegativeEmotionality</code> had by far the largest effect.</p>
+<p>Some other useful things you can extract:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb69"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb69-1"><a href="#cb69-1" aria-hidden="true" tabindex="-1"></a>lasso_model<span class="sc">$</span>lambda  <span class="co"># all lambda values tested</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1] 0.442444220 0.403138695 0.367324964 0.334692827 0.304959639 0.277867865
+ [7] 0.253182850 0.230690783 0.210196850 0.191523541 0.174509117 0.159006208
+[13] 0.144880535 0.132009748 0.120282365 0.109596812 0.099860533 0.090989198
+[19] 0.082905969 0.075540831 0.068829992 0.062715325 0.057143868 0.052067365
+[25] 0.047441843 0.043227241 0.039387052 0.035888015 0.032699822 0.029794860
+[31] 0.027147967 0.024736217 0.022538719 0.020536442 0.018712041 0.017049715
+[37] 0.015535065 0.014154973 0.012897484 0.011751707 0.010707718 0.009756474
+[43] 0.008889735 0.008099996 0.007380414 0.006724759 0.006127350 0.005583013
+[49] 0.005087033 0.004635115 0.004223344 0.003848154 0.003506295 0.003194805
+[55] 0.002910988 0.002652383 0.002416753 0.002202055</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb71"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb71-1"><a href="#cb71-1" aria-hidden="true" tabindex="-1"></a>lasso_model<span class="sc">$</span>cvm     <span class="co"># mean cross-validation error per lambda tested</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1] 0.5474312 0.5168876 0.4892192 0.4662463 0.4471717 0.4313338 0.4181833
+ [8] 0.4072640 0.3981972 0.3906685 0.3844126 0.3790556 0.3739481 0.3690966
+[15] 0.3649387 0.3614773 0.3586015 0.3562074 0.3541722 0.3523402 0.3507956
+[22] 0.3495270 0.3484797 0.3476107 0.3468644 0.3462141 0.3456656 0.3452136
+[29] 0.3448383 0.3445046 0.3442250 0.3439929 0.3438000 0.3436397 0.3435068
+[36] 0.3433957 0.3433035 0.3432268 0.3431629 0.3431098 0.3430656 0.3430288
+[43] 0.3429982 0.3429727 0.3429514 0.3429337 0.3429190 0.3429067 0.3428968
+[50] 0.3428886 0.3428910 0.3429005 0.3429127 0.3429252 0.3429375 0.3429501
+[57] 0.3429620 0.3429771</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb73"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb73-1"><a href="#cb73-1" aria-hidden="true" tabindex="-1"></a>lasso_model<span class="sc">$</span>nzero   <span class="co"># number of non-zero coefficients per lambda tested</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> s0  s1  s2  s3  s4  s5  s6  s7  s8  s9 s10 s11 s12 s13 s14 s15 s16 s17 s18 s19 
+  0   1   1   1   1   1   1   1   1   1   1   1   2   2   2   2   2   2   3   3 
+s20 s21 s22 s23 s24 s25 s26 s27 s28 s29 s30 s31 s32 s33 s34 s35 s36 s37 s38 s39 
+  3   3   4   4   4   4   4   4   4   4   4   4   4   4   4   4   4   4   4   4 
+s40 s41 s42 s43 s44 s45 s46 s47 s48 s49 s50 s51 s52 s53 s54 s55 s56 s57 
+  4   4   4   4   4   4   4   4   4   4   4   4   4   4   4   4   4   4 </code></pre>
+</div>
+</div>
+<p>To get predicted scores:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb75"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb75-1"><a href="#cb75-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(<span class="fu">predict</span>(lasso_model, <span class="at">newx =</span> predictors, <span class="at">s =</span> <span class="st">"lambda.min"</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>     lambda.min
+[1,]   3.153834
+[2,]   3.171883
+[3,]   4.034786
+[4,]   2.882289
+[5,]   3.043611
+[6,]   3.186076</code></pre>
+</div>
+</div>
+<hr>
+</section>
+</section>
+<section id="well-done" class="level2">
+<h2 data-anchor-id="well-done">Well Done!</h2>
+<p>You have completed the Prediction tutorial. Here is a summary of what was covered:</p>
+<ul>
+<li>Cross-validation methods: simple, double, k-fold, and leave-one-out, and how to compute shrunken R and shrunken <span class="math inline">\(R^2\)</span></li>
+<li>Variable selection: forward selection with <code>add1()</code>, backward selection with <code>drop1()</code>, stepwise selection, and all subsets regression with <code>regsubsets()</code></li>
+<li>Prediction intervals with <code>predict()</code> and how they differ from confidence intervals</li>
+<li>LASSO regression with <code>cv.glmnet()</code> for simultaneous variable selection and coefficient shrinkage</li>
+</ul>
+<p>The next lesson covers variable importance.</p>
+
+
+</section>
+
+</main> <!-- /main -->
+<!-- MailerLite Universal -->
+<script>
+    (function(w,d,e,u,f,l,n){w[f]=w[f]||function(){(w[f].q=w[f].q||[])
+    .push(arguments);},l=d.createElement(e),l.async=1,l.src=u,
+    n=d.getElementsByTagName(e)[0],n.parentNode.insertBefore(l,n);})
+    (window,document,'script','https://assets.mailerlite.com/js/universal.js','ml');
+    ml('account', '2295583');
+</script>
+<!-- End MailerLite Universal -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/infogothic\.com");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

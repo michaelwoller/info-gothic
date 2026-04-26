@@ -1,0 +1,10 @@
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+  var nav = document.querySelector(".navbar-nav");
+  var li = document.createElement("li");
+  li.className = "nav-item";
+  li.innerHTML = '<a class="nav-link ml-onclick-form" href="javascript:void(0)" onclick="ml(\'show\', \'18mxag\', true)">Mail List</a>';
+  var icons = nav.querySelector(".nav-item:has(.bi)");
+  nav.insertBefore(li, icons);
+});
+</script>

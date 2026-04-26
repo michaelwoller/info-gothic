@@ -1,0 +1,1691 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.9.36">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Michael Woller">
+
+<title>Multicategorical Predictors – InfoGothic</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<link href="../../images/favicon.ico" rel="icon">
+<script src="../../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-dark-f418161beb48e0141c760e455f12af2c.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap-4d14f3be7bc8eb7ec2287338953877e0.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="dark">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+
+<link rel="stylesheet" href="../../styles.css">
+</head>
+
+<body class="nav-fixed quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="../../index.html">
+    <span class="navbar-title">InfoGothic</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../about.html"> 
+<span class="menu-text">About</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../tutorials.html"> 
+<span class="menu-text">Courses &amp; Tutorials</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../blog-posts.html"> 
+<span class="menu-text">Blog Posts</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="https://notes.infogothic.com"> 
+<span class="menu-text">Obsidian Notes</span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/michaelwoller"> <i class="bi bi-github" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://bsky.app/profile/infogothic.bsky.social"> <i class="bi bi-bluesky" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item">
+    <span class="nav-link">
+<span class="menu-text">&lt;a class='ml-onclick-form' href='javascript:void(0)' onclick="ml('show', '18mxag', true)"&gt;Mail List&lt;/a&gt;</span>
+    </span>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction">Introduction</a>
+  <ul class="collapse">
+  <li><a href="#the-dataset" id="toc-the-dataset" class="nav-link" data-scroll-target="#the-dataset">The Dataset</a></li>
+  <li><a href="#group-descriptives" id="toc-group-descriptives" class="nav-link" data-scroll-target="#group-descriptives">Group Descriptives</a></li>
+  </ul></li>
+  <li><a href="#dummyindicator-coding" id="toc-dummyindicator-coding" class="nav-link" data-scroll-target="#dummyindicator-coding">1. Dummy/Indicator Coding</a>
+  <ul class="collapse">
+  <li><a href="#what-is-dummy-coding" id="toc-what-is-dummy-coding" class="nav-link" data-scroll-target="#what-is-dummy-coding">What Is Dummy Coding?</a></li>
+  <li><a href="#dummy-coding-with-factor" id="toc-dummy-coding-with-factor" class="nav-link" data-scroll-target="#dummy-coding-with-factor">Dummy Coding with factor()</a></li>
+  <li><a href="#fitting-the-model" id="toc-fitting-the-model" class="nav-link" data-scroll-target="#fitting-the-model">Fitting the Model</a></li>
+  <li><a href="#interpreting-dummy-codes" id="toc-interpreting-dummy-codes" class="nav-link" data-scroll-target="#interpreting-dummy-codes">Interpreting Dummy Codes</a></li>
+  <li><a href="#coding-unique-variables-manually" id="toc-coding-unique-variables-manually" class="nav-link" data-scroll-target="#coding-unique-variables-manually">Coding Unique Variables Manually</a></li>
+  <li><a href="#recoding-the-baseline-group" id="toc-recoding-the-baseline-group" class="nav-link" data-scroll-target="#recoding-the-baseline-group">Recoding the Baseline Group</a></li>
+  <li><a href="#custom-contrast-method" id="toc-custom-contrast-method" class="nav-link" data-scroll-target="#custom-contrast-method">Custom Contrast Method</a></li>
+  <li><a href="#adding-covariates" id="toc-adding-covariates" class="nav-link" data-scroll-target="#adding-covariates">Adding Covariates</a></li>
+  <li><a href="#interpreting-covariates" id="toc-interpreting-covariates" class="nav-link" data-scroll-target="#interpreting-covariates">Interpreting Covariates</a></li>
+  </ul></li>
+  <li><a href="#sequential-coding" id="toc-sequential-coding" class="nav-link" data-scroll-target="#sequential-coding">2. Sequential Coding</a>
+  <ul class="collapse">
+  <li><a href="#what-is-sequential-coding" id="toc-what-is-sequential-coding" class="nav-link" data-scroll-target="#what-is-sequential-coding">What Is Sequential Coding?</a></li>
+  <li><a href="#sequential-coding-in-base-r" id="toc-sequential-coding-in-base-r" class="nav-link" data-scroll-target="#sequential-coding-in-base-r">Sequential Coding in Base R</a></li>
+  <li><a href="#custom-contrast-method-1" id="toc-custom-contrast-method-1" class="nav-link" data-scroll-target="#custom-contrast-method-1">Custom Contrast Method</a></li>
+  <li><a href="#interpreting-sequential-codes" id="toc-interpreting-sequential-codes" class="nav-link" data-scroll-target="#interpreting-sequential-codes">Interpreting Sequential Codes</a></li>
+  </ul></li>
+  <li><a href="#helmert-coding" id="toc-helmert-coding" class="nav-link" data-scroll-target="#helmert-coding">3. Helmert Coding</a>
+  <ul class="collapse">
+  <li><a href="#what-is-helmert-coding" id="toc-what-is-helmert-coding" class="nav-link" data-scroll-target="#what-is-helmert-coding">What Is Helmert Coding?</a></li>
+  <li><a href="#helmert-coding-in-base-r" id="toc-helmert-coding-in-base-r" class="nav-link" data-scroll-target="#helmert-coding-in-base-r">Helmert Coding in Base R</a></li>
+  <li><a href="#custom-contrast-method-2" id="toc-custom-contrast-method-2" class="nav-link" data-scroll-target="#custom-contrast-method-2">Custom Contrast Method</a></li>
+  <li><a href="#interpreting-helmert-codes" id="toc-interpreting-helmert-codes" class="nav-link" data-scroll-target="#interpreting-helmert-codes">Interpreting Helmert Codes</a></li>
+  </ul></li>
+  <li><a href="#effects-coding" id="toc-effects-coding" class="nav-link" data-scroll-target="#effects-coding">4. Effects Coding</a>
+  <ul class="collapse">
+  <li><a href="#what-is-effects-coding" id="toc-what-is-effects-coding" class="nav-link" data-scroll-target="#what-is-effects-coding">What Is Effects Coding?</a></li>
+  <li><a href="#effects-coding-in-base-r" id="toc-effects-coding-in-base-r" class="nav-link" data-scroll-target="#effects-coding-in-base-r">Effects Coding in Base R</a></li>
+  <li><a href="#custom-contrast-method-3" id="toc-custom-contrast-method-3" class="nav-link" data-scroll-target="#custom-contrast-method-3">Custom Contrast Method</a></li>
+  <li><a href="#interpreting-effects-codes" id="toc-interpreting-effects-codes" class="nav-link" data-scroll-target="#interpreting-effects-codes">Interpreting Effects Codes</a></li>
+  </ul></li>
+  <li><a href="#well-done" id="toc-well-done" class="nav-link" data-scroll-target="#well-done">Well Done!</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Multicategorical Predictors</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Michael Woller </p>
+          </div>
+  </div>
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="introduction" class="level2">
+<h2 data-anchor-id="introduction">Introduction</h2>
+<p>Previously, you learned about single dichotomous predictors, where you have a binary variable with one reference group and a slope that represents the difference between the two groups. It is possible to expand this idea into multicategorical variables that have 3+ groups. This can be done through various coding techniques that we will go over below. These can be used for nominal or ordinal variables, though some of the methods are more preferable for certain variable types over others.</p>
+<p>A through line through each method is that we will need to have multiple predictors and multiple slopes in the model, approximately one for each group, except that, like a dichotomous predictor, there is a group that is left out of the model (the details of which are method dependent).</p>
+<p>Another through line is that each method can be represented by a coding scheme, a “contrast” matrix. If you have taken the ANOVA course before regression, this concept will hopefully make sense.</p>
+<p>At the end of the day, all of these methods are comparing group means of the outcome. What differs is what <em>combination</em> of group means are being compared (e.g., mean 1 vs mean 2, means 1 &amp; 2 vs means 3, etc.).</p>
+<section id="the-dataset" class="level3">
+<h3 data-anchor-id="the-dataset">The Dataset</h3>
+<p>For this lesson we will use a <strong>COVID stress</strong> dataset. The outcome is <code>COVID_Concerns</code> - how concerned an individual is about COVID-19. The predictor of interest is <code>Educ_Mom</code> - the mother’s education level, which has seven categories:</p>
+<ol type="1">
+<li>“None” (no college)</li>
+<li>“Up to 6 years of school”</li>
+<li>“Up to 9 years of school”</li>
+<li>“Up to 12 years of school” (high school degree)</li>
+<li>“Some College or equivalent”</li>
+<li>College degree</li>
+<li>PhD/Doctorate</li>
+</ol>
+<p>Note, the dataset that was given to develop the lab lesson proved to not really have any group differences (spoiler), so this isn’t the best example to teach with. If I ever get a hold on better data and can be bothered to come back and change some of these, I might in the future.</p>
+</section>
+<section id="group-descriptives" class="level3">
+<h3 data-anchor-id="group-descriptives">Group Descriptives</h3>
+<p>Since all of these methods will be comparing group means, it is very helpful to check the group descriptive statistics beforehand. We can use the <code>favstats()</code> function from the <code>mosaic</code> package.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>mosaic<span class="sc">::</span><span class="fu">favstats</span>(COVID_Concerns <span class="sc">~</span> Educ_Mom, <span class="at">data =</span> covid)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>                    Educ_Mom min    Q1 median Q3 max     mean       sd   n
+1             College degree   3 19.00   24.0 27  30 22.26774 5.981843 310
+2                       None   4 18.25   24.0 26  30 22.08065 6.036225  62
+3              PhD/Doctorate   4 22.50   26.0 28  30 23.90323 6.425755  31
+4 Some College or equivalent   3 19.00   23.0 26  30 21.85068 6.239199 221
+5   Up to 12 years of school   3 18.00   23.0 26  30 21.59048 6.392215 315
+6    Up to 6 years of school   3 19.75   24.0 26  30 22.47436 6.112334 156
+7    Up to 9 years of school   3 19.00   22.5 26  30 21.86765 5.863647 136
+  missing
+1       0
+2       0
+3       0
+4       0
+5       0
+6       0
+7       0</code></pre>
+</div>
+</div>
+<p>In terms of average COVID-19 concern levels, individuals whose mom has a PhD/Doctorate have the highest average level (23.9), whereas individuals whose mom has only a high school degree (“Up to 12 years of school”) have the lowest average COVID-19 concern (21.59). This gives us a glimpse of what relationships we might see.</p>
+<p>A lot of the explanation will be done in the Dummy/Indicator Coding section below, as dummy coding is by far the most popular method and its rules and options apply to the other coding schemes.</p>
+<hr>
+</section>
+</section>
+<section id="dummyindicator-coding" class="level2">
+<h2 data-anchor-id="dummyindicator-coding">1. Dummy/Indicator Coding</h2>
+<section id="what-is-dummy-coding" class="level3">
+<h3 data-anchor-id="what-is-dummy-coding">What Is Dummy Coding?</h3>
+<p>The most popular method for dealing with multicategorical predictors is to use dummy (or indicator) coding. This builds directly on what you have already learned about dichotomous (0/1) predictors. Previously, a dichotomous variable used 0 and 1 to represent two groups, where the coefficient told us the difference between those groups (with 0 as the reference group). Dummy coding extends this idea to variables with more than two categories by creating multiple 0/1 variables, each comparing one category to a chosen reference group. For example, if a variable has three categories, we would create two dummy variables, each coded 0 or 1, and each coefficient would represent the difference between that category and the reference category.</p>
+<p>For the sake of example, we will make the “None” mother’s education group the baseline. Therefore, each dummy coded variable will represent the difference between group means for that respective group and the “None” group.</p>
+</section>
+<section id="dummy-coding-with-factor" class="level3">
+<h3 data-anchor-id="dummy-coding-with-factor">Dummy Coding with factor()</h3>
+<p>There are many ways to dummy code in R, but the easiest is to convert your variable to a <code>factor</code> class object. R will then automatically apply dummy coding when you include the variable in <code>lm()</code>. First, check the class of your variable.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">class</span>(covid<span class="sc">$</span>Educ_Mom)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "character"</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(covid<span class="sc">$</span>Educ_Mom)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> chr [1:1263] "None" "College degree" "Up to 12 years of school" ...</code></pre>
+</div>
+</div>
+<p><code>Educ_Mom</code> is a <code>character</code> class variable. If you are ever curious about the structure of a variable or dataset, <code>str()</code> is a great function for that.</p>
+<p>Now convert it to a factor. We input the variable, define the levels (with names), and specify <code>ordered = FALSE</code>. The first level in the list will be the baseline reference group.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>covid<span class="sc">$</span>Educ_Mom_Factor <span class="ot">&lt;-</span> <span class="fu">factor</span>( </span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>  covid<span class="sc">$</span>Educ_Mom,</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">"None"</span>, <span class="st">"Up to 6 years of school"</span>, <span class="st">"Up to 9 years of school"</span>,</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>             <span class="st">"Up to 12 years of school"</span>,</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>             <span class="st">"Some College or equivalent"</span>, <span class="st">"College degree"</span>,</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>             <span class="st">"PhD/Doctorate"</span>), <span class="co"># make sure everything is spelled correctly</span></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">ordered =</span> <span class="cn">FALSE</span>) </span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>The last argument <code>ordered = FALSE</code> dictates whether or not the inputted variable has to be in order. If you want the ability to recode your reference variable, this needs to be set to <code>FALSE</code>. Even though our variable is technically ordinal, we want this argument to be <code>FALSE</code> so we can change the baseline and use the variable in other coding schemes as well.</p>
+<p>If your variable is numeric (no character strings, just numbers), converting it to a factor will be necessary, or else <code>lm()</code> will think your variable is continuous. In that case, just list the values in the <code>levels =</code> line (e.g.&nbsp;<code>levels = c(1,2,3,4)</code>).</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(covid<span class="sc">$</span>Educ_Mom_Factor)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> Factor w/ 7 levels "None","Up to 6 years of school",..: 1 6 4 6 5 4 6 4 6 NA ...</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">levels</span>(covid<span class="sc">$</span>Educ_Mom_Factor)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "None"                       "Up to 6 years of school"   
+[3] "Up to 9 years of school"    "Up to 12 years of school"  
+[5] "Some College or equivalent" "College degree"            
+[7] "PhD/Doctorate"             </code></pre>
+</div>
+</div>
+<p>Now it is classified as a “Factor” object with 7 levels. The first group in <code>levels()</code> is always the reference baseline group.</p>
+<p>You can also check the contrast matrix that R will use for dummy coding:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">contrasts</span>(covid<span class="sc">$</span>Educ_Mom_Factor)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>                           Up to 6 years of school Up to 9 years of school
+None                                             0                       0
+Up to 6 years of school                          1                       0
+Up to 9 years of school                          0                       1
+Up to 12 years of school                         0                       0
+Some College or equivalent                       0                       0
+College degree                                   0                       0
+PhD/Doctorate                                    0                       0
+                           Up to 12 years of school Some College or equivalent
+None                                              0                          0
+Up to 6 years of school                           0                          0
+Up to 9 years of school                           0                          0
+Up to 12 years of school                          1                          0
+Some College or equivalent                        0                          1
+College degree                                    0                          0
+PhD/Doctorate                                     0                          0
+                           College degree PhD/Doctorate
+None                                    0             0
+Up to 6 years of school                 0             0
+Up to 9 years of school                 0             0
+Up to 12 years of school                0             0
+Some College or equivalent              0             0
+College degree                          1             0
+PhD/Doctorate                           0             1</code></pre>
+</div>
+</div>
+<p>The row with all 0’s is the baseline group. Each column represents one dummy variable, and the 1 in each row tells you which dummy code that group gets.</p>
+</section>
+<section id="fitting-the-model" class="level3">
+<h3 data-anchor-id="fitting-the-model">Fitting the Model</h3>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>Model_Factor <span class="ot">&lt;-</span> <span class="fu">lm</span>(COVID_Concerns <span class="sc">~</span> Educ_Mom_Factor, <span class="at">data =</span> covid)</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(Model_Factor)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+lm(formula = COVID_Concerns ~ Educ_Mom_Factor, data = covid)
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-19.903  -2.868   1.409   4.410   8.409 
+
+Coefficients:
+                                          Estimate Std. Error t value Pr(&gt;|t|)
+(Intercept)                                22.0806     0.7815  28.255   &lt;2e-16
+Educ_Mom_FactorUp to 6 years of school      0.3937     0.9238   0.426    0.670
+Educ_Mom_FactorUp to 9 years of school     -0.2130     0.9429  -0.226    0.821
+Educ_Mom_FactorUp to 12 years of school    -0.4902     0.8549  -0.573    0.567
+Educ_Mom_FactorSome College or equivalent  -0.2300     0.8843  -0.260    0.795
+Educ_Mom_FactorCollege degree               0.1871     0.8561   0.219    0.827
+Educ_Mom_FactorPhD/Doctorate                1.8226     1.3536   1.347    0.178
+                                             
+(Intercept)                               ***
+Educ_Mom_FactorUp to 6 years of school       
+Educ_Mom_FactorUp to 9 years of school       
+Educ_Mom_FactorUp to 12 years of school      
+Educ_Mom_FactorSome College or equivalent    
+Educ_Mom_FactorCollege degree                
+Educ_Mom_FactorPhD/Doctorate                 
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 6.153 on 1224 degrees of freedom
+  (32 observations deleted due to missingness)
+Multiple R-squared:  0.004912,  Adjusted R-squared:  3.459e-05 
+F-statistic: 1.007 on 6 and 1224 DF,  p-value: 0.419</code></pre>
+</div>
+</div>
+<p>You can see the output is given per dummy coded variable, described as the variable name + the group name. Since “None” is the baseline reference, it is not included as a predictor, and its group mean is the value of the intercept. Each coefficient is the difference between the baseline and the predictor group following the form: Group - Baseline.</p>
+</section>
+<section id="interpreting-dummy-codes" class="level3">
+<h3 data-anchor-id="interpreting-dummy-codes">Interpreting Dummy Codes</h3>
+<p><strong>Intercept:</strong> The mean COVID-19 concern for individuals whose mothers have no education is about 22.08 points.</p>
+<p><strong>B1:</strong> Individuals whose mothers have up to 6 years of schooling have about .39 more average COVID-19 concern when compared to individuals whose mothers have no education.</p>
+<p><strong>B2:</strong> Individuals whose mothers have up to 9 years of schooling have about .21 less average COVID-19 concern when compared to individuals whose mothers have no education.</p>
+<p><strong>B3:</strong> Individuals whose mothers have up to 12 years of schooling have about .49 less average COVID-19 concern when compared to individuals whose mothers have no education.</p>
+<p><strong>B4:</strong> Individuals whose mothers have some college or equivalent education have about .23 less average COVID-19 concern when compared to individuals whose mothers have no education.</p>
+<p><strong>B5:</strong> Individuals whose mothers have a college degree have about .19 more average COVID-19 concern when compared to individuals whose mothers have no education.</p>
+<p><strong>B6:</strong> Individuals whose mothers have a doctorate degree have about 1.82 more average COVID-19 concern when compared to individuals whose mothers have no education.</p>
+<p>However, none of the slopes are significantly different than zero. Therefore, we would fail to reject the null that any of these groups have mean COVID-19 concern differences in the population.</p>
+</section>
+<section id="coding-unique-variables-manually" class="level3">
+<h3 data-anchor-id="coding-unique-variables-manually">Coding Unique Variables Manually</h3>
+<p>Another method is to manually create new dummy coded variables for each group. This involves making a new column variable that has 1’s for rows that are part of that group and 0’s on everything else. This is not necessary for dummy coded variables, but it can be helpful for other coding schemes covered later. It is also possible some datasets you will work with already have dummy coded variables.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>covid <span class="ot">&lt;-</span> <span class="fu">transform</span>(covid,</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>                   <span class="at">d1 =</span> (Educ_Mom <span class="sc">==</span> <span class="st">"None"</span>),</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>                   <span class="at">d2 =</span> (Educ_Mom <span class="sc">==</span> <span class="st">"Up to 6 years of school"</span>),</span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>                   <span class="at">d3 =</span> (Educ_Mom <span class="sc">==</span> <span class="st">"Up to 9 years of school"</span>),</span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>                   <span class="at">d4 =</span> (Educ_Mom <span class="sc">==</span> <span class="st">"Up to 12 years of school"</span>),</span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>                   <span class="at">d5 =</span> (Educ_Mom <span class="sc">==</span> <span class="st">"Some College or equivalent"</span>),</span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>                   <span class="at">d6 =</span> (Educ_Mom <span class="sc">==</span> <span class="st">"College degree"</span>),</span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a>                   <span class="at">d7 =</span> (Educ_Mom <span class="sc">==</span> <span class="st">"PhD/Doctorate"</span>))</span>
+<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Convert TRUE/FALSE to 1/0 for cleaner output</span></span>
+<span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a>cols <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"d1"</span>,<span class="st">"d2"</span>,<span class="st">"d3"</span>,<span class="st">"d4"</span>,<span class="st">"d5"</span>,<span class="st">"d6"</span>,<span class="st">"d7"</span>)</span>
+<span id="cb16-12"><a href="#cb16-12" aria-hidden="true" tabindex="-1"></a>covid[cols] <span class="ot">&lt;-</span> <span class="fu">lapply</span>(covid[cols], as.integer)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Note that if your categorical variable is numerically coded (e.g., “None” = 1, “Up to 6 years of school” = 2, etc.), you should just do <code>Educ_Mom == 1</code>, <code>Educ_Mom == 2</code>, etc. in the transform code above.</p>
+<p><strong>PLEASE NOTE</strong> that <code>lm()</code> will automatically use the LAST variable as the baseline, so you need to include <code>d1</code> very last since we are using “None” education as the baseline.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>Model_Dummy <span class="ot">&lt;-</span> <span class="fu">lm</span>(COVID_Concerns <span class="sc">~</span> d2 <span class="sc">+</span> d3 <span class="sc">+</span> d4 <span class="sc">+</span> d5 <span class="sc">+</span> d6 <span class="sc">+</span> d7 <span class="sc">+</span> d1, <span class="at">data =</span> covid)</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(Model_Dummy)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+lm(formula = COVID_Concerns ~ d2 + d3 + d4 + d5 + d6 + d7 + d1, 
+    data = covid)
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-19.903  -2.868   1.409   4.410   8.409 
+
+Coefficients: (1 not defined because of singularities)
+            Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept)  22.0806     0.7815  28.255   &lt;2e-16 ***
+d2            0.3937     0.9238   0.426    0.670    
+d3           -0.2130     0.9429  -0.226    0.821    
+d4           -0.4902     0.8549  -0.573    0.567    
+d5           -0.2300     0.8843  -0.260    0.795    
+d6            0.1871     0.8561   0.219    0.827    
+d7            1.8226     1.3536   1.347    0.178    
+d1                NA         NA      NA       NA    
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 6.153 on 1224 degrees of freedom
+  (32 observations deleted due to missingness)
+Multiple R-squared:  0.004912,  Adjusted R-squared:  3.459e-05 
+F-statistic: 1.007 on 6 and 1224 DF,  p-value: 0.419</code></pre>
+</div>
+</div>
+<p>As you can see, the results for this method are identical to the <code>factor()</code> method above.</p>
+<hr>
+</section>
+<section id="recoding-the-baseline-group" class="level3">
+<h3 data-anchor-id="recoding-the-baseline-group">Recoding the Baseline Group</h3>
+<p>Since dummy variable slopes only give the difference between the baseline and the dummy group, it does not inherently extend flexibility to any group comparison. For example, if you wanted to compare “Some College or equivalent” with “PhD/Doctorate”, you would need to change the baseline group to either one of those. There are a few ways to do this.</p>
+<p><strong>Method 1: Using relevel()</strong></p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>covid<span class="sc">$</span>Educ_Mom_Factor2 <span class="ot">&lt;-</span> <span class="fu">relevel</span>(covid<span class="sc">$</span>Educ_Mom_Factor, <span class="at">ref =</span> <span class="st">"College degree"</span>)</span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="fu">levels</span>(covid<span class="sc">$</span>Educ_Mom_Factor2)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "College degree"             "None"                      
+[3] "Up to 6 years of school"    "Up to 9 years of school"   
+[5] "Up to 12 years of school"   "Some College or equivalent"
+[7] "PhD/Doctorate"             </code></pre>
+</div>
+</div>
+<p>“College degree” is now first in the list, confirming it is the reference group.</p>
+<p><strong>Method 2: Respecifying the factor() order</strong></p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>covid<span class="sc">$</span>Educ_Mom_Factor2 <span class="ot">&lt;-</span> <span class="fu">factor</span>( </span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>  covid<span class="sc">$</span>Educ_Mom,</span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">"College degree"</span>, <span class="st">"None"</span>, <span class="st">"Up to 6 years of school"</span>, </span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>             <span class="st">"Up to 9 years of school"</span>, <span class="st">"Up to 12 years of school"</span>,</span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a>             <span class="st">"Some College or equivalent"</span>, <span class="st">"PhD/Doctorate"</span>), </span>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">ordered =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-8"><a href="#cb21-8" aria-hidden="true" tabindex="-1"></a>Model_Factor2 <span class="ot">&lt;-</span> <span class="fu">lm</span>(COVID_Concerns <span class="sc">~</span> Educ_Mom_Factor2, <span class="at">data =</span> covid)</span>
+<span id="cb21-9"><a href="#cb21-9" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(Model_Factor2)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+lm(formula = COVID_Concerns ~ Educ_Mom_Factor2, data = covid)
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-19.903  -2.868   1.409   4.410   8.409 
+
+Coefficients:
+                                           Estimate Std. Error t value Pr(&gt;|t|)
+(Intercept)                                 22.2677     0.3495  63.716   &lt;2e-16
+Educ_Mom_Factor2None                        -0.1871     0.8561  -0.219    0.827
+Educ_Mom_Factor2Up to 6 years of school      0.2066     0.6040   0.342    0.732
+Educ_Mom_Factor2Up to 9 years of school     -0.4001     0.6329  -0.632    0.527
+Educ_Mom_Factor2Up to 12 years of school    -0.6773     0.4923  -1.376    0.169
+Educ_Mom_Factor2Some College or equivalent  -0.4171     0.5417  -0.770    0.442
+Educ_Mom_Factor2PhD/Doctorate                1.6355     1.1591   1.411    0.159
+                                              
+(Intercept)                                ***
+Educ_Mom_Factor2None                          
+Educ_Mom_Factor2Up to 6 years of school       
+Educ_Mom_Factor2Up to 9 years of school       
+Educ_Mom_Factor2Up to 12 years of school      
+Educ_Mom_Factor2Some College or equivalent    
+Educ_Mom_Factor2PhD/Doctorate                 
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 6.153 on 1224 degrees of freedom
+  (32 observations deleted due to missingness)
+Multiple R-squared:  0.004912,  Adjusted R-squared:  3.459e-05 
+F-statistic: 1.007 on 6 and 1224 DF,  p-value: 0.419</code></pre>
+</div>
+</div>
+<p>Now the intercept equals the mean COVID-19 concern for individuals whose mothers have a college degree. The slope for the PhD dummy slope is about 1.64, meaning that the mean COVID-19 concern for individuals whose mothers have a doctorate is 1.64 higher than those whose mothers have a college degree. This is not significant.</p>
+<p>You can check the contrast matrix for your new factor variable:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="fu">contrasts</span>(covid<span class="sc">$</span>Educ_Mom_Factor2)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>                           None Up to 6 years of school Up to 9 years of school
+College degree                0                       0                       0
+None                          1                       0                       0
+Up to 6 years of school       0                       1                       0
+Up to 9 years of school       0                       0                       1
+Up to 12 years of school      0                       0                       0
+Some College or equivalent    0                       0                       0
+PhD/Doctorate                 0                       0                       0
+                           Up to 12 years of school Some College or equivalent
+College degree                                    0                          0
+None                                              0                          0
+Up to 6 years of school                           0                          0
+Up to 9 years of school                           0                          0
+Up to 12 years of school                          1                          0
+Some College or equivalent                        0                          1
+PhD/Doctorate                                     0                          0
+                           PhD/Doctorate
+College degree                         0
+None                                   0
+Up to 6 years of school                0
+Up to 9 years of school                0
+Up to 12 years of school               0
+Some College or equivalent             0
+PhD/Doctorate                          1</code></pre>
+</div>
+</div>
+<p><strong>Method 3: Reordering unique variables</strong></p>
+<p>If you did individual variables for each dummy code, you just need to place the one you want as the baseline last.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>Model_Dummy2 <span class="ot">&lt;-</span> <span class="fu">lm</span>(COVID_Concerns <span class="sc">~</span> d1 <span class="sc">+</span> d2 <span class="sc">+</span> d3 <span class="sc">+</span> d4 <span class="sc">+</span> d5 <span class="sc">+</span> d7 <span class="sc">+</span> d6, <span class="at">data =</span> covid) </span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(Model_Dummy2)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+lm(formula = COVID_Concerns ~ d1 + d2 + d3 + d4 + d5 + d7 + d6, 
+    data = covid)
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-19.903  -2.868   1.409   4.410   8.409 
+
+Coefficients: (1 not defined because of singularities)
+            Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept)  22.2677     0.3495  63.716   &lt;2e-16 ***
+d1           -0.1871     0.8561  -0.219    0.827    
+d2            0.2066     0.6040   0.342    0.732    
+d3           -0.4001     0.6329  -0.632    0.527    
+d4           -0.6773     0.4923  -1.376    0.169    
+d5           -0.4171     0.5417  -0.770    0.442    
+d7            1.6355     1.1591   1.411    0.159    
+d6                NA         NA      NA       NA    
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 6.153 on 1224 degrees of freedom
+  (32 observations deleted due to missingness)
+Multiple R-squared:  0.004912,  Adjusted R-squared:  3.459e-05 
+F-statistic: 1.007 on 6 and 1224 DF,  p-value: 0.419</code></pre>
+</div>
+</div>
+<p><strong>Method 4: Numeric coded variables</strong></p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>covid<span class="sc">$</span>Educ_Mom_Numeric <span class="ot">&lt;-</span> <span class="fu">as.integer</span>(covid<span class="sc">$</span>Educ_Mom_Factor)</span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>covid<span class="sc">$</span>Educ_Mom_Numeric2 <span class="ot">&lt;-</span> <span class="fu">as.integer</span>(covid<span class="sc">$</span>Educ_Mom_Factor2)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<hr>
+</section>
+<section id="custom-contrast-method" class="level3">
+<h3 data-anchor-id="custom-contrast-method">Custom Contrast Method</h3>
+<p>This section covers how to manually create a contrast matrix. This will become important when learning about other coding schemes, as many compare multiple group averages against others.</p>
+<p>To understand how this works, look at the contrast matrix. Whatever group has all 0’s across each column is the baseline. For each group row, whatever column has a “1” represents what that dummy code will be.</p>
+<p>To change the baseline manually, find the group row you want as the new baseline, change all of its values to 0, then change the original baseline row to be included in a variable.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>New_Contrast2 <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fu">c</span>(</span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>  <span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">1</span>,<span class="dv">0</span>,  <span class="co"># row 1 ("None" is now X5)</span></span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>  <span class="dv">1</span>,<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">0</span>,  <span class="co"># row 2</span></span>
+<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a>  <span class="dv">0</span>,<span class="dv">1</span>,<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">0</span>,  <span class="co"># row 3</span></span>
+<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a>  <span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">1</span>,<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">0</span>,  <span class="co"># row 4</span></span>
+<span id="cb28-6"><a href="#cb28-6" aria-hidden="true" tabindex="-1"></a>  <span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">1</span>,<span class="dv">0</span>,<span class="dv">0</span>,  <span class="co"># row 5</span></span>
+<span id="cb28-7"><a href="#cb28-7" aria-hidden="true" tabindex="-1"></a>  <span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">0</span>,  <span class="co"># row 6 = baseline ("College Degree")</span></span>
+<span id="cb28-8"><a href="#cb28-8" aria-hidden="true" tabindex="-1"></a>  <span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">1</span>   <span class="co"># row 7</span></span>
+<span id="cb28-9"><a href="#cb28-9" aria-hidden="true" tabindex="-1"></a>), <span class="at">nrow =</span> <span class="dv">7</span>, <span class="at">byrow =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb28-10"><a href="#cb28-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-11"><a href="#cb28-11" aria-hidden="true" tabindex="-1"></a>covid<span class="sc">$</span>Educ_Mom_Factor3 <span class="ot">&lt;-</span> covid<span class="sc">$</span>Educ_Mom_Factor</span>
+<span id="cb28-12"><a href="#cb28-12" aria-hidden="true" tabindex="-1"></a><span class="fu">contrasts</span>(covid<span class="sc">$</span>Educ_Mom_Factor3) <span class="ot">&lt;-</span> New_Contrast2</span>
+<span id="cb28-13"><a href="#cb28-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-14"><a href="#cb28-14" aria-hidden="true" tabindex="-1"></a><span class="fu">contrasts</span>(covid<span class="sc">$</span>Educ_Mom_Factor3)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>                           [,1] [,2] [,3] [,4] [,5] [,6]
+None                          0    0    0    0    1    0
+Up to 6 years of school       1    0    0    0    0    0
+Up to 9 years of school       0    1    0    0    0    0
+Up to 12 years of school      0    0    1    0    0    0
+Some College or equivalent    0    0    0    1    0    0
+College degree                0    0    0    0    0    0
+PhD/Doctorate                 0    0    0    0    0    1</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>Model_Dummy3 <span class="ot">&lt;-</span> <span class="fu">lm</span>(COVID_Concerns <span class="sc">~</span> Educ_Mom_Factor3, <span class="at">data =</span> covid) </span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(Model_Dummy3)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+lm(formula = COVID_Concerns ~ Educ_Mom_Factor3, data = covid)
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-19.903  -2.868   1.409   4.410   8.409 
+
+Coefficients:
+                  Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept)        22.2677     0.3495  63.716   &lt;2e-16 ***
+Educ_Mom_Factor31   0.2066     0.6040   0.342    0.732    
+Educ_Mom_Factor32  -0.4001     0.6329  -0.632    0.527    
+Educ_Mom_Factor33  -0.6773     0.4923  -1.376    0.169    
+Educ_Mom_Factor34  -0.4171     0.5417  -0.770    0.442    
+Educ_Mom_Factor35  -0.1871     0.8561  -0.219    0.827    
+Educ_Mom_Factor36   1.6355     1.1591   1.411    0.159    
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 6.153 on 1224 degrees of freedom
+  (32 observations deleted due to missingness)
+Multiple R-squared:  0.004912,  Adjusted R-squared:  3.459e-05 
+F-statistic: 1.007 on 6 and 1224 DF,  p-value: 0.419</code></pre>
+</div>
+</div>
+<p><strong>NOTE:</strong> If you use this method, you need to make sure the contrast is correct. If you do not, the results you get will be wrong. Double check the matrix.</p>
+<hr>
+</section>
+<section id="adding-covariates" class="level3">
+<h3 data-anchor-id="adding-covariates">Adding Covariates</h3>
+<p>Adding continuous covariates is straightforward. The same rules for the baseline group follow as outlined above. Simply add the variable into <code>lm()</code>.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Adding COVID_Compliance as a continuous covariate</span></span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>Model_Factor3 <span class="ot">&lt;-</span> <span class="fu">lm</span>(COVID_Concerns <span class="sc">~</span> Educ_Mom_Factor <span class="sc">+</span> COVID_Compliance,</span>
+<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a>                    <span class="at">data =</span> covid)</span>
+<span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(Model_Factor3)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+lm(formula = COVID_Concerns ~ Educ_Mom_Factor + COVID_Compliance, 
+    data = covid)
+
+Residuals:
+     Min       1Q   Median       3Q      Max 
+-20.2975  -2.8673   0.9447   4.0765  13.9001 
+
+Coefficients:
+                                          Estimate Std. Error t value Pr(&gt;|t|)
+(Intercept)                               10.94592    1.28744   8.502   &lt;2e-16
+Educ_Mom_FactorUp to 6 years of school     0.35460    0.88427   0.401   0.6885
+Educ_Mom_FactorUp to 9 years of school    -0.02346    0.90274  -0.026   0.9793
+Educ_Mom_FactorUp to 12 years of school   -0.26572    0.81861  -0.325   0.7455
+Educ_Mom_FactorSome College or equivalent  0.14755    0.84722   0.174   0.8618
+Educ_Mom_FactorCollege degree              0.53354    0.82007   0.651   0.5154
+Educ_Mom_FactorPhD/Doctorate               2.22178    1.29616   1.714   0.0868
+COVID_Compliance                           0.44197    0.04159  10.626   &lt;2e-16
+                                             
+(Intercept)                               ***
+Educ_Mom_FactorUp to 6 years of school       
+Educ_Mom_FactorUp to 9 years of school       
+Educ_Mom_FactorUp to 12 years of school      
+Educ_Mom_FactorSome College or equivalent    
+Educ_Mom_FactorCollege degree                
+Educ_Mom_FactorPhD/Doctorate              .  
+COVID_Compliance                          ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 5.89 on 1223 degrees of freedom
+  (32 observations deleted due to missingness)
+Multiple R-squared:  0.08902,   Adjusted R-squared:  0.08381 
+F-statistic: 17.07 on 7 and 1223 DF,  p-value: &lt; 2.2e-16</code></pre>
+</div>
+</div>
+<p>For the unique dummy variable method, just add the covariate in. R can still distinguish which variables are the dummy variables, and will use the last one as the reference code.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>Model_Dummy4 <span class="ot">&lt;-</span> <span class="fu">lm</span>(COVID_Concerns <span class="sc">~</span> d2 <span class="sc">+</span> d3 <span class="sc">+</span> d4 <span class="sc">+</span> d5 <span class="sc">+</span> d6 <span class="sc">+</span> d7 <span class="sc">+</span> d1 <span class="sc">+</span> COVID_Compliance,</span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a>                   <span class="at">data =</span> covid)</span>
+<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(Model_Dummy4)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+lm(formula = COVID_Concerns ~ d2 + d3 + d4 + d5 + d6 + d7 + d1 + 
+    COVID_Compliance, data = covid)
+
+Residuals:
+     Min       1Q   Median       3Q      Max 
+-20.2975  -2.8673   0.9447   4.0765  13.9001 
+
+Coefficients: (1 not defined because of singularities)
+                 Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept)      10.94592    1.28744   8.502   &lt;2e-16 ***
+d2                0.35460    0.88427   0.401   0.6885    
+d3               -0.02346    0.90274  -0.026   0.9793    
+d4               -0.26572    0.81861  -0.325   0.7455    
+d5                0.14755    0.84722   0.174   0.8618    
+d6                0.53354    0.82007   0.651   0.5154    
+d7                2.22178    1.29616   1.714   0.0868 .  
+d1                     NA         NA      NA       NA    
+COVID_Compliance  0.44197    0.04159  10.626   &lt;2e-16 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 5.89 on 1223 degrees of freedom
+  (32 observations deleted due to missingness)
+Multiple R-squared:  0.08902,   Adjusted R-squared:  0.08381 
+F-statistic: 17.07 on 7 and 1223 DF,  p-value: &lt; 2.2e-16</code></pre>
+</div>
+</div>
+<p>You can also add multiple multicategorical variables by using the factor method.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a>covid<span class="sc">$</span>Educ_Factor <span class="ot">&lt;-</span> <span class="fu">factor</span>( </span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a>  covid<span class="sc">$</span>Educ,</span>
+<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">"None"</span>, <span class="st">"Up to 6 years of school"</span>, <span class="st">"Up to 9 years of school"</span>,</span>
+<span id="cb36-4"><a href="#cb36-4" aria-hidden="true" tabindex="-1"></a>             <span class="st">"Up to 12 years of school"</span>, <span class="st">"Some College or equivalent"</span>, </span>
+<span id="cb36-5"><a href="#cb36-5" aria-hidden="true" tabindex="-1"></a>             <span class="st">"College degree"</span>, <span class="st">"PhD/Doctorate"</span>),</span>
+<span id="cb36-6"><a href="#cb36-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">ordered =</span> <span class="cn">FALSE</span>) </span>
+<span id="cb36-7"><a href="#cb36-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-8"><a href="#cb36-8" aria-hidden="true" tabindex="-1"></a>Model_Dummy5 <span class="ot">&lt;-</span> <span class="fu">lm</span>(COVID_Concerns <span class="sc">~</span> Educ_Mom_Factor <span class="sc">+</span> Educ_Factor, <span class="at">data =</span> covid)</span>
+<span id="cb36-9"><a href="#cb36-9" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(Model_Dummy5)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+lm(formula = COVID_Concerns ~ Educ_Mom_Factor + Educ_Factor, 
+    data = covid)
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-20.186  -2.827   1.291   4.173  11.385 
+
+Coefficients:
+                                          Estimate Std. Error t value Pr(&gt;|t|)
+(Intercept)                                21.2681     1.7010  12.504   &lt;2e-16
+Educ_Mom_FactorUp to 6 years of school     -0.1182     1.4260  -0.083    0.934
+Educ_Mom_FactorUp to 9 years of school     -0.2495     1.4777  -0.169    0.866
+Educ_Mom_FactorUp to 12 years of school    -1.0276     1.3403  -0.767    0.444
+Educ_Mom_FactorSome College or equivalent   0.2968     1.5438   0.192    0.848
+Educ_Mom_FactorCollege degree               0.6202     1.4052   0.441    0.659
+Educ_Mom_FactorPhD/Doctorate                1.3082     2.2212   0.589    0.556
+Educ_FactorUp to 6 years of school          5.1834     3.8631   1.342    0.181
+Educ_FactorUp to 9 years of school         -2.5352     2.0816  -1.218    0.224
+Educ_FactorUp to 12 years of school         0.5592     1.5082   0.371    0.711
+Educ_FactorPhD/Doctorate                    1.6101     1.5114   1.065    0.288
+                                             
+(Intercept)                               ***
+Educ_Mom_FactorUp to 6 years of school       
+Educ_Mom_FactorUp to 9 years of school       
+Educ_Mom_FactorUp to 12 years of school      
+Educ_Mom_FactorSome College or equivalent    
+Educ_Mom_FactorCollege degree                
+Educ_Mom_FactorPhD/Doctorate                 
+Educ_FactorUp to 6 years of school           
+Educ_FactorUp to 9 years of school           
+Educ_FactorUp to 12 years of school          
+Educ_FactorPhD/Doctorate                     
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 6.078 on 322 degrees of freedom
+  (930 observations deleted due to missingness)
+Multiple R-squared:  0.04442,   Adjusted R-squared:  0.01474 
+F-statistic: 1.497 on 10 and 322 DF,  p-value: 0.1392</code></pre>
+</div>
+</div>
+</section>
+<section id="interpreting-covariates" class="level3">
+<h3 data-anchor-id="interpreting-covariates">Interpreting Covariates</h3>
+<p>If you want to interpret a dummy coded variable with a covariate, you just need to control the covariate by holding the continuous one constant or keeping group membership the same for the categorical variable.</p>
+<p><strong>Example with continuous covariate:</strong></p>
+<blockquote class="blockquote">
+<p>Holding COVID-19 compliance constant between individuals, the mean COVID-19 concern score for individuals whose mother has 6 years of school is expected to be .35 higher than the average COVID-19 concern for individuals whose mothers have no education.</p>
+</blockquote>
+<p><strong>Example with categorical covariate:</strong></p>
+<blockquote class="blockquote">
+<p>For individuals who have the same education level, the mean COVID-19 concern score for individuals whose mother has 6 years of school is expected to be .35 higher than the average COVID-19 concern for individuals whose mothers have no education.</p>
+</blockquote>
+<p>Note that with multiple categorical variables, the intercept is the mean outcome at <em>both</em> baselines. In general, interpretations for models with multiple categorical variables get messy, and it is usually better to either run interactions or use an ANOVA/ANCOVA for simpler results to interpret.</p>
+<p>For inference, it is often of interest to treat all your dummy codes as a group and do a delta-R^2 test on them to test how much contribution the multicategorical variable added after controlling for the covariate(s). See the Inference lesson for that method.</p>
+<hr>
+</section>
+</section>
+<section id="sequential-coding" class="level2">
+<h2 data-anchor-id="sequential-coding">2. Sequential Coding</h2>
+<section id="what-is-sequential-coding" class="level3">
+<h3 data-anchor-id="what-is-sequential-coding">What Is Sequential Coding?</h3>
+<p>Moving on from dummy codes, sequential coding is an alternative way to structure your categorical predictors. Instead of comparing every group to a single baseline group (like dummy coding does), sequential coding compares groups in a step-by-step fashion. Each category is compared to the one that comes before it in some meaningful order (e.g., education level, time, dosage).</p>
+<p>In this context the interpretation of coefficients changes: rather than asking “How is this group different from the baseline?”, we ask “How is this group different from the previous group?” This can be especially useful when your categories have a natural ordering (i.e., ordinal variables) and you are interested in incremental changes across levels rather than comparisons to a single reference group. Though, you can still use sequential coding with non-ordinal variables.</p>
+<p>In short, dummy coding compares everything to one group, while sequential coding compares each group to the next in line.</p>
+<p><em>As a side note, if you ever want to do piecewise regression with multiple joints (see the future Nonlinear Regression lab), you should use sequential coding for the joints.</em></p>
+</section>
+<section id="sequential-coding-in-base-r" class="level3">
+<h3 data-anchor-id="sequential-coding-in-base-r">Sequential Coding in Base R</h3>
+<p>Unfortunately, <code>lm()</code> defaults to dummy coded variables for categorical variables, so you must code these manually. This method is much easier to do with a numeric coded variable. The coding scheme follows sequentially (e.g., S1 is everything above group 1, S2 is everything above group 2, etc.).</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a>covid <span class="ot">&lt;-</span> <span class="fu">transform</span>(covid,</span>
+<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a>                   <span class="at">s1 =</span> (Educ_Mom_Numeric <span class="sc">&gt;</span> <span class="dv">1</span>),</span>
+<span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a>                   <span class="at">s2 =</span> (Educ_Mom_Numeric <span class="sc">&gt;</span> <span class="dv">2</span>),</span>
+<span id="cb38-4"><a href="#cb38-4" aria-hidden="true" tabindex="-1"></a>                   <span class="at">s3 =</span> (Educ_Mom_Numeric <span class="sc">&gt;</span> <span class="dv">3</span>),</span>
+<span id="cb38-5"><a href="#cb38-5" aria-hidden="true" tabindex="-1"></a>                   <span class="at">s4 =</span> (Educ_Mom_Numeric <span class="sc">&gt;</span> <span class="dv">4</span>),</span>
+<span id="cb38-6"><a href="#cb38-6" aria-hidden="true" tabindex="-1"></a>                   <span class="at">s5 =</span> (Educ_Mom_Numeric <span class="sc">&gt;</span> <span class="dv">5</span>),</span>
+<span id="cb38-7"><a href="#cb38-7" aria-hidden="true" tabindex="-1"></a>                   <span class="at">s6 =</span> (Educ_Mom_Numeric <span class="sc">&gt;</span> <span class="dv">6</span>))</span>
+<span id="cb38-8"><a href="#cb38-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb38-9"><a href="#cb38-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Convert TRUE/FALSE to 1/0</span></span>
+<span id="cb38-10"><a href="#cb38-10" aria-hidden="true" tabindex="-1"></a>ss <span class="ot">&lt;-</span> <span class="fu">lapply</span>(covid[, <span class="fu">c</span>(<span class="st">"s1"</span>,<span class="st">"s2"</span>,<span class="st">"s3"</span>,<span class="st">"s4"</span>,<span class="st">"s5"</span>,<span class="st">"s6"</span>)], as.integer)</span>
+<span id="cb38-11"><a href="#cb38-11" aria-hidden="true" tabindex="-1"></a>covid[, <span class="fu">c</span>(<span class="st">"s1"</span>,<span class="st">"s2"</span>,<span class="st">"s3"</span>,<span class="st">"s4"</span>,<span class="st">"s5"</span>,<span class="st">"s6"</span>)] <span class="ot">&lt;-</span> ss</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Note that, unlike dummy codes, there is no “reference” group with sequential variables, so we include all variables into the model and the order does not matter.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb39"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a>model_sequential <span class="ot">&lt;-</span> <span class="fu">lm</span>(COVID_Concerns <span class="sc">~</span> s1 <span class="sc">+</span> s2 <span class="sc">+</span> s3 <span class="sc">+</span> s4 <span class="sc">+</span> s5 <span class="sc">+</span> s6, <span class="at">data =</span> covid)</span>
+<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(model_sequential)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+lm(formula = COVID_Concerns ~ s1 + s2 + s3 + s4 + s5 + s6, data = covid)
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-19.903  -2.868   1.409   4.410   8.409 
+
+Coefficients:
+            Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept)  22.0806     0.7815  28.255   &lt;2e-16 ***
+s1            0.3937     0.9238   0.426    0.670    
+s2           -0.6067     0.7219  -0.840    0.401    
+s3           -0.2772     0.6314  -0.439    0.661    
+s4            0.2602     0.5399   0.482    0.630    
+s5            0.4171     0.5417   0.770    0.442    
+s6            1.6355     1.1591   1.411    0.159    
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 6.153 on 1224 degrees of freedom
+  (32 observations deleted due to missingness)
+Multiple R-squared:  0.004912,  Adjusted R-squared:  3.459e-05 
+F-statistic: 1.007 on 6 and 1224 DF,  p-value: 0.419</code></pre>
+</div>
+</div>
+</section>
+<section id="custom-contrast-method-1" class="level3">
+<h3 data-anchor-id="custom-contrast-method-1">Custom Contrast Method</h3>
+<p>Knowing how the sequential coding contrast matrix should look, you can also make the contrast matrix manually and plug it into your factor variable.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb41"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a>Sequential_Matrix <span class="ot">&lt;-</span> <span class="fu">c</span>(</span>
+<span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a>  <span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">0</span>,  <span class="co"># row 1</span></span>
+<span id="cb41-3"><a href="#cb41-3" aria-hidden="true" tabindex="-1"></a>  <span class="dv">1</span>,<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">0</span>,  <span class="co"># row 2</span></span>
+<span id="cb41-4"><a href="#cb41-4" aria-hidden="true" tabindex="-1"></a>  <span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">0</span>,  <span class="co"># row 3</span></span>
+<span id="cb41-5"><a href="#cb41-5" aria-hidden="true" tabindex="-1"></a>  <span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">0</span>,  <span class="co"># row 4</span></span>
+<span id="cb41-6"><a href="#cb41-6" aria-hidden="true" tabindex="-1"></a>  <span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">0</span>,<span class="dv">0</span>,  <span class="co"># row 5</span></span>
+<span id="cb41-7"><a href="#cb41-7" aria-hidden="true" tabindex="-1"></a>  <span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">0</span>,  <span class="co"># row 6 </span></span>
+<span id="cb41-8"><a href="#cb41-8" aria-hidden="true" tabindex="-1"></a>  <span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">1</span>   <span class="co"># row 7</span></span>
+<span id="cb41-9"><a href="#cb41-9" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb41-10"><a href="#cb41-10" aria-hidden="true" tabindex="-1"></a>Sequential_Contrast <span class="ot">&lt;-</span> <span class="fu">matrix</span>(Sequential_Matrix, <span class="at">nrow =</span> <span class="dv">7</span>, <span class="at">byrow =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb41-11"><a href="#cb41-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb41-12"><a href="#cb41-12" aria-hidden="true" tabindex="-1"></a>covid<span class="sc">$</span>Educ_Mom_Factor_Seq <span class="ot">&lt;-</span> covid<span class="sc">$</span>Educ_Mom_Factor</span>
+<span id="cb41-13"><a href="#cb41-13" aria-hidden="true" tabindex="-1"></a><span class="fu">contrasts</span>(covid<span class="sc">$</span>Educ_Mom_Factor_Seq) <span class="ot">&lt;-</span> Sequential_Contrast</span>
+<span id="cb41-14"><a href="#cb41-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb41-15"><a href="#cb41-15" aria-hidden="true" tabindex="-1"></a>model_sequential2 <span class="ot">&lt;-</span> <span class="fu">lm</span>(COVID_Concerns <span class="sc">~</span> Educ_Mom_Factor_Seq, <span class="at">data =</span> covid)</span>
+<span id="cb41-16"><a href="#cb41-16" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(model_sequential2)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+lm(formula = COVID_Concerns ~ Educ_Mom_Factor_Seq, data = covid)
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-19.903  -2.868   1.409   4.410   8.409 
+
+Coefficients:
+                     Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept)           22.0806     0.7815  28.255   &lt;2e-16 ***
+Educ_Mom_Factor_Seq1   0.3937     0.9238   0.426    0.670    
+Educ_Mom_Factor_Seq2  -0.6067     0.7219  -0.840    0.401    
+Educ_Mom_Factor_Seq3  -0.2772     0.6314  -0.439    0.661    
+Educ_Mom_Factor_Seq4   0.2602     0.5399   0.482    0.630    
+Educ_Mom_Factor_Seq5   0.4171     0.5417   0.770    0.442    
+Educ_Mom_Factor_Seq6   1.6355     1.1591   1.411    0.159    
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 6.153 on 1224 degrees of freedom
+  (32 observations deleted due to missingness)
+Multiple R-squared:  0.004912,  Adjusted R-squared:  3.459e-05 
+F-statistic: 1.007 on 6 and 1224 DF,  p-value: 0.419</code></pre>
+</div>
+</div>
+<p>This method requires you to specify the matrix correctly. Double check the matrix is correct before interpreting results.</p>
+</section>
+<section id="interpreting-sequential-codes" class="level3">
+<h3 data-anchor-id="interpreting-sequential-codes">Interpreting Sequential Codes</h3>
+<p>The intercept of the sequentially coded groups is the group mean of the “first” group in sequential order, which is the “None” mother’s education group. Each coefficient then compares the subsequent group mean to the previous group mean.</p>
+<p><strong>Example b1:</strong></p>
+<blockquote class="blockquote">
+<p>Individuals whose mothers have up to 6 years of schooling have about .39 more average COVID-19 concern when compared to individuals whose mothers have no education.</p>
+</blockquote>
+<p><strong>Example b2:</strong></p>
+<blockquote class="blockquote">
+<p>Individuals whose mothers have up to 9 years of schooling have about .61 less average COVID-19 concern when compared to individuals whose mothers have 6 years of education.</p>
+</blockquote>
+<p><strong>Example b6:</strong></p>
+<blockquote class="blockquote">
+<p>Individuals whose mothers have a PhD or doctorate have about 1.64 more average COVID-19 concern when compared to individuals whose mothers have a college degree.</p>
+</blockquote>
+<hr>
+</section>
+</section>
+<section id="helmert-coding" class="level2">
+<h2 data-anchor-id="helmert-coding">3. Helmert Coding</h2>
+<section id="what-is-helmert-coding" class="level3">
+<h3 data-anchor-id="what-is-helmert-coding">What Is Helmert Coding?</h3>
+<p>Helmert coding is a method to code multicategorical variables where each group is compared to the average of the groups that come after it. Unlike dummy coding, which compares each group to a single reference group, Helmert coding makes a series of sequential comparisons across levels of the variable. For example, the first coefficient compares the first group to the average of all remaining group means, the second coefficient compares the second group average to the average of the group means that follow, and so on.</p>
+<p>Helmert coding is useful when there is a meaningful ordering to the categories and you are interested in how earlier groups differ from later ones overall. Note that even though it is helpful for ordinal variables, Helmert coding’s order of coefficients is arbitrary and any comparison can be made.</p>
+<p>For our example, we want to do the following comparisons:</p>
+<ul>
+<li>No education vs the rest</li>
+<li>PhD vs everything except No Education</li>
+<li>6 years vs 9 years, 12 years, Some College, and College</li>
+<li>9 years vs 12 years, Some College, and College</li>
+<li>12 years vs Some College and College</li>
+<li>Some College vs College</li>
+</ul>
+<blockquote class="blockquote">
+<p><strong>Important note on “mean of the group means”:</strong> Helmert coding compares each group to the <em>average of the group means</em> of subsequent groups, not the grand mean of all individuals in those groups. These are only equal when group sizes are equal, which they usually are not. Be precise about this in your interpretations.</p>
+</blockquote>
+</section>
+<section id="helmert-coding-in-base-r" class="level3">
+<h3 data-anchor-id="helmert-coding-in-base-r">Helmert Coding in Base R</h3>
+<p>There is no easy built-in way to do Helmert coding in R, so we will manually code unique variables. The coding scheme follows fractions based on a specific pattern. The <code>|</code> operator represents “OR”.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb43"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a>covid <span class="ot">&lt;-</span> <span class="fu">transform</span>(</span>
+<span id="cb43-2"><a href="#cb43-2" aria-hidden="true" tabindex="-1"></a>  covid,</span>
+<span id="cb43-3"><a href="#cb43-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">h1 =</span> <span class="sc">-</span><span class="dv">6</span><span class="sc">/</span><span class="dv">7</span> <span class="sc">*</span> (Educ_Mom_Numeric <span class="sc">==</span> <span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb43-4"><a href="#cb43-4" aria-hidden="true" tabindex="-1"></a>        <span class="dv">1</span><span class="sc">/</span><span class="dv">7</span> <span class="sc">*</span> (Educ_Mom_Numeric <span class="sc">&gt;</span> <span class="dv">1</span>),</span>
+<span id="cb43-5"><a href="#cb43-5" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb43-6"><a href="#cb43-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">h2 =</span> <span class="sc">-</span><span class="dv">5</span><span class="sc">/</span><span class="dv">6</span> <span class="sc">*</span> (Educ_Mom_Numeric <span class="sc">==</span> <span class="dv">7</span>) <span class="sc">+</span></span>
+<span id="cb43-7"><a href="#cb43-7" aria-hidden="true" tabindex="-1"></a>       <span class="dv">1</span><span class="sc">/</span><span class="dv">6</span> <span class="sc">*</span> ((Educ_Mom_Numeric <span class="sc">==</span> <span class="dv">2</span>) <span class="sc">|</span></span>
+<span id="cb43-8"><a href="#cb43-8" aria-hidden="true" tabindex="-1"></a>              (Educ_Mom_Numeric <span class="sc">==</span> <span class="dv">3</span>) <span class="sc">|</span></span>
+<span id="cb43-9"><a href="#cb43-9" aria-hidden="true" tabindex="-1"></a>              (Educ_Mom_Numeric <span class="sc">==</span> <span class="dv">4</span>) <span class="sc">|</span></span>
+<span id="cb43-10"><a href="#cb43-10" aria-hidden="true" tabindex="-1"></a>              (Educ_Mom_Numeric <span class="sc">==</span> <span class="dv">5</span>) <span class="sc">|</span></span>
+<span id="cb43-11"><a href="#cb43-11" aria-hidden="true" tabindex="-1"></a>              (Educ_Mom_Numeric <span class="sc">==</span> <span class="dv">6</span>)),</span>
+<span id="cb43-12"><a href="#cb43-12" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb43-13"><a href="#cb43-13" aria-hidden="true" tabindex="-1"></a>  <span class="at">h3 =</span> <span class="sc">-</span><span class="dv">4</span><span class="sc">/</span><span class="dv">5</span> <span class="sc">*</span> (Educ_Mom_Numeric <span class="sc">==</span> <span class="dv">2</span>) <span class="sc">+</span></span>
+<span id="cb43-14"><a href="#cb43-14" aria-hidden="true" tabindex="-1"></a>       <span class="dv">1</span><span class="sc">/</span><span class="dv">5</span> <span class="sc">*</span> ((Educ_Mom_Numeric <span class="sc">==</span> <span class="dv">3</span>) <span class="sc">|</span></span>
+<span id="cb43-15"><a href="#cb43-15" aria-hidden="true" tabindex="-1"></a>              (Educ_Mom_Numeric <span class="sc">==</span> <span class="dv">4</span>) <span class="sc">|</span></span>
+<span id="cb43-16"><a href="#cb43-16" aria-hidden="true" tabindex="-1"></a>              (Educ_Mom_Numeric <span class="sc">==</span> <span class="dv">5</span>) <span class="sc">|</span></span>
+<span id="cb43-17"><a href="#cb43-17" aria-hidden="true" tabindex="-1"></a>              (Educ_Mom_Numeric <span class="sc">==</span> <span class="dv">6</span>)),</span>
+<span id="cb43-18"><a href="#cb43-18" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb43-19"><a href="#cb43-19" aria-hidden="true" tabindex="-1"></a>  <span class="at">h4 =</span> <span class="sc">-</span><span class="dv">3</span><span class="sc">/</span><span class="dv">4</span> <span class="sc">*</span> (Educ_Mom_Numeric <span class="sc">==</span> <span class="dv">3</span>) <span class="sc">+</span></span>
+<span id="cb43-20"><a href="#cb43-20" aria-hidden="true" tabindex="-1"></a>       <span class="dv">1</span><span class="sc">/</span><span class="dv">4</span> <span class="sc">*</span> ((Educ_Mom_Numeric <span class="sc">==</span> <span class="dv">4</span>) <span class="sc">|</span></span>
+<span id="cb43-21"><a href="#cb43-21" aria-hidden="true" tabindex="-1"></a>              (Educ_Mom_Numeric <span class="sc">==</span> <span class="dv">5</span>) <span class="sc">|</span></span>
+<span id="cb43-22"><a href="#cb43-22" aria-hidden="true" tabindex="-1"></a>              (Educ_Mom_Numeric <span class="sc">==</span> <span class="dv">6</span>)),</span>
+<span id="cb43-23"><a href="#cb43-23" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb43-24"><a href="#cb43-24" aria-hidden="true" tabindex="-1"></a>  <span class="at">h5 =</span> <span class="sc">-</span><span class="dv">2</span><span class="sc">/</span><span class="dv">3</span> <span class="sc">*</span> (Educ_Mom_Numeric <span class="sc">==</span> <span class="dv">4</span>) <span class="sc">+</span></span>
+<span id="cb43-25"><a href="#cb43-25" aria-hidden="true" tabindex="-1"></a>       <span class="dv">1</span><span class="sc">/</span><span class="dv">3</span> <span class="sc">*</span> ((Educ_Mom_Numeric <span class="sc">==</span> <span class="dv">5</span>) <span class="sc">|</span></span>
+<span id="cb43-26"><a href="#cb43-26" aria-hidden="true" tabindex="-1"></a>              (Educ_Mom_Numeric <span class="sc">==</span> <span class="dv">6</span>)),</span>
+<span id="cb43-27"><a href="#cb43-27" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb43-28"><a href="#cb43-28" aria-hidden="true" tabindex="-1"></a>  <span class="at">h6 =</span> <span class="sc">-</span><span class="dv">1</span><span class="sc">/</span><span class="dv">2</span> <span class="sc">*</span> (Educ_Mom_Numeric <span class="sc">==</span> <span class="dv">5</span>) <span class="sc">+</span></span>
+<span id="cb43-29"><a href="#cb43-29" aria-hidden="true" tabindex="-1"></a>       <span class="dv">1</span><span class="sc">/</span><span class="dv">2</span> <span class="sc">*</span> (Educ_Mom_Numeric <span class="sc">==</span> <span class="dv">6</span>)</span>
+<span id="cb43-30"><a href="#cb43-30" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Since there is no “baseline” group, the order does not matter when plugging into <code>lm()</code>.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb44"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a>model_Helmert <span class="ot">&lt;-</span> <span class="fu">lm</span>(COVID_Concerns <span class="sc">~</span> h1 <span class="sc">+</span> h2 <span class="sc">+</span> h3 <span class="sc">+</span> h4 <span class="sc">+</span> h5 <span class="sc">+</span> h6, <span class="at">data =</span> covid)</span>
+<span id="cb44-2"><a href="#cb44-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(model_Helmert)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+lm(formula = COVID_Concerns ~ h1 + h2 + h3 + h4 + h5 + h6, data = covid)
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-19.903  -2.868   1.409   4.410   8.409 
+
+Coefficients:
+            Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept) 22.29068    0.23763  93.805   &lt;2e-16 ***
+h1           0.24504    0.81890   0.299   0.7648    
+h2          -1.89305    1.12196  -1.687   0.0918 .  
+h3          -0.58022    0.53476  -1.085   0.2781    
+h4           0.03532    0.56954   0.062   0.9506    
+h5           0.46873    0.43996   1.065   0.2869    
+h6           0.41706    0.54173   0.770   0.4415    
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 6.153 on 1224 degrees of freedom
+  (32 observations deleted due to missingness)
+Multiple R-squared:  0.004912,  Adjusted R-squared:  3.459e-05 
+F-statistic: 1.007 on 6 and 1224 DF,  p-value: 0.419</code></pre>
+</div>
+</div>
+</section>
+<section id="custom-contrast-method-2" class="level3">
+<h3 data-anchor-id="custom-contrast-method-2">Custom Contrast Method</h3>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb46"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a>Helmert_Matrix <span class="ot">&lt;-</span> <span class="fu">c</span>(</span>
+<span id="cb46-2"><a href="#cb46-2" aria-hidden="true" tabindex="-1"></a>  <span class="sc">-</span><span class="dv">6</span><span class="sc">/</span><span class="dv">7</span>,   <span class="dv">0</span>,     <span class="dv">0</span>,     <span class="dv">0</span>,     <span class="dv">0</span>,     <span class="dv">0</span>,   <span class="co"># row 1</span></span>
+<span id="cb46-3"><a href="#cb46-3" aria-hidden="true" tabindex="-1"></a>   <span class="dv">1</span><span class="sc">/</span><span class="dv">7</span>,  <span class="dv">1</span><span class="sc">/</span><span class="dv">6</span>,  <span class="sc">-</span><span class="dv">4</span><span class="sc">/</span><span class="dv">5</span>,    <span class="dv">0</span>,     <span class="dv">0</span>,     <span class="dv">0</span>,   <span class="co"># row 2</span></span>
+<span id="cb46-4"><a href="#cb46-4" aria-hidden="true" tabindex="-1"></a>   <span class="dv">1</span><span class="sc">/</span><span class="dv">7</span>,  <span class="dv">1</span><span class="sc">/</span><span class="dv">6</span>,   <span class="dv">1</span><span class="sc">/</span><span class="dv">5</span>,  <span class="sc">-</span><span class="dv">3</span><span class="sc">/</span><span class="dv">4</span>,    <span class="dv">0</span>,     <span class="dv">0</span>,   <span class="co"># row 3</span></span>
+<span id="cb46-5"><a href="#cb46-5" aria-hidden="true" tabindex="-1"></a>   <span class="dv">1</span><span class="sc">/</span><span class="dv">7</span>,  <span class="dv">1</span><span class="sc">/</span><span class="dv">6</span>,   <span class="dv">1</span><span class="sc">/</span><span class="dv">5</span>,   <span class="dv">1</span><span class="sc">/</span><span class="dv">4</span>,  <span class="sc">-</span><span class="dv">2</span><span class="sc">/</span><span class="dv">3</span>,    <span class="dv">0</span>,   <span class="co"># row 4</span></span>
+<span id="cb46-6"><a href="#cb46-6" aria-hidden="true" tabindex="-1"></a>   <span class="dv">1</span><span class="sc">/</span><span class="dv">7</span>,  <span class="dv">1</span><span class="sc">/</span><span class="dv">6</span>,   <span class="dv">1</span><span class="sc">/</span><span class="dv">5</span>,   <span class="dv">1</span><span class="sc">/</span><span class="dv">4</span>,   <span class="dv">1</span><span class="sc">/</span><span class="dv">3</span>,  <span class="sc">-</span><span class="dv">1</span><span class="sc">/</span><span class="dv">2</span>,  <span class="co"># row 5</span></span>
+<span id="cb46-7"><a href="#cb46-7" aria-hidden="true" tabindex="-1"></a>   <span class="dv">1</span><span class="sc">/</span><span class="dv">7</span>,  <span class="dv">1</span><span class="sc">/</span><span class="dv">6</span>,   <span class="dv">1</span><span class="sc">/</span><span class="dv">5</span>,   <span class="dv">1</span><span class="sc">/</span><span class="dv">4</span>,   <span class="dv">1</span><span class="sc">/</span><span class="dv">3</span>,   <span class="dv">1</span><span class="sc">/</span><span class="dv">2</span>,  <span class="co"># row 6</span></span>
+<span id="cb46-8"><a href="#cb46-8" aria-hidden="true" tabindex="-1"></a>   <span class="dv">1</span><span class="sc">/</span><span class="dv">7</span>, <span class="sc">-</span><span class="dv">5</span><span class="sc">/</span><span class="dv">6</span>,   <span class="dv">0</span>,     <span class="dv">0</span>,     <span class="dv">0</span>,     <span class="dv">0</span>     <span class="co"># row 7</span></span>
+<span id="cb46-9"><a href="#cb46-9" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb46-10"><a href="#cb46-10" aria-hidden="true" tabindex="-1"></a>Helmert_Contrast <span class="ot">&lt;-</span> <span class="fu">matrix</span>(Helmert_Matrix, <span class="at">nrow =</span> <span class="dv">7</span>, <span class="at">byrow =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb46-11"><a href="#cb46-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb46-12"><a href="#cb46-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Note: you can use whole numbers, but you will need to rescale coefficients</span></span>
+<span id="cb46-13"><a href="#cb46-13" aria-hidden="true" tabindex="-1"></a><span class="co"># accordingly. I recommend sticking to fractions.</span></span>
+<span id="cb46-14"><a href="#cb46-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb46-15"><a href="#cb46-15" aria-hidden="true" tabindex="-1"></a>covid<span class="sc">$</span>Educ_Mom_Factor_Helmert2 <span class="ot">&lt;-</span> covid<span class="sc">$</span>Educ_Mom_Factor</span>
+<span id="cb46-16"><a href="#cb46-16" aria-hidden="true" tabindex="-1"></a><span class="fu">contrasts</span>(covid<span class="sc">$</span>Educ_Mom_Factor_Helmert2) <span class="ot">&lt;-</span> Helmert_Contrast</span>
+<span id="cb46-17"><a href="#cb46-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb46-18"><a href="#cb46-18" aria-hidden="true" tabindex="-1"></a>model_Helmert2 <span class="ot">&lt;-</span> <span class="fu">lm</span>(COVID_Concerns <span class="sc">~</span> Educ_Mom_Factor_Helmert2, <span class="at">data =</span> covid)</span>
+<span id="cb46-19"><a href="#cb46-19" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(model_Helmert2)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+lm(formula = COVID_Concerns ~ Educ_Mom_Factor_Helmert2, data = covid)
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-19.903  -2.868   1.409   4.410   8.409 
+
+Coefficients:
+                          Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept)               22.29068    0.23763  93.805   &lt;2e-16 ***
+Educ_Mom_Factor_Helmert21  0.24504    0.81890   0.299   0.7648    
+Educ_Mom_Factor_Helmert22 -1.89305    1.12196  -1.687   0.0918 .  
+Educ_Mom_Factor_Helmert23 -0.58022    0.53476  -1.085   0.2781    
+Educ_Mom_Factor_Helmert24  0.03532    0.56954   0.062   0.9506    
+Educ_Mom_Factor_Helmert25  0.46873    0.43996   1.065   0.2869    
+Educ_Mom_Factor_Helmert26  0.41706    0.54173   0.770   0.4415    
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 6.153 on 1224 degrees of freedom
+  (32 observations deleted due to missingness)
+Multiple R-squared:  0.004912,  Adjusted R-squared:  3.459e-05 
+F-statistic: 1.007 on 6 and 1224 DF,  p-value: 0.419</code></pre>
+</div>
+</div>
+</section>
+<section id="interpreting-helmert-codes" class="level3">
+<h3 data-anchor-id="interpreting-helmert-codes">Interpreting Helmert Codes</h3>
+<p>Interpreting Helmert coded groups is comparing one group mean to the average of the other group means (e.g., Mean 1 vs (Mean 2 + Mean 3 + Mean 4) / 3). Note that its often not represented this way due to shorthand, but when you are comparing “groups”, you are comparing “group averages.”</p>
+<p>This is important because it is a <em>very</em> common mistake to say you are comparing the “grand mean of group 2, 3, and 4”, but this is incorrect. The grand mean is NOT the mean of the group means. They will only be equal when group sample sizes are equal. When group sample sizes are not equal (as they often are not), then the mean of the group means will be different than the grand mean.</p>
+<p>The intercept of the Helmert coded groups is the average of the group means. Keep in mind that Helmert coding arithmetic is: later groups - current group. So a negative sign means the current group mean is larger than the average of the other group means.</p>
+<p><strong>Example b1:</strong></p>
+<blockquote class="blockquote">
+<p>Individuals whose mothers have no education have an average COVID-19 concern that is about .25 lower than the average of the other education level averages.</p>
+</blockquote>
+<p><strong>Example b2:</strong></p>
+<blockquote class="blockquote">
+<p>Individuals whose mothers have a PhD or doctorate have an average COVID-19 concern that is 1.89 greater than the average of the rest of the education group means.</p>
+</blockquote>
+<p><strong>Example b6:</strong></p>
+<blockquote class="blockquote">
+<p>Individuals whose mothers have some college or equivalent have an average COVID-19 concern that is .41 lower than the average for individuals whose mother has a college degree.</p>
+</blockquote>
+<hr>
+</section>
+</section>
+<section id="effects-coding" class="level2">
+<h2 data-anchor-id="effects-coding">4. Effects Coding</h2>
+<section id="what-is-effects-coding" class="level3">
+<h3 data-anchor-id="what-is-effects-coding">What Is Effects Coding?</h3>
+<p>Effects coding is a method for coding multicategorical variables where each category is compared to the mean of the means rather than to a single reference group. Like dummy coding, it uses a series of 0/1-type variables, but with one key difference: the reference category is coded as -1 instead of 0. This ensures that the coefficients represent how much each group differs from the average of all groups, rather than from a specific baseline group.</p>
+<p>As a result, the intercept in an effects-coded model represents the mean of the group means, and each coefficient tells us how far a given category is above or below that overall average. This can be especially useful when no single group serves as a natural reference, or when you are interested in understanding how each group compares to the overall pattern rather than to one specific category.</p>
+<p>The downside is that you have to leave out one group for the sake of estimating the model. The choice of group you leave out has no practical consequence. It just means that if you want the effects coded coefficient for that group, you have to change the leave-out group and rerun the model.</p>
+<p><em>As a side note, effects coding is helpful for LASSO, Ridge, or Elastic Net regression because it treats all categories more evenly when coefficients are being shrunk. Unlike dummy coding, which depends on a chosen reference group, effects coding reduces the influence of that arbitrary choice and can lead to more stable results when selecting variables.</em></p>
+</section>
+<section id="effects-coding-in-base-r" class="level3">
+<h3 data-anchor-id="effects-coding-in-base-r">Effects Coding in Base R</h3>
+<p><code>lm()</code> defaults to dummy coded variables, so you must code these manually. All you need to do is select the group you are leaving out and subtract it from each other group.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb48"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Leave out the PhD/Doctorate group (group 7)</span></span>
+<span id="cb48-2"><a href="#cb48-2" aria-hidden="true" tabindex="-1"></a>covid <span class="ot">&lt;-</span> <span class="fu">transform</span>(covid,</span>
+<span id="cb48-3"><a href="#cb48-3" aria-hidden="true" tabindex="-1"></a>                   <span class="at">e1 =</span> (Educ_Mom_Numeric <span class="sc">==</span> <span class="dv">1</span>) <span class="sc">-</span> (Educ_Mom_Numeric <span class="sc">==</span> <span class="dv">7</span>),</span>
+<span id="cb48-4"><a href="#cb48-4" aria-hidden="true" tabindex="-1"></a>                   <span class="at">e2 =</span> (Educ_Mom_Numeric <span class="sc">==</span> <span class="dv">2</span>) <span class="sc">-</span> (Educ_Mom_Numeric <span class="sc">==</span> <span class="dv">7</span>),</span>
+<span id="cb48-5"><a href="#cb48-5" aria-hidden="true" tabindex="-1"></a>                   <span class="at">e3 =</span> (Educ_Mom_Numeric <span class="sc">==</span> <span class="dv">3</span>) <span class="sc">-</span> (Educ_Mom_Numeric <span class="sc">==</span> <span class="dv">7</span>),</span>
+<span id="cb48-6"><a href="#cb48-6" aria-hidden="true" tabindex="-1"></a>                   <span class="at">e4 =</span> (Educ_Mom_Numeric <span class="sc">==</span> <span class="dv">4</span>) <span class="sc">-</span> (Educ_Mom_Numeric <span class="sc">==</span> <span class="dv">7</span>),</span>
+<span id="cb48-7"><a href="#cb48-7" aria-hidden="true" tabindex="-1"></a>                   <span class="at">e5 =</span> (Educ_Mom_Numeric <span class="sc">==</span> <span class="dv">5</span>) <span class="sc">-</span> (Educ_Mom_Numeric <span class="sc">==</span> <span class="dv">7</span>),</span>
+<span id="cb48-8"><a href="#cb48-8" aria-hidden="true" tabindex="-1"></a>                   <span class="at">e6 =</span> (Educ_Mom_Numeric <span class="sc">==</span> <span class="dv">6</span>) <span class="sc">-</span> (Educ_Mom_Numeric <span class="sc">==</span> <span class="dv">7</span>))</span>
+<span id="cb48-9"><a href="#cb48-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb48-10"><a href="#cb48-10" aria-hidden="true" tabindex="-1"></a>model_effects <span class="ot">&lt;-</span> <span class="fu">lm</span>(COVID_Concerns <span class="sc">~</span> e1 <span class="sc">+</span> e2 <span class="sc">+</span> e3 <span class="sc">+</span> e4 <span class="sc">+</span> e5 <span class="sc">+</span> e6, <span class="at">data =</span> covid)</span>
+<span id="cb48-11"><a href="#cb48-11" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(model_effects)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+lm(formula = COVID_Concerns ~ e1 + e2 + e3 + e4 + e5 + e6, data = covid)
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-19.903  -2.868   1.409   4.410   8.409 
+
+Coefficients:
+            Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept) 22.29068    0.23763  93.805   &lt;2e-16 ***
+e1          -0.21004    0.70191  -0.299   0.7648    
+e2           0.18368    0.47941   0.383   0.7017    
+e3          -0.42303    0.50530  -0.837   0.4026    
+e4          -0.70021    0.37726  -1.856   0.0637 .  
+e5          -0.44000    0.42290  -1.040   0.2983    
+e6          -0.02294    0.37909  -0.061   0.9518    
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 6.153 on 1224 degrees of freedom
+  (32 observations deleted due to missingness)
+Multiple R-squared:  0.004912,  Adjusted R-squared:  3.459e-05 
+F-statistic: 1.007 on 6 and 1224 DF,  p-value: 0.419</code></pre>
+</div>
+</div>
+<p>If you want to change the leave-out group, you must change which numeric gets subtracted.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb50"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Now leave out the "None" group (group 1) instead</span></span>
+<span id="cb50-2"><a href="#cb50-2" aria-hidden="true" tabindex="-1"></a>covid <span class="ot">&lt;-</span> <span class="fu">transform</span>(covid,</span>
+<span id="cb50-3"><a href="#cb50-3" aria-hidden="true" tabindex="-1"></a>                   <span class="at">e1 =</span> (Educ_Mom_Numeric <span class="sc">==</span> <span class="dv">2</span>) <span class="sc">-</span> (Educ_Mom_Numeric <span class="sc">==</span> <span class="dv">1</span>),</span>
+<span id="cb50-4"><a href="#cb50-4" aria-hidden="true" tabindex="-1"></a>                   <span class="at">e2 =</span> (Educ_Mom_Numeric <span class="sc">==</span> <span class="dv">3</span>) <span class="sc">-</span> (Educ_Mom_Numeric <span class="sc">==</span> <span class="dv">1</span>),</span>
+<span id="cb50-5"><a href="#cb50-5" aria-hidden="true" tabindex="-1"></a>                   <span class="at">e3 =</span> (Educ_Mom_Numeric <span class="sc">==</span> <span class="dv">4</span>) <span class="sc">-</span> (Educ_Mom_Numeric <span class="sc">==</span> <span class="dv">1</span>),</span>
+<span id="cb50-6"><a href="#cb50-6" aria-hidden="true" tabindex="-1"></a>                   <span class="at">e4 =</span> (Educ_Mom_Numeric <span class="sc">==</span> <span class="dv">5</span>) <span class="sc">-</span> (Educ_Mom_Numeric <span class="sc">==</span> <span class="dv">1</span>),</span>
+<span id="cb50-7"><a href="#cb50-7" aria-hidden="true" tabindex="-1"></a>                   <span class="at">e5 =</span> (Educ_Mom_Numeric <span class="sc">==</span> <span class="dv">6</span>) <span class="sc">-</span> (Educ_Mom_Numeric <span class="sc">==</span> <span class="dv">1</span>),</span>
+<span id="cb50-8"><a href="#cb50-8" aria-hidden="true" tabindex="-1"></a>                   <span class="at">e6 =</span> (Educ_Mom_Numeric <span class="sc">==</span> <span class="dv">7</span>) <span class="sc">-</span> (Educ_Mom_Numeric <span class="sc">==</span> <span class="dv">1</span>))</span>
+<span id="cb50-9"><a href="#cb50-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-10"><a href="#cb50-10" aria-hidden="true" tabindex="-1"></a>model_effects2 <span class="ot">&lt;-</span> <span class="fu">lm</span>(COVID_Concerns <span class="sc">~</span> e1 <span class="sc">+</span> e2 <span class="sc">+</span> e3 <span class="sc">+</span> e4 <span class="sc">+</span> e5 <span class="sc">+</span> e6, <span class="at">data =</span> covid)</span>
+<span id="cb50-11"><a href="#cb50-11" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(model_effects2)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+lm(formula = COVID_Concerns ~ e1 + e2 + e3 + e4 + e5 + e6, data = covid)
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-19.903  -2.868   1.409   4.410   8.409 
+
+Coefficients:
+            Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept) 22.29068    0.23763  93.805   &lt;2e-16 ***
+e1           0.18368    0.47941   0.383   0.7017    
+e2          -0.42303    0.50530  -0.837   0.4026    
+e3          -0.70021    0.37726  -1.856   0.0637 .  
+e4          -0.44000    0.42290  -1.040   0.2983    
+e5          -0.02294    0.37909  -0.061   0.9518    
+e6           1.61254    0.96379   1.673   0.0946 .  
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 6.153 on 1224 degrees of freedom
+  (32 observations deleted due to missingness)
+Multiple R-squared:  0.004912,  Adjusted R-squared:  3.459e-05 
+F-statistic: 1.007 on 6 and 1224 DF,  p-value: 0.419</code></pre>
+</div>
+</div>
+<p>As you can see, every coefficient that is not associated with the added PhD group does not change. However, to get the coefficient for the PhD group, we had to recode and rerun everything. This is annoying but not that hard to do.</p>
+</section>
+<section id="custom-contrast-method-3" class="level3">
+<h3 data-anchor-id="custom-contrast-method-3">Custom Contrast Method</h3>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb52"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb52-1"><a href="#cb52-1" aria-hidden="true" tabindex="-1"></a>Effects_Matrix <span class="ot">&lt;-</span> <span class="fu">c</span>(</span>
+<span id="cb52-2"><a href="#cb52-2" aria-hidden="true" tabindex="-1"></a>  <span class="sc">-</span><span class="dv">1</span>, <span class="sc">-</span><span class="dv">1</span>, <span class="sc">-</span><span class="dv">1</span>, <span class="sc">-</span><span class="dv">1</span>, <span class="sc">-</span><span class="dv">1</span>, <span class="sc">-</span><span class="dv">1</span>,  <span class="co"># row 1 (leave-out)</span></span>
+<span id="cb52-3"><a href="#cb52-3" aria-hidden="true" tabindex="-1"></a>   <span class="dv">1</span>,  <span class="dv">0</span>,  <span class="dv">0</span>,  <span class="dv">0</span>,  <span class="dv">0</span>,  <span class="dv">0</span>,  <span class="co"># row 2</span></span>
+<span id="cb52-4"><a href="#cb52-4" aria-hidden="true" tabindex="-1"></a>   <span class="dv">0</span>,  <span class="dv">1</span>,  <span class="dv">0</span>,  <span class="dv">0</span>,  <span class="dv">0</span>,  <span class="dv">0</span>,  <span class="co"># row 3</span></span>
+<span id="cb52-5"><a href="#cb52-5" aria-hidden="true" tabindex="-1"></a>   <span class="dv">0</span>,  <span class="dv">0</span>,  <span class="dv">1</span>,  <span class="dv">0</span>,  <span class="dv">0</span>,  <span class="dv">0</span>,  <span class="co"># row 4</span></span>
+<span id="cb52-6"><a href="#cb52-6" aria-hidden="true" tabindex="-1"></a>   <span class="dv">0</span>,  <span class="dv">0</span>,  <span class="dv">0</span>,  <span class="dv">1</span>,  <span class="dv">0</span>,  <span class="dv">0</span>,  <span class="co"># row 5</span></span>
+<span id="cb52-7"><a href="#cb52-7" aria-hidden="true" tabindex="-1"></a>   <span class="dv">0</span>,  <span class="dv">0</span>,  <span class="dv">0</span>,  <span class="dv">0</span>,  <span class="dv">1</span>,  <span class="dv">0</span>,  <span class="co"># row 6</span></span>
+<span id="cb52-8"><a href="#cb52-8" aria-hidden="true" tabindex="-1"></a>   <span class="dv">0</span>,  <span class="dv">0</span>,  <span class="dv">0</span>,  <span class="dv">0</span>,  <span class="dv">0</span>,  <span class="dv">1</span>   <span class="co"># row 7</span></span>
+<span id="cb52-9"><a href="#cb52-9" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb52-10"><a href="#cb52-10" aria-hidden="true" tabindex="-1"></a>Effects_Contrast <span class="ot">&lt;-</span> <span class="fu">matrix</span>(Effects_Matrix, <span class="at">nrow =</span> <span class="dv">7</span>, <span class="at">byrow =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb52-11"><a href="#cb52-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb52-12"><a href="#cb52-12" aria-hidden="true" tabindex="-1"></a>covid<span class="sc">$</span>Educ_Mom_Factor_Effects2 <span class="ot">&lt;-</span> covid<span class="sc">$</span>Educ_Mom_Factor</span>
+<span id="cb52-13"><a href="#cb52-13" aria-hidden="true" tabindex="-1"></a><span class="fu">contrasts</span>(covid<span class="sc">$</span>Educ_Mom_Factor_Effects2) <span class="ot">&lt;-</span> Effects_Contrast</span>
+<span id="cb52-14"><a href="#cb52-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb52-15"><a href="#cb52-15" aria-hidden="true" tabindex="-1"></a>model_effects3 <span class="ot">&lt;-</span> <span class="fu">lm</span>(COVID_Concerns <span class="sc">~</span> Educ_Mom_Factor_Effects2, <span class="at">data =</span> covid)</span>
+<span id="cb52-16"><a href="#cb52-16" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(model_effects3)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+lm(formula = COVID_Concerns ~ Educ_Mom_Factor_Effects2, data = covid)
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-19.903  -2.868   1.409   4.410   8.409 
+
+Coefficients:
+                          Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept)               22.29068    0.23763  93.805   &lt;2e-16 ***
+Educ_Mom_Factor_Effects21  0.18368    0.47941   0.383   0.7017    
+Educ_Mom_Factor_Effects22 -0.42303    0.50530  -0.837   0.4026    
+Educ_Mom_Factor_Effects23 -0.70021    0.37726  -1.856   0.0637 .  
+Educ_Mom_Factor_Effects24 -0.44000    0.42290  -1.040   0.2983    
+Educ_Mom_Factor_Effects25 -0.02294    0.37909  -0.061   0.9518    
+Educ_Mom_Factor_Effects26  1.61254    0.96379   1.673   0.0946 .  
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 6.153 on 1224 degrees of freedom
+  (32 observations deleted due to missingness)
+Multiple R-squared:  0.004912,  Adjusted R-squared:  3.459e-05 
+F-statistic: 1.007 on 6 and 1224 DF,  p-value: 0.419</code></pre>
+</div>
+</div>
+<p>If you want to switch the leave-out group, you need to rearrange the row with -1’s and rerun the model.</p>
+</section>
+<section id="interpreting-effects-codes" class="level3">
+<h3 data-anchor-id="interpreting-effects-codes">Interpreting Effects Codes</h3>
+<p>The intercept of the effects coded groups is the mean of the group means. Each coefficient is the difference between that group’s mean and the mean of the group means (Group - Intercept). So a negative sign means the group mean is <em>below</em> the mean of the group means.</p>
+<p>This is a <em>very</em> common mistake: people often say you are comparing to the “grand mean” or “overall average”, but this is incorrect. The grand mean is NOT the mean of the group means. They only equal each other when group sample sizes are equal.</p>
+<p><strong>Example b1 (with PhD as the leave-out group):</strong></p>
+<blockquote class="blockquote">
+<p>Individuals whose mothers have no education are expected to have an average COVID-19 concern that is .18 larger than the average COVID-19 concern of the different mother education level means.</p>
+</blockquote>
+<p><strong>Example b3:</strong></p>
+<blockquote class="blockquote">
+<p>Individuals whose mothers have at least 12 years of education are expected to have an average COVID-19 concern that is .70 lower than the average COVID-19 concern of the different mother education level means.</p>
+</blockquote>
+<hr>
+</section>
+</section>
+<section id="well-done" class="level2">
+<h2 data-anchor-id="well-done">Well Done!</h2>
+<p>You have completed the Multicategorical Predictors tutorial. Here is a summary of what was covered:</p>
+<ul>
+<li><strong>Dummy coding</strong> with <code>factor()</code> and <code>relevel()</code>, manual dummy variables, and custom contrast matrices</li>
+<li><strong>Sequential coding</strong> for step-by-step comparisons between adjacent groups</li>
+<li><strong>Helmert coding</strong> for comparing each group to the average of subsequent groups</li>
+<li><strong>Effects coding</strong> for comparing each group to the mean of all group means</li>
+<li>How to interpret the intercept and slopes under each coding scheme</li>
+<li>How to add covariates to multicategorical models</li>
+</ul>
+<p>The next lesson covers prediction and cross-validation.</p>
+
+
+</section>
+
+</main> <!-- /main -->
+<!-- MailerLite Universal -->
+<script>
+    (function(w,d,e,u,f,l,n){w[f]=w[f]||function(){(w[f].q=w[f].q||[])
+    .push(arguments);},l=d.createElement(e),l.async=1,l.src=u,
+    n=d.getElementsByTagName(e)[0],n.parentNode.insertBefore(l,n);})
+    (window,document,'script','https://assets.mailerlite.com/js/universal.js','ml');
+    ml('account', '2295583');
+</script>
+<!-- End MailerLite Universal -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/infogothic\.com");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

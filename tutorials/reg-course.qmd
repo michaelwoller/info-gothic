@@ -18,7 +18,7 @@ A beginner tutorial covering the basics of R objects and functions and how to do
 
 [Open Tutorial (Interactable Shiny App)](https://infogothic.shinyapps.io/simple_linear_regression){target="_blank"}
 
-[Open Tutorial (Static Page )](simple-linear-regression.html)
+[Open Tutorial (Static Page)](regression-lessons/simple-linear-regression.html)
 
 ------------------------------------------------------------------------
 
@@ -28,7 +28,7 @@ In this lesson, we cover how to run multiple linear regressions and how to inter
 
 [Open Tutorial (Interactable Shiny App)](https://infogothic.shinyapps.io/mlr_tutorial/){target="_blank"}
 
-[Open Tutorial (Static Page )](multiple-linear-regression.html)
+[Open Tutorial (Static Page)](regression-lessons/multiple-linear-regression.html)
 
 ------------------------------------------------------------------------
 
@@ -38,7 +38,7 @@ In this lesson, we cover how to interpret significance tests of the regression. 
 
 [Open Tutorial (Interactable Shiny App)](https://infogothic.shinyapps.io/diagnostics_tutorial/)
 
-[Open Tutorial (Static Page )](inference-and-multiple-correlations.html)
+[Open Tutorial (Static Page)](regression-lessons/inference-and-multiple-correlations.html)
 
 ------------------------------------------------------------------------
 
@@ -48,7 +48,7 @@ In this lesson, we cover the basic model assumptions of linear regression and ho
 
 [Open Tutorial (Interactable Shiny App)](https://infogothic.shinyapps.io/diagnostics_tutorial/)
 
-[Open Tutorial (Static Page )](diagnostics.html)
+[Open Tutorial (Static Page)](regression-lessons/diagnostics.html)
 
 ------------------------------------------------------------------------
 
@@ -56,7 +56,7 @@ In this lesson, we cover the basic model assumptions of linear regression and ho
 
 In this lesson, we cover what makes variables important in the model and how "importance" differs from "significance". We will cover multiple different predictor effect sizes as well as dominance analysis of regression slopes.
 
-[Open Tutorial](variable-importance.html)
+[Open Tutorial](regression-lessons/variable-importance.html)
 
 ------------------------------------------------------------------------
 
@@ -64,7 +64,7 @@ In this lesson, we cover what makes variables important in the model and how "im
 
 In this lesson, we cover predictive statistics and how this differs from the inferential statistics we've been doing previously. This involves covering cross-validation and how to get shrunken-$R^2$'s as well as simple variable selection techniques. It also covers how to generate prediction intervals and how to run simple LASSO regression.
 
-[Open Tutorial](prediction.html)
+[Open Tutorial](regression-lessons/prediction.html)
 
 ------------------------------------------------------------------------
 
@@ -72,7 +72,7 @@ In this lesson, we cover predictive statistics and how this differs from the inf
 
 In this lesson, we cover how to run and interpret multicategorical predictors. This involves covering multiple categorical coding schemes. We will cover the popular dummy coding technique and the lesser known sequential specification, Helmert coding, and effects coding methods.
 
-[Open Tutorial](multicategorical-predictors.html)
+[Open Tutorial](regression-lessons/multicategorical-predictors.html)
 
 ------------------------------------------------------------------------
 
@@ -80,7 +80,7 @@ In this lesson, we cover how to run and interpret multicategorical predictors. T
 
 In this lesson, we cover how to fit and analyze nonlinear regression models. These models include polynomial regression, piecewise regression, and log-transformed models.
 
-[Open Tutorial](nonlinear-regression.html)
+[Open Tutorial](regression-lessons/nonlinear-regression.html)
 
 ------------------------------------------------------------------------
 
@@ -88,7 +88,7 @@ In this lesson, we cover how to fit and analyze nonlinear regression models. The
 
 In this lesson, we cover moderation and interaction terms in regression. This involves covering how to interpret interactions and conditional effects, how to get simple effects, and how to make interaction plots.
 
-[Open Tutorial](moderation.html)
+[Open Tutorial](regression-lessons/moderation.html)
 
 ------------------------------------------------------------------------
 
@@ -96,4 +96,4 @@ In this lesson, we cover moderation and interaction terms in regression. This in
 
 In this lesson, we cover logistic regression of binary outcome variables. This involves covering fitting and interpreting log-odds, how to convert log-odds to odds ratios or probabilities, how to get pseudo-$R^2$ statistics, and how to plot logistic regression models.
 
-[Open Tutorial](logistic-regression.html)
+[Open Tutorial](regression-lessons/logistic-regression.html)

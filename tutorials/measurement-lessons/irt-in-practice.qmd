@@ -1,0 +1,793 @@
+---
+title: "IRT in Practice"
+author: "Michael Woller"
+draft: true
+format:
+  html:
+    toc: true
+    toc-depth: 3
+execute:
+  echo: true
+  warning: false
+  message: false
+---
+
+```{r setup, include=FALSE}
+library(mirt)
+library(mokken)
+library(ltm)
+library(psych)
+library(psychTools)
+library(ggplot2)
+```
+
+## Introduction
+
+This page is the applied companion to IRT Foundations. Where that page built the conceptual vocabulary (latent traits, item parameters, information functions) this one puts those ideas to work with real data and R code. If you have not read IRT Foundations yet, it is worth starting there. The concepts introduced there are assumed throughout.
+
+**Data used in this tutorial.** The dichotomous IRT examples use the `LSAT` dataset from the `ltm` package. This is an IRT dataset containing responses from 1,000 respondents to five items from Section 6 of the Law School Admissions Test (Bock & Lieberman, 1970)^1^. All items are dichotomously scored (0 = incorrect, 1 = correct). The items vary in difficulty, with *endorsement rates* (the proportion of respondents answering each item correctly) ranging from about .56 to .93. Some items were answered correctly by nearly everyone. Others were genuinely challenging for a meaningful portion of the sample. Unfortunately, the actual questions for each item are not public information, so we will have to gloss over the content of the individual items, and the number of items is small compared to the full test.
+
+The polytomous examples draw on two additional datasets. The first is the Big Five Inventory (BFI) from the `psychTools` package^2^, specifically the five extraversion items (`E1` through `E5`) rated on a 6-point scale from *very inaccurate* to *very accurate* ($N = 2{,}800$ after removing missing data). Extraversion is the tendency toward sociability, assertiveness, and positive affect. The second is the `Science` dataset from the `mirt` package^3^, containing responses from 392 individuals to nine items measuring attitudes toward science and technology, each rated on a 4-point scale.s
+
+You can load in these datasets yourself by following the code below.
+
+```{r}
+library(ltm)
+library(psychTools)
+library(mirt)
+
+# Dichotomous IRT examples: Law School Admissions Test (ltm package)
+# 5 items, N = 1000, dichotomous scoring (0 = incorrect, 1 = correct)
+data(LSAT, package = "ltm")
+
+# Polytomous GRM examples: Big Five Inventory extraversion items (psychTools package)
+# Selecting the 5 extraversion items (E1-E5) from the bfi dataset
+# Items are rated 1-6 (Very Inaccurate to Very Accurate), N = 2800
+data(bfi, package = "psychTools")
+bfi_extra <- bfi[, c("E1", "E2", "E3", "E4", "E5")]
+bfi_extra <- na.omit(bfi_extra)
+
+# Polytomous NRM examples: Science attitudes dataset (mirt package)
+# 9 polytomous items rated on a 4-point scale, N = 392
+data(Science, package = "mirt")
+```
+
+I will note, that a bulk of the explanation on how to run and interpret output will be given in Section 2 with dichotomous IRT models. Later parts won't explain all the pieces of the functions but will stick to mainly interpretations. So if you are confused abotu what function does what and what part of the output represents what, read over Section 2.
+
+------------------------------------------------------------------------
+
+## 1. Assumptions and Model Checking
+
+Before fitting any IRT model, it is important to verify that the data meet the core assumptions. There are two, and they are two sides of the same coin.
+
+**Unidimensionality:** The items should all reflect a single underlying latent pyschological trait. This is a requirement for the standard unidimensional IRT models covered on this page, not a requirement of IRT as a framework. Multidimensional IRT (MIRT) models exist and can handle items that load on multiple traits simultaneously, but they are considerably more complex and beyond the scope of this introduction. For most applied scale development work in clinical and social psychology, the goal is to build scales that are sufficiently unidimensional so that a single $\theta$ trait can meaningfully summarize where a person stands. If items have substantial secondary dimensions that a single $\theta$ cannot account for, the model will be misspecified and parameter estimates will be biased.
+
+**Local independence:** After conditioning on $\theta$, responses to different items should be uncorrelated. If your latent trait $\theta$ is the only driver of people's responses to the test items, knowing how someone answered item 3 adds no information about item 7 once $\theta$ is known. On a reading comprehension test, two questions that both refer to the same passage are likely to be locally dependent. So a student who misreads or misunderstands that passage will get both wrong, not because of their underlying ability but because of something specific to that passage. Their shared fate has nothing to do with $\theta$. It is driven by something the two items have in common that the model is not capturing.
+
+This is obviously to the detriment of the test because you are essentially counting the same information twice. The model thinks it has two independent pieces of evidence about the student's reading ability, when really it has one piece of evidence seen from two slightly different angles. Everything downstream, including your precision estimates and your confidence in trait scores, ends up more optimistic than it should be.
+
+Violations of local independence typically indicate that items share specific content beyond the common dimension, or that the scale is genuinely multidimensional.
+
+**Monotonicity:** Higher levels of the latent trait should almsot always lead to a higher probability of endorsing an item, never lower. In plain terms, more anxious people should be more likely to endorse anxiety items than less anxious people, at every point along the trait continuum. This sounds like it should always be true by definition, but it can fail when items are poorly worded, interpreted differently by people at different trait levels, or accidentally reverse-keyed. (I.e., the item might say "I feel calm and collected most of the time", where highly anxious people would rate low in scores). It is worth checking empirically before fitting any model because a nonmonotone item response function violates the basic logic that IRT is built on. True nonmonotone traits are possible in theory but rare in practice, and when they occur most researchers treat it as a signal to revise the item rather than accept the violation.
+
+### Brief Review
+
+Before diving into assumption checking, it helps to briefly review three concepts that appear in this section. If you have worked through the earlier pages in this tutorial, these will be familiar. If you are jumping in here directly, this short review should give you enough context to follow along.
+
+**Scree plots** come from factor analysis. It is a plot used to decide on how many latent factors could potentially explain the results of your item correlations.
+
+> When you extract factors from a correlation matrix (a table of correlations between multiple items or factor), each factor has an associated *eigenvalue* that reflects how much variance it accounts for (an eigenvalue is a number that tells you how much shared variance among items a given factor is responsible for. A value of 1 means the factor accounts for as much variance as a single item would on its own). A scree plot displays these eigenvalues in descending order. The idea is to look for an "elbow" in the plot where the eigenvalues drop off sharply, suggesting that factors to the right of that point are explaining very little and are likely noise.
+
+A scree plot that shows a single factor model would likely be a best fit is what you want to see before fitting a unidimensional IRT model. It is the quickest method to do this, and is often justifiable enough to find unidimensional models.
+
+**Parallel analysis** is a more rigorous companion to the scree plot, but is also used to figure out how many potential latent factors can explain your item correlations.
+
+> Rather than eyeballing the elbow of the scree plot, parallel analysis generates a large number of random datasets with the same dimensions as your real data and computes the average eigenvalues from those random datasets. The logic is that any factor in your real data whose eigenvalue exceeds what you would expect by chance is worth retaining. Eigenvalues that fall below the random baseline are noise.
+
+It is often considered a more reliable guide to dimensionality than the scree plot alone because, unlike the scree plot, it gives you an objective statistical benchmark rather than asking you to visually judge where the drop-off occurs.
+
+**Tetrachoric correlations** are the appropriate correlation coefficient for binary item responses, which is what dichotomous IRT data consists of. A regular Pearson correlation between two binary items will underestimate the true relationship between them because it is constrained by the item difficulty levels. A tetrachoric correlation estimates what the correlation would be if the underlying response tendency were continuous and normally distributed, which is exactly the assumption IRT makes about the latent trait. When you run a factor analysis as a dimensionality check for IRT, you should be computing it on the tetrachoric correlation matrix rather than the raw Pearson matrix.
+
+### 1.1 Unidimensionality
+
+The most common approach is parallel analysis or inspection of the **scree plot** from a principal components analysis of the tetrachoric correlation matrix. (Principal components analysis is a technique that takes your full set of item correlations and asks how many underlying dimensions are needed to explain them).
+
+Strong unidimensionality is indicated by a dominant first factor with a large eigenvalue and a sharp drop-off before the second factor. A ratio of the first to second eigenvalue of 3:1 or greater is generally taken as evidence of sufficient unidimensionality for IRT.
+
+The code below uses two functions to check unidimensionality. The first is `polychoric()` from the `psych` package, which computes the tetrachoric correlation matrix for your items. The `$rho` at the end extracts just the correlation matrix from the output, since `polychoric()` returns several things. The second is `eigen()`, which is a base R function that takes a correlation matrix and decomposes it into eigenvalues. The `$values` at the end extracts just the eigenvalues themselves, which is what we need to inspect and plot for the scree plot and parallel analysis.
+
+```{r parallel-analysis}
+library(psych)
+
+# Compute tetrachoric correlations and inspect eigenvalues
+tet_cor <- psych::polychoric(LSAT)$rho
+eigs    <- eigen(tet_cor)$values
+
+# Printing results
+cat("Eigenvalues:\n")
+print(round(eigs, 3))
+cat("\nRatio (EV1 / EV2):", round(eigs[1] / eigs[2], 2), "\n")
+```
+
+For the LSAT, the ratio of the first to second eigenvalue is 1.62, which falls below the 3:1 heuristic typically applied to longer scales. Which technically means that unidimensionality isn't the most appropriate model for this dataset. However, this is the a result of the fact that we only only have 5 items of the entire LSAT test. In the study that this dataset originated from (which uses the full test), they proved unidimensionality of the test. So the limited `LSAT` data we are using here isn't ideal, however, we will move forward assuming that the unidimensionality assumption of our data has been upheld.
+
+### 1.2 Local Independence and the Q3 Statistic
+
+The Q3 statistic is the correlation between the residuals of two items after removing the effect of $\theta$ that checks for local independence. If local independence holds, these residual correlations should be near zero. Values above about .20 flag item pairs that are more correlated than the model accounts for, suggesting a local dependency.
+
+To compute the Q3 statistic, we first need a fitted IRT model to extract residuals from. The first line of the code below fits a 2PL model to the LSAT data using the `mirt()` function from the `mirt` package. We fit it here temporarily just to get the residuals. The `verbose = FALSE` argument is just to reduce clutter from the iteratio messages. The second line calls `residuals()` on the fitted model with `type = "Q3"`, which tells `mirt` to compute the Q3 statistic for every pair of items in the scale. Internally, `mirt` estimates each person's $\theta$, computes the difference between their actual item response and what the model predicted given that $\theta$, and then correlates those residuals across all item pairs. It's conceptually equivalent to saving the residuals of a regression model and correlating them with the observed values.
+
+The result stored in `q3_mat` is a matrix with one row and one column per item, where each cell contains the Q3 value for that pair of items. The diagonal is not meaningful since an item cannot be locally dependent with itself. The third line prints the matrix rounded to three decimal places so the values are readable.
+
+```{r q3}
+fit_2pl_lsat <- mirt(LSAT, 1, itemtype = "2PL", verbose = FALSE)
+q3_mat <- residuals(fit_2pl_lsat, type = "Q3")
+print(round(q3_mat, 3))
+```
+
+The Q3 results for the LSAT look clean. All off-diagonal values are negative, ranging from -0.116 to -0.004, and every value falls well below the .20 threshold that would flag a local dependency concern. Negative Q3 values are actually expected and normal when a model fits well. There is no item pair here that stands out as problematic. This is reassuring given result from the eigenvalue ratio above. So even though the LSAT's factor structure is not textbook clean, the 2PL appears to be accounting for the item relationships reasonably well at the local level. The closest to zero is the Item 4 and Item 5 pair at -0.004.
+
+### 1.3 Monotonicity via Mokken Scaling
+
+The third assumption to check is monotonicity. We need to see if higher $\theta$ values lead to a higher probability of endorsing an item. This can fail when items are poorly worded, accidentally reverse-keyed before analysis, or interpreted differently by people at different trait levels (for instance, highly anxious people might reject a mildly worded anxiety item as not strong enough to describe their experience, while moderately anxious people readily endorse it).
+
+The `mokken` package provides a way to check monotonicity directly without assuming any particular model shape. The key function is `check.monotonicity()`, which takes your item response matrix (the part of the data that is just the items and their responses) and tests whether the probability of endorsing each item consistently increases as $\theta$ increases, which is the core monotonicity requirement. It does this nonparametrically, meaning it makes no assumptions about the specific shape of the curve beyond the requirement that it never decreases. The `summary()` call then prints a table flagging any items with significant violations.
+
+```{r mokken}
+mono_check <- check.monotonicity(LSAT)
+summary(mono_check)
+```
+
+The Mokken monotonicity check shows clean results for all five LSAT items. The key columns to focus on are `#vi` (number of violations) and `#zsig` (number of statistically significant violations), both of which are zero for every item. This means no item showed a single instance where the probability of a correct response decreased as the trait level increased, which is exactly what you want to see. A small number of raw violations in `#vi` is considered acceptable and even expected due to sampling error, especially with smaller samples. What you do not want to see is statistically significant violations in `#zsig`.
+
+The `crit` column is a summary criterion score that combines the number and severity of violations into a single value. A `crit` score above 40 is typically flagged as a concern, and all five items score 0 here. The `ItemH` column reports each item's scalability coefficient, which ranges from 0 to 1 and reflects how well the item fits within the overall Mokken scale. Values above .30 are generally considered acceptable, and while the LSAT items are on the lower end of that range (.12 to .17), none are flagged as violating monotonicity. Overall, the monotonicity assumption is satisfied and there is no reason to exclude any item before proceeding to model fitting.
+
+------------------------------------------------------------------------
+
+## 2. Fitting Dichotomous IRT Models in R
+
+We now have the conceptual foundation to fit models to real data. The `mirt` package is the standard tool for IRT in R. It handles dichotomous and polytomous models, produces IRT-parameterized output, computes fit indices, and generates all the plots we have discussed.
+
+### 2.1 Fitting the Models
+
+The `mirt()` function is the main workhorse. It takes three essential arguments: the data matrix, the number of latent factors to estimate (1 for a unidimensional model), and `itemtype` which specifies which IRT model to fit. Setting `verbose = FALSE` suppresses the iteration-by-iteration estimation output that `mirt` prints by default, but you can include it if you wish to see the iterations. We fit both a 1PL and a 2PL so we can compare them.
+
+```{r fit-models}
+fit_1pl <- mirt(LSAT, 1, itemtype = "Rasch", verbose = FALSE)
+fit_2pl <- mirt(LSAT, 1, itemtype = "2PL",   verbose = FALSE)
+```
+
+Note that `"Rasch"` represents the 1PL model for measurement. `mirt()` also has a `itemtype = "1PL"` option, however, this option constrains the latent variance to 1.0, which is not what we want to use for the typical 1PL model.
+
+Moving ahead, `"Rasch"` constrains all item slopes to 1.0, so items can only differ in their location. `"2PL"` estimates slopes freely, allowing items to differ in both discrimination and location. Both fitted model objects are stored and used in the sections below.
+
+### 2.2 Extracting Parameters
+
+By default, `mirt` stores and returns parameters in intercept-slope form, where `a` is the slope and `d` is the intercept (Recall: $d = \gamma = -\alpha\beta$). This is the internal parameterization `mirt` uses for estimation. It is mathematically equivalent to the slope-location ($-\alpha\beta$) form but less intuitive to interpret directly, since you have to back-calculate $\beta$ from $d$ and $a$ yourself. Setting `IRTpars = TRUE` does that conversion for you and returns the parameters in the more readable $\alpha$ and $\beta$ form. The `simplify = TRUE` argument collapses the output into a single clean matrix rather than a list, and `$items` extracts just the item parameter table from that matrix.
+
+```{r params}
+coef(fit_1pl, IRTpars = TRUE, simplify = TRUE)$items
+coef(fit_2pl, IRTpars = TRUE, simplify = TRUE)$items
+```
+
+The 1PL output shows all five items with a discrimination of exactly 1.0 in the `a` column, which is expected since the Rasch model constrains all slopes ($\alpha$) to be identical. The `b` column shows the location discrimination parameters ($\beta$), which range from -2.87 (Item 1, very easy) to -0.26 (Item 3, moderate difficulty). All five items have negative location parameters, meaning all of them sit below the population average on the ability scale. In other words, most people in the sample of LSAT test takers found these items relatively easy, which is consistent with the endorsement rates we noted earlier ranging from .56 to .93. Keep in mind when inerpreeting that the "population" for these items is students trying to enter law school.
+
+It is worth pausing on what negative location parameters actually mean in practice. Recall that $\beta$ is the point on the $\theta$ scale where a person has a 50/50 chance of answering an item correctly. A $\beta$ of -2.87 for Item 1 means that a person needs to be nearly 3 standard deviations below the population average in ability before the probability of getting it wrong even reaches 50%. Anyone above that point is more likely than not to answer correctly, and since almost everyone in this sample sits well above $\theta = -2.87$, this item is essentially answered correctly by nearly everyone. This is consistent with the high endorsement rates we noted earlier. Whether this reflects items that were genuinely easy, a sample that was particularly able, or some combination of both is hard to say without more information about how these 1,000 test takers were selected. What the negative location parameters tell us clearly is that all five items are doing their discriminating work in a region of the ability scale well below where most of this sample sits, which limits how useful they are for distinguishing among people in the middle to upper range of the distribution.
+
+The `g` and `u` columns are the lower and upper asymptote parameters, fixed at 0 and 1 respectively since we are not fitting a 3PL or 4PL. (Review the previous lesson to recall what these represent).
+
+The 2PL output tells a more nuanced story. The discrimination parameters in the `a` column now vary across items, ranging from 0.66 (Item 5) to 0.89 (Item 3). These fall in the moderate to lower end of range for discrimination values. These LSAT items are not functioning as a highly discriminating scale. In practical terms, someone who just barely knows the material and someone who knows it well have similar probabilities of answering these items correctly, because the curves rise so gradually that the items never draw a sharp line between ability levels. This makes more sense when you look at the location parameters alongside the discrimination values. Items 1 and 5 have location parameters `b` of around -3.4 and -3.1 respectively, meaning a person needs to be nearly 3 standard deviations below the population average before they even have a 50/50 chance of getting those items wrong. The items are so easy for this sample that almost everyone gets them right regardless of their actual ability level, which leaves very little variation for the discrimination parameter to work with. A highly discriminating item is only useful if people are actually spread out on either side of its location. When nearly the entire sample sits far above the item's threshold, the item cannot tell anyone apart no matter how steep its curve is. This is so much cool information that we can infer from just these two statistics!
+
+If you are interested in the intercept form ($\gamma$) of the parameters rather than the individual forms ($\alpha$ and $\beta$), you can drop `IRTpars = TRUE` from the `coef()` call. You might want the intercept form if you are doing advanced work with `mirt` that requires the internal parameterization, but for most applied psychometrics work the IRT form with `IRTpars = TRUE` is what you will use day to day. The intercept form is shown here mainly so that if you ever encounter `d` in `mirt` output and wonder what it is, you have a reference point.
+
+```{r params-intercept}
+coef(fit_2pl, IRTpars = FALSE, simplify = TRUE)$items
+```
+
+Rather than returning $\beta$, the location where endorsement probability crosses .50, this form returns $d$ in a column, which is the expected log-odds of a correct response for a person sitting exactly at the population average ($\theta = 0$). The $\alpha$ slope is identical to the IRT form but is renamed from `a` to `a1`. The two model outputs contain exactly the same information and you can always convert between them using $d = -\alpha\beta$.
+
+### 2.3 Comparing Model Fit
+
+A central question is whether freeing the discrimination parameters, moving from 1PL to 2PL, meaningfully improves fit. We address this with two complementary approaches. The `M2()` function from `mirt` computes absolute fit indices including the M2 statistic, RMSEA, and CFI. These tell you how well each model fits the data on its own terms, regardless of how the other model performs. The `anova()` call then compares the two models directly using a likelihood ratio test, which tests whether the improvement in fit from the 1PL to the 2PL is larger than you would expect by chance given the additional parameters being estimated.
+
+Without going into too much detail (you should review these indices and tests on your own), good absolute fit is indicated by a **non-significant** M2, RMSEA below .05, and CFI above .95. A significant likelihood ratio test in the `anova()` output means the 2PL fits meaningfully better than the 1PL and the extra discrimination parameters are earning their keep.
+
+```{r fit-indices}
+M2(fit_1pl)
+M2(fit_2pl)
+anova(fit_1pl, fit_2pl)
+```
+
+The `M2()` output is read as a single row of statistics. The `M2` column is the test statistic itself, `df` is the degrees of freedom, and `p` is the p-value for that test. To the right of those you have `RMSEA` with its 90% confidence interval bounds (`RMSEA_5` and `RMSEA_95`), then `SRMSR`. The `TLI` and `CFI` columns appear at the end.
+
+The 1PL shows a non-significant M2 ($p = .077$), an RMSEA of .026 with an upper confidence bound of .047, and an SRMSR of .053. The RMSEA is comfortably below .05 and the upper bound just stays under the threshold, indicating acceptable fit (recall that a non-significant M2 is good). The SRMSR is marginally above .05, suggesting the equal-slopes constraint is leaving a small amount of misfit in the bivariate item relationships.
+
+The 2PL fits considerably better. The M2 drops to 4.738 ($p = .449$), the RMSEA is essentially zero, and the SRMSR of .021 is well below the threshold. The model is reproducing the observed item relationships very closely. The likelihood ratio test confirms the improvement is statistically significant ($\chi^2(5) = 12.801$, $p = .025$), meaning the extra discrimination parameters in the 2PL are justified. The AIC also favors the 2PL (4953 vs. 4956), though the BIC favors the more parsimonious 1PL (4981 vs. 5002) due to its penalty for additional parameters. Given the meaningful improvement in RMSEA and SRMSR and the significant likelihood ratio test, the 2PL is the preferred model here.
+
+The `anova()` output compares the two models directly, with the `X2` column being the likelihood ratio test statistic, `df` the difference in parameters between the models, and `p` the significance of that difference. The AIC and BIC columns reflect overall model parsimony.
+
+The likelihood ratio test in the `anova()` output confirms that the improvement from 1PL to 2PL is statistically significant ($\chi^2(5) = 12.801$, $p = .025$), meaning the extra discrimination parameters in the 2PL are earning their keep. The AIC also favors the 2PL (4953 vs. 4956), though the BIC favors the 1PL (5002 vs. 4981) due to its penalty for the additional parameters. In practice the RMSEA and SRMSR improvement from the 1PL to the 2PL is meaningful enough that the 2PL is the preferred model here, consistent with what we would expect for most psychological scales where items genuinely differ in their discrimination.
+
+### 2.4 Item Fit
+
+Beyond overall model fit, it is worth checking how well each individual item fits the model. Overall fit indices like the M2 tell you whether the model fits the data as a whole, but a scale could have good overall fit while still containing one or two poorly fitting items that are worth investigating. The `itemfit()` function from `mirt` provides item-level fit statistics, with the S-X2 statistic and its associated RMSEA being the primary indices to focus on. A non-significant S-X2 p-value and an item-level RMSEA below .06 are generally considered evidence of adequate fit for an individual item. Here we will check the items for the 2PL model
+
+```{r itemfit}
+itemfit(fit_2pl)
+```
+
+All five LSAT items show excellent individual fit under the 2PL. Every item has a non-significant S-X2 p-value, ranging from .415 for Item 3 to .946 for Item 5, and every item-level RMSEA is exactly zero. This means the 2PL is reproducing the observed response patterns for each individual item very closely, with no item standing out as behaving in a way the model cannot account for. This is a clean result and consistent with the good overall fit we saw from the M2 above. There are no items here that would warrant revision or removal on the basis of model fit.
+
+### 2.5 Visualizing Results
+
+`mirt` produces a clean set of diagnostic plots with a single `plot()` call, using the `type` argument to specify what to display. Each of the four plot types below answers a different question about your scale.
+
+To get these plots, you need to install the `latticeExtra` package, which usually comes with `mirt`. However, I had compatibility issues for this package with my version of R, so a work aroun if you have this issue is to install directly from CRAN instead
+
+```{r, eval = F}
+install.packages("latticeExtra", repos = "https://cran.r-project.org")
+```
+
+-   **Trace plots** (`"trace"`): the item response curve for each item. Look for smooth S-shaped curves. Steep curves indicate high discrimination, gradual curves indicate low discrimination. These will give multiple plot outputs depending on how many items you have. You might have to tinker with output settings to get them the size you want.
+
+-   **Item information functions** (`"infotrace"`): item information curves for how much information each item provides across $\theta$. Look for where each item's peak falls along the trait range and how tall the peak is. Tall narrow peaks indicate high discrimination, low flat hills indicate weak items.
+
+-   **Test information and SE**: shows in one combined plot where the test is most precise and where it is not. The region where test information peaks is the region where the standard error of measurement is at its lowest, meaning the test is most accurately estimating $\theta$ for people who fall in that range of the trait.
+
+-   **Marginal reliability** (`"rxx"`): plots how reliability varies across $\theta$ rather than collapsing it to a single number like CTT alpha. Where the curve is high the test is measuring precisely for people at that trait level, and where it drops off the test is losing precision. You want the curve to be highest in the region of $\theta$ that matters most for your population.
+
+The plot code to get each of these is below
+
+```{r item-plots}
+library(latticeExtra)
+plot(fit_2pl, type = "trace")
+plot(fit_2pl, type = "infotrace")
+plot(fit_2pl, type = "infoSE")
+plot(fit_2pl, type = "rxx")
+```
+
+When reviewing these plots, ask: are the item response curves smooth and well-behaved? Does the test information peak in the region of $\theta$ most relevant to the population you care about? Are there items with flat information functions near zero across the full trait range? Those items are candidates for revision or removal. Share your output and we can interpret the results together.
+
+To interpret in order of the output above:
+
+**Trace plots**\
+\> The trace plot confirms what the parameter estimates already suggested. All five curves have climbed well above .50 probability long before reaching $\theta = 0$, meaning the items are too easy for most of this sample and are doing their discriminating work well below the population average. The slopes are also noticeably gradual across all five items, reflecting the low discrimination values we saw earlier. Item 3 comes closest to a centered, textbook S-curve and is the most useful for differentiating people near the population average, while Items 1, 4, and 5 have largely plateaued by $\theta = 0$ and contribute little information for anyone at or above average ability.
+
+**Item information functions** \> Every item's information peak sits well to the left of $\theta = 0$, with Items 1, 4, and 5 peaking between $\theta = -4$ and $\theta = -2$, and Items 2 and 3 peaking closest to the population average. Item 3 has the highest peak at around .20 and is the most informative of the five, while Item 2 contributes the least precision overall. By $\theta = 0$ all five curves have already dropped off substantially, meaning the test delivers very little precision for anyone at or above average ability of the LSAT. A poor match for a sample of test takers who would be expected to cluster at the higher end of the distribution.
+
+**Test information and SE** \> The test information curve peaks around $\theta = -2$ and has dropped to roughly half its peak value by $\theta = 0$, confirming that the test delivers its best precision well below the population average. The standard error curve tells the same story, sitting low near $\theta = -2$ but rising steeply into double digits by $\theta = 4$. For anyone at or above average ability the test is measuring very imprecisely, which is a poor result for a test designed to differentiate among law school applicants who would be expected to cluster at the higher end of the trait distribution.
+
+**Marginal reliability** \> The reliability curve peaks at around .37 near $\theta = -2$, which is modest even at its best and well below what you would want from a scale used to make meaningful distinctions between people. From that peak the curve drops off steadily in both directions, falling below .20 by $\theta = 1$ and approaching zero by $\theta = 4$. This means the LSAT test (from our 5 items) is providing essentially no reliable measurement for legal knowledge ability for anyone in the upper half of the ability distribution.
+
+Now we turn to talking about other models, however, the technical detail will be lighter unless no tools or concepts are introduced.
+
+------------------------------------------------------------------------
+
+## 3. The Graded Response Model (GRM)
+
+### 3.1 From Dichotomous to Polytomous
+
+The **graded response model (GRM)** is an IRT model designed specifically for polytomous items, that is, items with more than two ordered response categories. Everything covered so far has assumed dichotomous items where a response is either correct or incorrect, endorsed or not endorsed. But most psychological scales use Likert-type formats with four, five, or six ordered response options, and a single logistic curve cannot capture the additional complexity of multiple response thresholds. The GRM extends the IRT framework to handle this by modeling each response boundary separately, giving you a richer picture of how people move through the response categories as their trait level increases. Like the dichotomous models, it still produces discrimination and location parameters for each item, and it still places persons and items on the same $\theta$ scale. The key difference is that instead of one location parameter per item, you now get one per response boundary.
+
+To make this more concrete, the issue is that we need to model the items as dichotomous decisions (i.e. endorsed vs not endorsed), but with multiple possible answers, this can't happen. What GRM does as a work around is to separate the multiple groups into many dichtomous decisions.
+
+To extend that bridge, consider that a $K$-category item is equivalent to $K - 1$ cumulative dichotomies. A 5-point item with categories 1 through 5 can be decomposed into four nested comparisons: (category 1) vs. (categories 2-5), (categories 1-2) vs. (categories 3-5), (categories 1-3) vs. (categories 4-5), and (categories 1-4) vs. (category 5). Each is a dichotomous decision: "below this threshold" vs. "at or above this threshold". This allows each one to be modeled with a logistic curve. Conceptually, this is similar to breaking apart multiple categorical predictors ina regression model into multiple dummy coded variables.
+
+**The data: BFI Extraversion.** The GRM examples in this section use the five extraversion items from the Big Five Inventory (which we labeled `bfi_extra`). Each item is rated on a 6-point scale from *very inaccurate* to *very accurate* ($N = 2{,}800$).
+
+### 3.2 Threshold Response Curves
+
+The $K - 1$ cumulative dichotomies curves that the GRC creates are called **threshold response curves (TRC)**. Each of these curves follow a 2PL model-like structure. Mathematically, the probability of responding *above* boundary labeled $v$ for any item $i$ is:
+
+$$
+P^*_{ix}(\theta) = \frac{\exp[\alpha_i(\theta - \beta_{iv})]}{1 + \exp[\alpha_i(\theta - \beta_{iv})]}
+$$
+
+where $\alpha_i$ is the item's slope (shared across all boundaries) and $\beta_{iv}$ is the location of boundary $v$. The **homogeneous constraint** is the defining feature of the GRM. This means that all TRCs for a given item share the same slope. Only the threshold locations differ.
+
+Consider a 5-point anxiety item rated from "never" to "always." The homogeneous constraint says that the item is equally sharp at the boundary between "never" and "sometimes" as it is at the boundary between "often" and "always." What changes across those four boundaries is only the trait level required to cross them. You need to be more anxious to move from "often" to "always" than from "never" to "sometimes." But the steepness of the transition at each boundary (how well it separates people who fall just below versus just above it) is the same throughout. The item has one discrimination value that applies uniformly to all four of its boundaries.
+
+This is a meaningful assumption. It says the item functions consistently across the full range of the response scale rather than being sharper at some boundaries than others.
+
+The threshold parameters must be ordered: $\beta_{i1} < \beta_{i2} < \cdots < \beta_{i,K-1}$. This ordering reflects the cumulative nature of the response process. The threshold $\beta_{iv}$ has a concrete interpretation: it is the value of $\theta$ at which the probability of responding in category $v$ or higher equals .50.
+
+### 3.3 Category Response Curves
+
+For mathematics of the curves, the TRCs give cumulative probabilities. To get the probability of being in a *specific* category, you take the difference between adjacent TRCs:
+
+$$
+P(X = k \mid \theta) = P^*_{i,k-1}(\theta) - P^*_{i,k}(\theta)
+$$
+
+with boundary conditions $P^*(0) = 1$ and $P^*(K) = 0$. These are the **category response curves (CRCs)**.
+
+The shape of CRCs is diagnostic and tells you something meaningful about how your scale is working.
+
+The lowest category has a monotonically decreasing CRC, meaning only people with very low anxiety choose it. On a 5-point anxiety scale, the "never" response is selected almost exclusively by people near the bottom of the trait, but as anxiety increases, the probability of choosing "never" drops steadily toward zero and never comes back up.
+
+The highest category works in the opposite direction: "always" has a monotonically increasing CRC, becoming more likely only as anxiety climbs toward the high end of the trait.
+
+All the middle categories (e.g., "rarely," "sometimes," and "often") produce unimodal, bell-shaped CRCs that each peak at a different region of the trait range. A person with low-moderate anxiety is most likely to say "rarely." A person with moderate anxiety is most likely to say "sometimes." A person with high anxiety is most likely to say "often." Each middle category has its moment of dominance at a different point along the anxiety continuum, which is exactly what you want from a well-functioning polytomous item. Widely spaced thresholds produce well-separated, narrow bells for each category, meaning the scale is making four genuinely distinct discriminations.
+
+Closely spaced thresholds produce overlapping, flat CRCs. In practical terms this means the response categories are not doing distinct work. If you have a 5-point anxiety item but three of the four thresholds are clustered within half a standard deviation of each other, respondents are essentially making one real decision, not four. The middle categories become nearly interchangeable, and the scale is functioning more like a 2-point item than a 5-point one.
+
+Hopefully, this will become clearer with a visual example. If you want ot make curves for individual items rather than all at once, you can use `itemplot()` from `mirt` and specify your model, the item (in order of the data), and the type of plot you want (in this case, the CRC is under `"trace"`).
+
+```{r}
+# fitting the GRM for this example
+GRM_fit <- mirt(bfi_extra, 1, itemtype = "graded", verbose = FALSE)
+itemplot(GRM_fit, item = 2, type = "trace")
+```
+
+The shape of this CRC is diagnostic and tells you something meaningful about how the extraversion scale is working. The "P" curves are the probabilities for each item (E1 = E6).
+
+The lowest category in the E2 item, we can see that the dark blue P1 curve ("very inaccurate") starts at a probability of 1.0 on the far left and drops steeply toward zero as extraversion increases. A person who is very introverted is almost certain to select "very inaccurate" for an item like "I enjoy being around people." As extraversion increases even slightly, that probability collapses quickly.
+
+The highest category works in the opposite direction. The yellow P6 curve ("very accurate") sits near zero across most of the trait range and only climbs steeply toward 1.0 at the high end. Only genuinely extraverted people regularly select the top category.
+
+The four middle categories P2 through P5 each produce bell-shaped CRCs bunched together in the center of the plot, with each one peaking at a slightly higher level of extraversion than the one before it. P2 peaks around $\theta = -2$, P3 around $\theta = -1$, P4 around $\theta = 0$, and P5 around $\theta = 1$. However, notice that none of the middle categories ever climbs very high in probability. P2 peaks at around .40 and the others are similar or lower. This is normal and expected. The middle categories are always competing with their neighbors, so no single middle option ever dominates the response space the way P1 and P6 do at the extremes. What matters is that the peaks are ordered correctly from left to right and spread across meaningfully different regions of the trait. The ordering is there, which is good. The modest peak heights reflect the reality that for personality items, people genuinely hover between adjacent middle options rather than committing clearly to one.
+
+Intuitively, this tells us that most respondents who take this extraversion scale are genuinely uncertain between adjacent middle options. Someone moderately extraverted is not confidently picking category 3 or 4, they are hovering between them. The item is still doing useful measurement work because those competing middle categories are at least pulling people in different directions depending on their trait level, but the boundaries between them are softer than the clean separation you see at the extremes.
+
+Another thing to notice is also how sharply separated the curves are for E2 compared to what you would see for a weakly discriminating item. The bells are relatively narrow and clearly distinct from each other. A poorly functioning item would show wide, flat, heavily overlapping bells where no single middle category ever clearly dominates, meaning the scale is not making meaningful distinctions between adjacent response options.
+
+With simulated (fake) data, we can see two cases with a "good" GRC on the left and a problematic CRC on the right.
+
+```{r, echo = F}
+# Simulate CRCs for a high discrimination item (like E2, alpha = 2.2)
+# versus a low discrimination item (alpha = 0.6) with the same thresholds
+
+theta_seq <- seq(-6, 6, length.out = 500)
+betas     <- c(-1.7, -0.9, -0.2, 0.2, 1.1)  # approximate E2 thresholds
+
+# Function to compute GRM category probabilities
+grm_probs <- function(alpha, betas, theta) {
+  K     <- length(betas) + 1
+  cumps <- cbind(1, sapply(betas, function(b) {
+    exp(alpha * (theta - b)) / (1 + exp(alpha * (theta - b)))
+  }), 0)
+  catps <- t(apply(cumps, 1, diff)) * -1
+  catps <- cbind(1 - cumps[, 2], catps[, -1], cumps[, ncol(cumps) - 1])
+  # cleaner: just take adjacent differences of cumulative probs
+  probs <- matrix(NA, nrow = length(theta), ncol = K)
+  cum   <- cbind(rep(1, length(theta)),
+                 sapply(betas, function(b)
+                   exp(alpha*(theta-b))/(1+exp(alpha*(theta-b)))),
+                 rep(0, length(theta)))
+  for (k in 1:K) probs[, k] <- cum[, k] - cum[, k + 1]
+  probs
+}
+
+make_crc_df <- function(alpha, betas, theta_seq, label) {
+  probs <- grm_probs(alpha, betas, theta_seq)
+  do.call(rbind, lapply(1:ncol(probs), function(k) {
+    data.frame(theta    = theta_seq,
+               prob     = probs[, k],
+               category = paste0("P", k),
+               item     = label)
+  }))
+}
+
+high_disc <- make_crc_df(2.2, betas, theta_seq, "High discrimination (α = 2.2)")
+low_disc  <- make_crc_df(0.6, betas, theta_seq, "Low discrimination (α = 0.6)")
+crc_both  <- rbind(high_disc, low_disc)
+
+ggplot(crc_both, aes(x = theta, y = prob, color = category)) +
+  geom_line(linewidth = 0.9) +
+  facet_wrap(~ item) +
+  labs(x     = expression(theta),
+       y     = "P(X = k | θ)",
+       title = "CRCs: High vs. Low Discrimination",
+       color = NULL) +
+  theme_minimal() +
+  theme(legend.position = "bottom")
+```
+
+On the right panel, the low discrimination item tells a very different story than our LSAT data. The only curves that behave clearly are P1 and P6 at the extremes. P1 drops gradually from left to right and P6 rises gradually, but even these transitions are far more sluggish than in the high discrimination panel. The four middle categories P2 through P5 are essentially invisible, each peaking at a probability so low they barely register above zero across the entire trait range. No middle category ever has a meaningful moment of dominance anywhere on the scale. In practice this means respondents with very different levels of extraversion all have roughly similar probabilities of selecting any of the middle options, so those categories are contributing almost nothing to measurement. The scale is nominally a 6-point instrument but is functionally behaving like a 2-point one, with the only real discrimination happening between the lowest and highest categories.
+
+Finally, on a different note about CRCs, summing the expected category scores across $\theta$ gives the item response curve (IRC), which plots the expected item score as a function of trait level. Summing IRCs across all items in the scale gives you a single curve called the **test characteristic curve (TCC)**, which shows the expected total score at every level of $\theta$. This is a useful way to see how the whole instrument behaves across the trait continuum and whether the scale as a whole is well matched to your intended population.
+
+### 3.4 Fitting the GRM in R
+
+To fit a graded response model to the extraversion items, the setup is nearly identical to the dichotomous models from Section 2, with only adding a new `itemtype = "graded"` to the function. This tells `mirt()` to fit a graded response model. Then, the `coef()` call with `IRTpars = TRUE` now returns a slope column `a` as before, but instead of a single `b` location column you now get multiple threshold columns, one for each response boundary. Since the BFI items use a 6-point scale, you will see `b1` through `b5`, representing the five cumulative boundaries between adjacent response categories. The `apply()` call at the end computes the column means across all five items, giving you the average slope and average threshold location at each boundary, which is a quick way to characterize the scale as a whole before looking at individual items.
+
+```{r grm-fit}
+# Reverse-score E1 and E2 before fitting (both are reverse-keyed) in the original data
+# so we correct them (aka, we make it so high in E1 and E2 mean high in extraversion)
+bfi_extra$E1 <- 7 - bfi_extra$E1
+bfi_extra$E2 <- 7 - bfi_extra$E2
+
+# Fit the GRM
+GRM_fit <- mirt(bfi_extra, 1, itemtype = "graded", verbose = FALSE)
+
+# IRT-parameterized: a = slope, b1-b5 = threshold locations
+coef(GRM_fit, IRTpars = TRUE, simplify = TRUE)$items
+
+# Column means across items
+apply(coef(GRM_fit, IRTpars = TRUE, simplify = TRUE)$items, 2, mean)
+```
+
+Each row in the output is one of the five extraversion items. The `a` column is the discrimination parameter, shared across all response boundaries for that item (due to the assumption of homogeneity). The `b1` through `b5` columns are the five threshold location parameters, one for each of the five boundaries between adjacent response categories on the 6-point scale.
+
+Notice that within each row the threshold values increase from left to right, meaning you need to be progressively higher in extraversion to cross each successive boundary. This ordering is a requirement of the GRM and if it were violated it would signal a problem with the scale. For example, we would not want a person who is high in extraversion to be more likely to select "never" on an item like "I enjoy being around people" than someone with moderate extraversion. If `b2` were larger than `b3`, it would mean the cumulative probability of responding in category 3 or higher drops as extraversion increases, which makes no psychological sense for an item measuring extraversion in the intended direction.
+
+The `apply()` output at the bottom gives the column means across all five items. The average slope is 1.647, and the average thresholds run from -2.39 at `b1` to 1.23 at `b5`, showing that on average the response boundaries are spread across roughly 3.6 units of the $\theta$ scale.
+
+### 3.5 Interpreting GRM Parameters
+
+Each item has one slope in the `a` column and five threshold parameters `b1` through `b5`. Looking at the slopes, they range from 1.18 (E5) to 2.20 (E2), with the average sitting at 1.65. E2 is the most discriminating item, meaning it draws the sharpest line between people at each of its thresholds, while E5 is the weakest, with a more gradual response curve across the trait range.
+
+The thresholds tell you where on the extraversion continuum each response boundary falls. For E3 for example, `b1` is -2.62, meaning a person needs to be about 2.6 standard deviations below the population average in extraversion before they are more likely to stay in category 1 than move any higher category. At the other end, `b5` is 1.83, meaning a person needs to be nearly 2 standard deviations above average before they are more likely to select the top category than any lower one. That is a wide spread, which is a good sign. This means the item is making meaningful discriminations across a broad range of the trait.
+
+If the thresholds were not performing well, you might see something like E5 with all five thresholds clustered between $\theta = -1$ and $\theta = 0$. In that case, someone who is even slightly below average in extraversion would have essentially the same probability of selecting "never" as someone who is well below average, and someone slightly above average would have nearly the same probability of selecting "always" as someone who is extremely extraverted. The item would be making five nominal distinctions but really only one meaningful discrimination, and everything outside that narrow band of the trait would be measured with very little precision. In general, we want the space for each item to be spaced apart. Because if the thresholds are too close, that means the items categories aren't really that distinct from one anotehr.
+
+The column means give you a quick summary of where the scale as a whole is doing its measurement work. The average `b1` of -2.39 means the typical first boundary sits well below the population average, so most people will clear that threshold easily. The average `b5` of 1.23 means the typical top boundary sits moderately above average, so only genuinely extraverted people regularly select the highest category. The 3.6 unit spread between those two averages tells you the response boundaries are distributed across a meaningful range of the trait rather than all clustered together.
+
+There is also an important relationship between slope and threshold spacing worth noting. Higher slopes compress the apparent spacing between thresholds on the $\theta$ scale because $\beta_{iv} = -\gamma_{iv} / \alpha_i$. This means E2, with the highest slope of 2.20, will show more tightly clustered thresholds than E3 or E5 even if their underlying intercepts were similar. The thresholds are not independent of the slope, so when comparing threshold spread across items you should keep the steepness of the slope in mind.
+
+### 3.6 GRM Model and Item Fit
+
+For polytomous IRT models with a small number of items, the standard M2 statistic cannot be computed because there are too few degrees of freedom. (The number of response pattern parameters being estimated leaves no room for the test statistic). This is a technical limitation of the M2 approach for model fit with small scales rather than a problem with the model itself.
+
+```{r, eval = F}
+M2(GRM_fit)
+```
+
+Note that `M2()` fails here with a degrees of freedom error. This is not a problem with the model. It is a limitation of the M2 statistic when the number of response categories is large relative to the number of items. Each 6-point item requires substantially more parameters than a dichotomous item, leaving too few residual degrees of freedom for the M2 calculation.
+
+In short, if you have many options per item but not many items themselves, you probably can't get a M2 dit statistic. The recommended solution in `mirt` is the C2 statistic, a hybrid version of M2 designed specifically for this situation.
+
+```{r grm-fit-indices}
+# M2 fails with small polytomous scales -- use C2 instead
+M2(GRM_fit, type = "C2")
+
+# Item-level fit
+itemfit(GRM_fit)
+```
+
+The C2 results present a mixed picture. The overall fit statistics look reasonable on the SRMSR of .041, which is well below the .05 threshold. The RMSEA of .076 is slightly above the conventional .05 cutoff, with the lower bound of the 90% confidence interval at .062, suggesting mild but not severe misfit. The CFI of .981 and TLI of .963 are both above .95. The M2 p-value is significant, but with a sample of 2,800 this isn't unexpected as the statistic is sensitive enough at large sample sizes to give false positives. So the RMSEA and SRMSR are probably more informative here.
+
+The item-level fit tells a more cautionary story. All five items show significant S-X2 p-values, ranging from .010 to .023, suggesting that each individual item has some response patterns the GRM is not fully capturing. However, the item-level RMSEAs are all very small, ranging from .012 to .013, meaning the practical magnitude of misfit is negligible even though the statistical tests are flagging it. This is again likely due to the large sample size. The item-level RMSEAs are all well below the .06 threshold and essentially identical across items, which is reassuring. No single item stands out as a serious problem.
+
+The overall conclusion is that the GRM fits the extraversion data adequately in a practical sense. The mild RMSEA elevation and significant item-level S-X2 values are worth noting but should not be over-interpreted given the large sample size. The scale is most likely performing well enough to proceed with interpretation and use.
+
+### 3.7 Item Information in Polytomous Models
+
+One advantage of polytomous items over dichotomous ones is that they carry more total information and spread it more broadly across the trait range. A 6-point item is making five distinct cumulative discriminations rather than one, so its information function tends to be broader and taller than what you would see from a single dichtomous item. Unlike the sharp single peak you saw in the dichotomous item information plots, GRM information functions often show a wider, flatter curve with multiple local bump because the item is contributing information at every point where a cumulative boundary falls.
+
+The following curves follow what was done before besides the addition of the test characteristic curve (TCC), which, if you recall is found by summing all item response curves across all items in the scale.
+
+```{r grm-info}
+plot(GRM_fit, type = "trace")      # CRCs for each item
+plot(GRM_fit, type = "infotrace")  # item information per item
+plot(GRM_fit, type = "infoSE")     # test information and SE
+plot(GRM_fit, type = "rxx")        # marginal reliability across theta
+plot(GRM_fit, type = "score")      # Test Characteristic Curve (TCC)
+```
+
+**Category response curves** \> The CRC plot shows what you want to see from a well-functioning polytomous scale. Each of the six response categories has its moment of dominance at a different region of the trait, fanning out from left to right in the expected order. P1 dominates at the far left and P6 at the far right, with the four middle categories each peaking at progressively higher levels of extraversion. E2 shows the most sharply separated CRCs consistent with its high discrimination of 2.20, while E5 shows more overlap between adjacent categories consistent with its weaker slope of 1.18.
+
+**Item information functions** \> E2 has the highest and narrowest information peak, consistent with its discrimination of 2.20, doing sharp precise measurement concentrated around $\theta = -1$ to $\theta = 0$. E5 has the flattest and lowest curve, consistent with its slope of 1.18, providing modest precision spread thinly across the trait. Notably, all five information curves are broader and flatter than the dichotomous LSAT items. This is the polytomous advantage, each item contributing information across multiple regions of the trait rather than spiking sharply at a single point.
+
+**Test information and SE** \> The information curve peaks around $\theta = -1$ to $\theta = 0$ and remains broad, staying above 2.0 across roughly 4 units of $\theta$. This is considerably better coverage than the LSAT showed, where information dropped off sharply above $\theta = 0$. The standard error stays low across most of the trait range and only starts climbing steeply beyond $\theta = 2$, meaning the scale measures well for most of the population but loses precision for people at the very high end of extraversion.
+
+**Marginal reliability** \> The reliability curve peaks at around .82 between $\theta = -2$ and $\theta = 1$, providing strong consistent measurement across the range where most of a general population sample would sit. Compare this to the LSAT reliability plot which barely reached .37 at its peak. The five polytomous extraversion items are delivering more than twice the reliability of five dichotomous items, which is a concrete illustration of the measurement advantage of polytomous response formats. The curve drops off sharply past $\theta = 3$, meaning the scale loses precision for extremely extraverted people, but for the vast majority of respondents the scale is measuring well.
+
+**Test Characteristic Curve (TCC)** \> The TCC shows the expected total score across the extraversion continuum for this five-item scale. At the far left, even the most introverted people have an expected total score of around 5, which makes sense since the minimum possible score on five 6-point items is 5. So introverts were selecting "1" for every item. The curve rises in an S-shape through the middle of the trait range, with the steepest climb happening between $\theta = -2$ and $\theta = 2$, exactly where the test information was highest. By $\theta = 3$ the curve has largely plateaued near 30, approaching the maximum possible score of 30, the maximum score of our items as possible. This is the shape you want. Total scores increase steadily and predictably as extraversion increases, with no flat regions in the middle where people with genuinely different trait levels would receive the same expected score.
+
+------------------------------------------------------------------------
+
+## 4. The Nominal Response Model (NRM)
+
+### 4.1 The NRM Equation
+
+The graded response model assumes that the response categories have a known, fixed ordering. This is reasonable for Likert-format items where categories are explicitly ordered by intensity. But what if you are not confident the categories are being used in their intended order? Or what if the categories are genuinely unordered, as in multiple-choice items where wrong answers might carry information?
+
+The **nominal resposne model (NRM)** handles these cases. It is the most general and least constrained of the common polytomous IRT models. Rather than assuming a fixed ordering, the NRM estimates a separate slope and intercept for every response category, letting the data tell you whether the categories are actually functioning in the order you intended. This is the key difference from the graded response model: instead of one shared slope per item and ordered thresholds, the NRM gives every category its own slope parameter, and the ordering of those slopes is what tells you whether the response categories are functioning as intended.
+
+Every response category gets its own slope ($\alpha_{ix}$) and its own intercept ($c_{ix}$). Mathematically, the probabiltiy function looks like
+
+$$
+P_{ix}(\theta) = \frac{\exp(\alpha_{ix}\theta + c_{ix})}{\sum_{x=0}^{K_i - 1} \exp(\alpha_{ix}\theta + c_{ix})}
+$$
+
+The probability of each category is its exponential weight divided by the sum of all exponential weights. To give the parameters a fixed solution (i.e. identified), either the slopes and intercepts are constrained to sum to zero across categories, or the parameters for the lowest category are fixed to zero, which is what `mirt` does by default (hence why `ak0 = 0` and `d0 = 0` appear in the output). Conceptually, this is similar to using a "reference" group in muticategorical regression.
+
+The category with the most positive $\alpha_{ix}$ will have a monotonically increasing category response curve (CRC), meaning people with higher $\theta$ increasingly prefer that category. The category with the most lower $\alpha_{ix}$ will have a monotonically decreasing CRC. If the slope ordering matches the intended category ordering, the data are consistent with ordered categories.
+
+To make this concrete, consider a multiple choice test item with four answer options: one correct answer and three distractors. The NRM does not assume any ordering among the options, since there isn't a natural ordering. So, it estimates a slope for each response If the model is working correctly, the correct answer should have the most positive slope because higher ability students increasingly select it as their abilities rise. The three distractor options should have lower slopes, reflecting that higher ability students are less likely to choose them. However, the distractors do not all have to behave the same way. One distractor might have a moderately positive slope, meaning it attracts students at a particular ability level who are partially informed but making a specific systematic error (think of a response that is *almost* correct but not quite). Another distractor might be chosen almost randomly across all ability levels, producing a near-zero slope (think of a response that is obviously wrong to anyone who has studied the material at all, so the only people who would select it are just purely guessing). The NRM captures these differences explicitly. Understanding which wrong answers attract which students at which ability levels is genuinely useful information for item revision.
+
+The NRM also provides a unique advantage when working with ordinal variables that have a natural intended order. With the GRM you have to assume the categories are correctly ordered before fitting the model. The NRM makes no such assumption. It estimates slopes freely for every category and then lets you check whether the ordering actually holds in the data. If the scoring coefficients increase monotonically from the lowest to the highest category, you have empirical support for treating the scale as ordered. If the ordering is violated somewhere in the middle, that is a signal that respondents are not treating those categories as meaningfully distinct, and the scale may benefit from collapsing or rewording those options. In this sense the NRM is both a measurement model and a diagnostic tool for checking whether your response format is working as intended.
+
+For example, imagine a 4-point anxiety scale with response options "never," "sometimes," "often," and "always." You designed the scale assuming respondents would use these categories in that order, with higher anxiety predicting higher category selection. The GRM would simply accept that assumption and estimate parameters accordingly. The NRM would instead estimate a slope for each category and let you check. If the slopes increase from "never" to "always" in the expected order, you have empirical confirmation that respondents are actually using the scale as intended. But if "often" and "always" have nearly identical slopes, that tells you respondents are not meaningfully distinguishing between those two options, perhaps because both feel like extreme responses to people with moderate anxiety.
+
+**The data: Science.** The NRM examples use the `Science` dataset from the `mirt` package, containing 392 respondents' answers to items measuring attitudes toward science and technology, drawn from the 1992 Euro-Barometer Survey (Karlheinz & Melich, 1992)^3^. We will work with four of the items, each rated on a 4-point scale with response categories "strongly disagree," "disagree to some extent," "agree to some extent," and "strongly agree". The items are
+
+-   **Comfort**: "Science and technology are making our lives healthier, easier and more comfortable."
+-   **Work**: "The application of science and new technology will make work more interesting."
+-   **Future**: "Thanks to science and technology, there will be more opportunities for the future generations."
+-   **Benefit**: "The benefits of science are greater than any harmful effect it may have."
+
+All four items are positively worded, meaning higher agreement is intended to reflect a more favorable attitude toward science and technology. The NRM will let us verify whether respondents are actually using the four response categories in that intended order.
+
+### 4.2 Transformed Parameters: CBD and Category Intersection
+
+The raw NRM slopes (`ak` values in the output below) are on an arbitrary scale that is difficult to interpret directly. Two derived quantities are more useful.
+
+The **category boundary discrimination (CBD)** for boundary $j$ is the difference between adjacent slopes:
+
+$$\text{CBD}_j = \alpha_{i,j} - \alpha_{i,j-1}$$
+
+Think of this as the NRM equivalent of the graded response model's shared slope parameter. A positive CBD means the model is discriminating in the intended direction at that boundary: higher trait levels are associated with choosing the higher category. If all CBDs are positive and increasing, the categories are functioning in their intended order. A negative CBD would be a red flag, suggesting that a higher response category is actually being selected by people lower on the trait, which would mean the category ordering is not working as intended. (Keep in mind, "ordering" for a multiple choice question is the degree of responses you'd imagine answers would get per the individual's proficiency).
+
+The **category intersection** $\delta_j$ is the value of $\theta$ at which adjacent CRCs cross:
+
+$$\delta_j = \frac{c_{i,j-1} - c_{i,j}}{\alpha_{i,j} - \alpha_{i,j-1}}$$
+
+This is the point on the $\theta$ scale where the model transitions from predicting one category to the next. Well-ordered intersections that span the trait range from low to high confirm that all categories are being used meaningfully at different trait levels.
+
+### 4.3 Fitting the NRM in R
+
+The NRM is fitted with `itemtype = "nominal"` in `mirt`. The coefficient output looks different from what you have seen before because each response category now has its own parameters rather than sharing a slope.
+
+```{r}
+NRM_fit <- mirt(Science, 1, itemtype = "nominal", verbose = FALSE)
+coef(NRM_fit, simplify = TRUE)$items
+```
+
+The output has two sets of columns. The `ak` columns (`ak0` through `ak3`) are the scoring coefficients for each response category, where `ak0` is fixed to 0 for identification. The `d` columns (`d0` through `d3`) are the intercepts for each category, where `d0` is also fixed to 0. The `a1` column on the far left is the overall item slope. The key thing to look at is whether the `ak` values increase monotonically from `ak0` to `ak3`: if they do, the response categories are functioning in the intended order
+
+### 4.4 Interpreting NRM Parameter Output
+
+Looking at the `ak` scoring coefficients, all four items show values that increase from `ak0 = 0` to `ak3 = 3` in the expected direction, confirming that the four response categories are functioning in their intended order for all items (since there's 4 response categories the ak will range from 0 to 3). Future has the highest overall slope (`a1 = 2.04`), making it the most discriminating item, while Benefit has the lowest (`a1 = 0.78`), meaning it is doing the least work to separate people at different trait levels. The `ak` values for Future (0, 0.76, 1.86, 3) are more spread out than those for Work (0, 0.69, 1.50, 3), suggesting Future is making more distinct discriminations between adjacent categories.
+
+In contrast, imagine an item with `ak` coefficients of (0, 2.8, 2.9, 3). The jump from `ak0` to `ak1` is enormous, meaning categories 1 and 2 are doing almost all of the discriminating work, and the remaining three categories are virtually identical in their scoring weights. In practice this means the item is functioning more like a 2-point scale than a 4-point one.
+
+The `d` columns (`d0` through `d3`) are the category intercepts, with `d0` fixed to 0 as the reference anchor. The intercepts work together with the `ak` scoring coefficients to determine where on the $\theta$ scale each category boundary falls. A large positive `d` value for a category means that category is relatively easy to endorse, so even people near the population average have a reasonable chance of selecting it. Looking at the output, Future and Comfort both show large `d1` and `d2` values (around 3.6 and 5.9 respectively), suggesting the lower and middle response categories are being endorsed fairly readily by most respondents, with the steeper discrimination happening as people move toward the higher categories. Work shows a notably low `d3` of 0.33 compared to the other items, meaning the top response category is considerably harder to endorse for `Work` than for the other items, which is consistent with its weaker overall slope and flatter CRCs.
+
+### 4.5 Model and Item Fit
+
+The NRM estimates considerably more parameters than the GRM because every response category has its own slope and intercept rather than sharing a slope across boundaries. This means neither the M2 nor the C2 statistic has sufficient degrees of freedom to be computed for this model with four items. This is a known limitation of limited-information fit statistics with highly parameterized polytomous models and small item sets. It is not a reflection of the model's quality or correctness. In this situation item-level fit via `itemfit()` is the most practical option available.
+
+```{r nrm-fit}
+itemfit(NRM_fit)
+```
+
+All four items show good item-level fit. S-X2 p-values range from .191 to .394, all non-significant, and item-level RMSEAs range from .011 to .031, all well below the .06 threshold. There are no items here that would warrant model revision on the basis of fit alone.
+
+### 4.6 NRM Curves
+
+The appropriate plots for the NRM can be found with the same functions as before. However, there is one additional plot worth bringing up, which is
+
+```{r nrm-curves}
+# Category response curves for each item
+plot(NRM_fit, type = "trace")
+
+# Item information functions
+plot(NRM_fit, type = "infotrace")
+
+# Test information and SE
+plot(NRM_fit, type = "infoSE")
+
+# Marginal reliability
+plot(NRM_fit, type = "rxx")
+```
+
+**Category response curves** \> The CRC plot shows clearly ordered categories for all four items, with P1 dominating at the low end and P4 dominating at the high end. Future and Comfort show the sharpest, most distinct category separations, consistent with their higher slopes. Work and Benefit show more overlap between adjacent categories, reflecting their weaker discrimination. Notably, all four items show the P3 category being quite narrow and rarely dominant. It has a brief peak in the middle of the transition zone but is quickly overtaken by P4 as $\theta$ increases, suggesting that the third response category may not be pulling as much distinct weight as the others.
+
+**Item information functions** \> Future stands out clearly as the most informative item, with a tall double-peaked information curve reaching above 1.5 between $\theta = -3$ and $\theta = 0$. The double peak is common in NRM information functions as they reflect the multiple category boundaries that each contribute their own local information spike. Comfort shows a similar but lower double peak. Work and Benefit are considerably flatter and lower, confirming their weaker discrimination. The bumpy shape of these curves is normal for the NRM and contrasts with the smoother GRM information functions you saw earlier.
+
+**Test information and SE** \> The test information curve is notably bumpy, with two local peaks around $\theta = -2$ and $\theta = 1$, reflecting the aggregation of multiple category-level information spikes across items. This is likely related to the double-peaked information of Future. Despite the irregular shape, the curve stays above 2.0 across a reasonably broad range from about $\theta = -3$ to $\theta = 2$, meaning the scale provides decent precision across most of the trait range. The standard error stays low and flat in that same region before climbing steeply beyond $\theta = 3$.
+
+**Marginal reliability** \> The reliability curve mirrors the bumpy test information curve, plateauing around .65 to .70 across the middle of the trait range from $\theta = -3$ to $\theta = 1$ before dropping off sharply at the high end. This is lower than the extraversion GRM scale, which reached .82, and reflects both the smaller number of items in the Future dataset and the weaker discrimination of Work and Benefit. Still, reliability in the .65 to .70 range across a broad middle section of the trait is respectable for a four-item scale.
+
+Now that we've covered the most basic unidimensional IRT models, we will move on to a few spurious advanced topics.
+
+------------------------------------------------------------------------
+
+## 5. Computerized Adaptive Testing (CAT)
+
+### 5.1 Why CAT?
+
+Fixed-length tests are inefficient by design. A 40-item depression scale administered to everyone will include many items that are essentially uninformative for any given respondent. For someone with very high depression, easy items — those with low location parameters — offer almost no information: the probability of endorsement is near 1.0 regardless of exactly where on the $\theta$ scale they sit. For someone with low depression, the hard items are equally useless. Both types of items get administered anyway because the test is fixed-length and the same for everyone.
+
+Computerized adaptive testing (CAT) eliminates this waste. Rather than administering the same items to all examinees, a CAT selects, in real time, the item from the available bank that provides the most information about the examinee's current estimated trait level. As more responses accumulate and the estimate sharpens, the algorithm homes in on a narrower region of the trait continuum, selecting items targeted to that region.
+
+CAT rests entirely on IRT's person-invariance property: a person's $\theta$ does not depend on which particular items are used to estimate it. If the trait estimate were test-dependent, as it is in CTT, there would be no principled way to compare scores from adaptive tests that administered different items.
+
+### 5.2 The CAT Algorithm
+
+The basic CAT algorithm loops through five steps until a stopping criterion is met:
+
+1.  **Initialize.** Assume $\hat{\theta} = 0$ and administer the item of median difficulty from the bank. Alternatives include starting at a specific prior $\hat{\theta}$ or randomly sampling from moderate-difficulty items to prevent overexposure of the same starting item.
+2.  **Score the item.** Record the response.
+3.  **Estimate** $\theta$. Update $\hat{\theta}$ using the accumulated response pattern.
+4.  **Select the next item.** Choose the item from the remaining bank that provides the most information at the current $\hat{\theta}$, or that most reduces posterior SE under a Bayesian criterion.
+5.  **Check the termination criterion.** If satisfied, stop and report $\hat{\theta}$. If not, administer the selected item and loop.
+
+An important practical concern is **content constraints**. Pure maximum-information item selection tends to fixate on a small set of highly discriminating items, leading to overexposure and tests that feel narrow. Operational CATs impose constraints: no more than one item per content domain, no item administered more than some fraction of the time, etc.
+
+### 5.3 Theta Estimation in CAT
+
+Three estimation methods are used in practice:
+
+**Maximum likelihood (ML):** Returns the $\theta$ that maximizes the likelihood of the observed response pattern. Unbiased, but undefined until at least one correct and one incorrect response has been observed — the likelihood function is monotone otherwise. ML requires EAP or MAP as a fallback at the start.
+
+**Expected a posteriori (EAP):** Uses a prior distribution on $\theta$ (typically $N(0, 1)$) and returns the mean of the posterior. Biased — it shrinks estimates toward the prior mean — but more efficient than ML (smaller SE for the same number of items) and always defined. EAP is the most common choice in operational CAT.
+
+**Maximum a posteriori (MAP):** Also Bayesian, returns the posterior mode rather than the mean. Less commonly used than EAP.
+
+### 5.4 Item Selection and Termination
+
+Under ML estimation, item selection at each step is simple: choose the item from the unused bank with the highest Fisher information at the current $\hat{\theta}$. Under Bayesian estimation, choose the item that most reduces posterior standard error.
+
+For termination, two approaches are common. **Fixed-length** administers a predetermined number of items and stops — simple and administratively predictable, but it does not equalize precision across examinees. The **SE threshold** approach continues until $SE(\hat{\theta}) <$ some criterion, equalizing precision but producing variable test length. In practice the SE criterion often cannot be met even after the full bank is exhausted, particularly for examinees at the extremes of the trait distribution.
+
+### 5.5 A Worked Example: Likelihood Updating
+
+To make the algorithm concrete, consider a 9-item bank where all slopes are $\alpha = 1.7$ and locations are evenly spaced from $-2.0$ to $+2.0$ in steps of 0.5. An examinee begins at item 5 ($\beta = 0.0$) and produces the response pattern 1, 1, 0, 1 across items 5, 6, 7, and 8.
+
+```{r cat-likelihood}
+theta_grid <- seq(-4, 4, length.out = 500)
+alpha_val  <- 1.7
+betas      <- c(0.0, 0.5, 1.0, 1.5)
+responses  <- c(1,   1,   0,   1)
+
+# Log-likelihood contribution of each item
+log_lik_mat <- sapply(seq_along(betas), function(j) {
+  p <- exp(alpha_val * (theta_grid - betas[j])) /
+       (1 + exp(alpha_val * (theta_grid - betas[j])))
+  if (responses[j] == 1) log(p) else log(1 - p)
+})
+
+# Cumulative normalized likelihood after each item
+cum_lik <- do.call(rbind, lapply(1:4, function(j) {
+  cl <- exp(rowSums(log_lik_mat[, 1:j, drop = FALSE]))
+  cl <- cl / max(cl)
+  data.frame(
+    theta = theta_grid,
+    lik   = cl,
+    stage = paste0("After Item ", j + 4,
+                   " (β=", betas[j], ", X=", responses[j], ")")
+  )
+}))
+
+ggplot(cum_lik, aes(x = theta, y = lik)) +
+  geom_line(color = "steelblue", linewidth = 1) +
+  facet_wrap(~ stage, ncol = 2) +
+  labs(x = expression(theta), y = "Normalized Likelihood",
+       title = "Likelihood Updating Across CAT Items") +
+  theme_minimal()
+```
+
+After item 5 (correct), the likelihood is a broad curve shifted right of center — weak evidence that the examinee is above average. After item 6 (also correct), the likelihood sharpens and shifts further right. After item 7 (incorrect), the likelihood is pulled back left and narrows, now indicating the examinee is above average but not by much. After item 8 (correct), the likelihood narrows further and the ML estimate settles near $\hat{\theta} \approx 1.2$. With each item, the curve both *moves* (updating the estimate) and *narrows* (reducing uncertainty).
+
+### 5.6 CAT Efficiency: Applied Examples
+
+The efficiency gains from CAT are well documented. In aptitude testing, CAT typically achieves the same precision as a full fixed-length test using about 50% of the items. Results in personality and clinical research vary by instrument design.
+
+The **Absorption scale** (34 dichotomous items) produced a fixed-length CAT of 17 items — exactly 50% savings — with a correlation of .97 between full-scale $\theta$ and CAT $\hat{\theta}$.
+
+The **Clinical Decision CAT** illustrates a different design goal: determine whether a patient's $\hat{\theta}$ falls above or below a clinical cut-point ($\theta = 2.0$), stopping when the 90% CI for $\hat{\theta}$ excludes that cut-point. In a simulation of $N = 1{,}000$ examinees, 85.1% required only 7 items out of 34, and classification was perfect — zero misclassifications.
+
+The **NEO PI-R Anxiety (N1) facet** (8 items, 5-point GRM) reached a correlation of .93-.95 with full-scale $\theta$ after just 3-4 items. Item 3 (slope $= 2.06$, the highest-discriminating item) was administered first to virtually all examinees, as it provided the most information near $\theta = 0$.
+
+### 5.7 Limits of CAT in Personality and Health Research
+
+CAT is not a universal solution. Several features of personality and clinical measurement limit its applicability relative to achievement testing.
+
+**Finite item pools.** Aptitude constructs have essentially unlimited potential items — any new math problem or reading passage is a candidate. Personality and psychopathology constructs do not. There are only so many non-redundant ways to ask about social anxiety or depression, and item banks tend to be small.
+
+**Polytomous items reduce the efficiency advantage.** A well-designed polytomous item already spreads information across multiple regions of the trait continuum via its multiple thresholds. There may be less inefficiency for the CAT algorithm to eliminate — in well-designed polytomous scales, there is simply nothing for the algorithm to adapt to.
+
+**Construct narrowness.** High item discriminations in personality research often reflect highly similar item content. A bank of nearly identically worded items will produce high $\alpha$ values, but those items are largely redundant. CAT selects for high information, which can mean administering conceptually repetitive items — statistically satisfying but potentially transparent or frustrating for respondents.
+
+------------------------------------------------------------------------
+
+## 6. Differential Item Functioning (DIF)
+
+### 6.1 Measurement Invariance and Its Violations
+
+For any psychological measure to support valid group comparisons, test scores must mean the same thing across groups. If a depression scale produces higher scores in women than in men, we want to be confident that the difference reflects a real difference in depression, not a difference in how the items function. This is the principle of measurement invariance.
+
+In IRT terms, measurement invariance holds when an item has the same item characteristic curve for all groups. Given the same $\theta$, members of all groups should have the same probability of endorsement. When this condition fails — when an item is systematically easier or harder for one group at the same trait level — the item exhibits **differential item functioning (DIF)**. DIF can bias total scores and distort group mean comparisons in ways that are invisible to CTT reliability analyses.
+
+Measurement invariance can also be assessed at the scale level by comparing test response curves across groups. A test with no DIF should produce identical test response curves in all groups.
+
+### 6.2 Uniform vs. Non-Uniform DIF
+
+DIF comes in two varieties, defined by the pattern of group differences across the trait continuum.
+
+**Uniform DIF** occurs when item slopes are the same across groups but location parameters differ. One group needs to be at a systematically higher or lower trait level to achieve the same probability of endorsement. On the ICC plot, the two group curves are parallel — same shape, same steepness — but horizontally offset. The group disadvantage is constant across all values of $\theta$.
+
+**Non-uniform DIF** occurs when item slopes differ across groups. The ICC curves have different steepnesses and will cross somewhere along the $\theta$ axis. The direction of the group difference reverses: one group may be advantaged at low $\theta$ and disadvantaged at high $\theta$, or vice versa. Non-uniform DIF is more complex to interpret and requires that slope differences are substantively meaningful, not just sampling noise.
+
+### 6.3 Detecting DIF: Logistic Regression
+
+The logistic regression approach (Swaminathan & Rogers, 1990) uses the total raw score $X$ as a proxy for $\theta$ and detects both types of DIF through a single model:
+
+$$Z = b_0 + b_1(X) + b_2(G) + b_3(XG)$$
+
+where $G$ codes group membership (0 = reference, 1 = focal) and $XG$ is the interaction. The parameters are interpreted as follows. $b_1$ captures the association between total score and item endorsement (ability matching). $b_2$ is the group mean difference on the item after controlling for ability — the uniform DIF coefficient. $b_3$ is the difference in slopes between groups — the non-uniform DIF coefficient.
+
+```{r dif-logreg}
+# Logistic regression DIF detection using the LSAT.
+# We use a simulated grouping variable for illustration only.
+set.seed(42)
+group       <- sample(0:1, nrow(LSAT), replace = TRUE)
+total_score <- rowSums(LSAT)
+item_resp   <- LSAT[, 1]
+
+dif_full    <- glm(item_resp ~ total_score + group + total_score:group,
+                   family = binomial)
+dif_uniform <- glm(item_resp ~ total_score + group,
+                   family = binomial)
+dif_null    <- glm(item_resp ~ total_score,
+                   family = binomial)
+
+# Test for uniform DIF (b2): does adding group improve fit?
+anova(dif_null, dif_uniform, test = "LRT")
+
+# Test for non-uniform DIF (b3): does the interaction improve fit?
+anova(dif_uniform, dif_full, test = "LRT")
+
+summary(dif_full)
+```
+
+Significance of the group term ($b_2$) indicates uniform DIF; significance of the interaction ($b_3$) indicates non-uniform DIF. In practice, you run this for every item in the scale and apply a correction for multiple testing (Bonferroni or false discovery rate).
+
+### 6.4 Detecting DIF: IRT Likelihood Ratio Approach
+
+The IRT-based approach is more principled because it uses $\theta$ rather than the raw score as the ability control. The key challenge is that you cannot simply calibrate parameters separately in each group and compare them — if groups have different mean $\theta$ values, the parameters will be on different scales and direct comparison is invalid.
+
+The solution is **iterative linking** with anchor items. The procedure identifies items believed to be free of DIF and uses them to establish a common scale across groups. The focal item is then freed to have different parameters in each group, and a likelihood ratio test determines whether the freed parameters improve fit.
+
+In the **model comparison approach**: the constrained model estimates all items with the same parameters in both groups (equivalent to single-group estimation). The unconstrained model frees the slope and location of one focal item while all other items serve as anchors. The $-2$ log-likelihood difference follows a $\chi^2$ distribution with degrees of freedom equal to the number of freed parameters (2 for the 2PL). A significant result indicates DIF.
+
+```{r dif-irt}
+# IRT-based DIF using mirt's multipleGroup() function.
+group_factor <- factor(group)
+
+# Constrained baseline: all parameters equal across groups
+# fit_constrained <- multipleGroup(
+#   LSAT, 1, group = group_factor,
+#   invariance = c("slopes", "intercepts", "free_means", "free_var")
+# )
+
+# Free item 1: estimate its slope and intercept separately per group
+# fit_free_item1 <- multipleGroup(
+#   LSAT, 1, group = group_factor,
+#   invariance = names(LSAT)[-1]   # anchor all items except item 1
+# )
+
+# Likelihood ratio test
+# anova(fit_constrained, fit_free_item1)
+```
+
+A practical complication is that you need to identify DIF-free anchor items before you start. In practice, you often begin by assuming all items are anchors, identify those showing significant DIF, remove them from the anchor set, and repeat until convergence — this is iterative purification.
+
+### 6.5 DIF and Multidimensionality
+
+There is a deeper connection between DIF and multidimensionality worth understanding. IRT assumes unidimensionality but is routinely applied to scales that are merely "unidimensional enough" — scales with a strong common factor but also detectable secondary dimensions. The central irony is that differential group mean differences on those secondary dimensions are often the primary cause of DIF.
+
+The MPQ Stress Reaction Scale illustrates this clearly. The scale has 23 items covering a broad stress reaction construct, but factor analysis reveals five correlated content subdimensions: tends to worry; nervous and tense; sensitive and vulnerable; easily upset and irritable; often feels guilty; unaccountable mood changes. IRT calibration shows a strong common dimension — all items load substantially on the first factor. When gender DIF is assessed, a systematic pattern emerges: items on the "sensitive and vulnerable" facet show negative DIF differences (women endorse more than men at the same $\theta$), while items on "nervous and tense" show positive DIF differences. These effects track the facet structure almost perfectly — they are not random item-level biases.
+
+The interpretation is not that the items are biased in a problematic sense. Rather, the scale measures a broad stress reaction construct with genuine gender-differentiated facets. Men and women at the same level of overall stress differ in which *manifestations* of that stress they experience. Uniform DIF is the statistical fingerprint of that substantive phenomenon. Treating it as pure bias would be a mistake; understanding its source in the construct structure is the right response.
+
+This example illustrates a general principle: **understanding DIF requires understanding construct structure**. Before concluding that DIF signals a biased item, ask whether the group difference on that item is consistent with a theoretically meaningful facet of the construct that genuinely differs between groups.
+
+------------------------------------------------------------------------
+
+## Discussion Questions
+
+1.  You fit a 2PL to a 10-item anxiety scale and find that the Q3 statistic between items 4 and 7 is .38, well above the .20 threshold. What does this mean in plain terms, and what would you investigate first to understand why?
+
+2.  After fitting the GRM to a polytomous anxiety measure, you find that for several items the threshold parameters $\beta_3$ and $\beta_4$ are very close together — within 0.1 $\theta$ units. What does this tell you about how respondents are using the scale, and what would you consider doing?
+
+3.  You fit an NRM to a 10-item measure and find that for Item 6 the scoring coefficients across four categories are 0, 0.3, 0.2, and 1.9. The first three categories have nearly identical weights. What are the substantive implications of this pattern, and what would you do with this item?
+
+4.  You are designing an item bank for a CAT intended to screen for clinical depression. Should you prefer items with high $\alpha$ and high $\beta$ (hard, highly discriminating items) or items with moderate $\alpha$ spread across a wide range of $\beta$ values? What does your answer depend on, and what would you need to know about the intended testing population to decide?
+
+5.  A measurement researcher finds large uniform DIF on several items favoring White students on a standardized achievement test. One colleague argues the items are biased and should be removed. Another argues the differences might reflect true group differences in the construct. How would you adjudicate this disagreement? What additional analyses or information would help you decide?
+
+6.  A researcher runs a logistic regression DIF analysis across all 20 items of a depression scale comparing men and women. Using $p < .05$ as the criterion, they flag 3 items as showing significant uniform DIF. A reviewer says this finding is probably spurious. Why might the reviewer be right, and what should the researcher have done instead?
