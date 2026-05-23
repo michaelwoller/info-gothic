@@ -1,8 +1,9 @@
 ---
-title: "Success Must Fail
+title: "Success Must Fail"
 date: "2026-05-13"
 description: "Old ideas of what it means to be successful must change for the good of all of us"
 author: "Michael Woller"
+draft: true
 categories: [goth, analysis]
 ---
 
