@@ -9,11 +9,13 @@ Examples of things SPSS can do that R cannot:
 -   In between-subjects designs, R functions like `anova()` give wrong results when you have unequal group sizes (which is very common).
 -   In within-subject designs, functions such as `manova()` rely on assumptions such as homskedasticity and sphericity, which are often violated in real data.
 
-Software such as SPSS or SAS provide better solutions. It's possible to do these ANOVAs in R, but it will require fine grain math and coding skills from the researchers.
+Software such as SPSS or SAS provide better solutions. It's possible to do these ANOVAs in R, but it will require fine grain math and coding skills from the researchers. Supposedly, in the future the professor who taught this course will be forced to switch to R, so maybe I can ask them for their material so I can redo some of this.
 
 The caveat of using SPSS is that I can't run SPSS code natively in Quarto, which is how I am constructing this website. So all lessons will give you the syntax, but output will be done via screenshots as best as I can. But due to this limitation, the quality of the lesson material might ebb and flow depending on the topic.
 
-## Introduction to SPSS and ANOVA
+The SPSS data sets can be found on this [Google Link](https://drive.google.com/file/d/1PVQ5JurltWVhdv_w0Jv-HNHtXf46MnAw/view?usp=sharing).
+
+## Introduction to SPSS and One-Way ANOVA
 
 [Open Tutorial](anova-lessons/SPSS-ANOVA-Intro.html)
 
@@ -30,5 +32,41 @@ Open Tutorial
 ------------------------------------------------------------------------
 
 ## Trend Analysis: Linear and Nonlineary Trajectories
+
+Open Tutorial
+
+------------------------------------------------------------------------
+
+## Two-Way Between-Subjects ANOVA
+
+Open Tutorial
+
+------------------------------------------------------------------------
+
+## Higher Order Between-Subjects ANOVA
+
+Open Tutorial
+
+------------------------------------------------------------------------
+
+## One-Way Within-Subejcts ANOVA: Univariate and Multivariate Method
+
+Open Tutorial
+
+------------------------------------------------------------------------
+
+## Two-Way Within-Subejcts ANOVA
+
+Open Tutorial
+
+------------------------------------------------------------------------
+
+## Split-Plot ANOVA
+
+Open Tutorial
+
+------------------------------------------------------------------------
+
+## ANCOVA
 
 Open Tutorial

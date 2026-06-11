@@ -12,6 +12,8 @@ For anyone who wishes to dig deeper or is interested in pursuing psychological r
 
 I started doing a lot of these as R Shiny apps, only to learn that shinyapps.io caps free accounts to only 5 apps. So I only the first five lessons are interactable. But that's ok, the static lessons are just as good :\^)
 
+Data for static exercises if you wish to follow along can be found in [this Google Driv](https://drive.google.com/file/d/1Gi1KEj_apgRHjE7ze8SPDYIWOSZGgw7R/view?usp=sharing)e link.
+
 ## Introduction to R and Simple Linear Regression
 
 A beginner tutorial covering the basics of R objects and functions and how to do simple linear regression. This lesson will cover important functions and interpretations we will use throughout the course.

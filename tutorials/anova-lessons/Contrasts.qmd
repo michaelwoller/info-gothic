@@ -9,7 +9,6 @@ execute:
   echo: false
   warning: false
   message: false
-standalone: true
 ---
 
 ## Introduction
