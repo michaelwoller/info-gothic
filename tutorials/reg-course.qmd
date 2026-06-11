@@ -10,7 +10,7 @@ By going through these lessons, you should be equipped enough to deal with a lot
 
 For anyone who wishes to dig deeper or is interested in pursuing psychological research as a career and wants to know what are the higher stats courses needed, I would recommend pursuing learning material in the fields of: multilevel modeling, factor analysis, structural equation modeling, item response theory, longitudinal modeling.
 
-I started doing a lot of these as R Shiny apps, only to learn that shinyapps.io caps free accounts to only 5 apps. So I only the first five lessons are interactable. But that's ok, the static lessons are just as good :\^)
+I started doing a lot of these as R Shiny apps, only to learn that shinyapps.io caps free accounts to only 5 apps. So, only the first five lessons are interactable. But that's ok, the static lessons are just as good :\^)
 
 Data for static exercises if you wish to follow along can be found in [this Google Driv](https://drive.google.com/file/d/1Gi1KEj_apgRHjE7ze8SPDYIWOSZGgw7R/view?usp=sharing)e link.
 
