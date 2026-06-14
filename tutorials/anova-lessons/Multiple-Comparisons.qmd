@@ -29,16 +29,18 @@ We will continue with the hypertension dataset from the previous lesson: four tr
 
 ### Why Running Many Tests Is Dangerous
 
-When you reject the null hypothesis at $\alpha = .05$, you are accepting a 5% chance that you are wrong — that the effect you found is a false positive, also called a **Type I error**. That 5% risk is manageable for a single test.
-
-The problem arises when you run many tests at once. Each individual test has its own 5% chance of a false positive, and these chances accumulate. With enough tests, it becomes nearly inevitable that at least one of your results will be a false positive, even if nothing is truly significant.
+When you reject the null hypothesis at the level $\alpha = .05$, you are accepting a 5% chance that you are wrong and that the effect you found is a false positive. This is called a **Type I error**. That 5% is arbitrary, but it is generally the recommended manageable risk for a single test for psychology. In clinical settings, you might use $\alpha = .01$ instead, but we will use .05 going forward.
 
 We distinguish two kinds of error rates:
 
 -   **Per-comparison error rate** ($\alpha_{PC}$): the false positive rate for a single test, the one you set directly (e.g., .05).
 -   **Experimentwise error rate** ($\alpha_{EW}$): the probability of making *at least one* Type I error across the entire set of tests you are running.
 
-For a set of orthogonal contrasts, the experimentwise error rate is:
+The former is what you set directly by choosing your significance threshold before running a test. The latter is what researchers need to worry about as they publish their studies: it is the real probability that your study produced at least one false positive result.
+
+A practical way to think about it is that $\alpha_{PC}$ is the concern of a researcher evaluating a single isolated test, while $\alpha_{EW}$ is the concern of a psychologist writing up a results section and asking whether their pattern of significant findings can be trusted. If you ran one contrast and it was significant, $\alpha_{PC}$ is what matters. If you ran six contrasts and three of them were significant, $\alpha_{EW}$ is what should haunt you.
+
+For a set of contrasts, the experimentwise error rate is:
 
 $$\alpha_{EW} = 1 - (1 - \alpha_{PC})^C$$
 
@@ -46,31 +48,45 @@ where $C$ is the number of comparisons being made. With just 3 comparisons at $\
 
 $$\alpha_{EW} = 1 - (1 - .05)^3 = 1 - (.95)^3 \approx .143$$
 
-So your real Type I error rate is already 14%, not 5%. With 10 comparisons it climbs to about 40%. You are no longer doing science at $\alpha = .05$ — you are just conducting a lottery.
+So, if you did 3 tests, your real Type I error rate is actually 14%, not 5%. With 10 comparisons it climbs to about 40%. You are no longer doing science at $\alpha = .05$. You are just conducting a lottery and hoping you get lucky.
+
+Luckily, there are ways to help mitigate this issue that researchers need to be aware of. Unfortunately, most people don't do this, since they either A) don't know about these things or B) don't want to lose their "significant" results (i.e., they don't want to admit they might have had false findings).
+
+It's a bit disheartening the ammount of researchers who don't even consider experimentwise error rates, but you, reader, can be the change we need!
 
 ### Planned vs. Post Hoc Comparisons
 
-An important distinction for choosing how to control Type I error is whether your comparisons were **planned** or **post hoc**.
+An important distinction for choosing how to control Type I error is whether your mean comparisons were **planned** or **post hoc**.
 
 A **planned contrast** is one you decided to test *before* looking at the data, based on your theoretical hypotheses. You committed to it in advance.
 
-A **post hoc contrast** is one you decided to test *after* examining the data — for example, after noticing that two particular group means look far apart.
+A **post hoc contrast** is one you decided to test *after* examining the data. For example, after noticing that two particular group means look far apart.
 
-This distinction matters more than it might seem. Suppose you run a four-group study and after seeing the results you decide to test the largest-looking mean difference. It feels like you are only running one test. But in reality, you implicitly scanned all possible pairwise differences before choosing that one. The comparison that "caught your eye" is almost by definition the most extreme one in the data, which means it is also the one most likely to be a false positive. You did not really run one test — you ran all of them mentally and selected the winner.
+This distinction matters more than it might seem. Suppose you run a four-group study and after seeing the results you decide to test the largest-looking mean difference. It feels like you are only running one test. But in reality, you implicitly scanned all possible pairwise differences before choosing that one. The comparison that "caught your eye" is almost by definition the most extreme one in the data, which means it is also the one most likely to be a false positive. You did not really run one test. You ran all of them mentally and selected the winner.
 
-This means that the number of comparisons you must account for is not just the ones you formally tested, but the entire family of comparisons that your selection process implicitly considered.
+This is called data-driven science and is generally frowned upon within psychology. This type of behavior has heavily contributed to replication issues, since researchers are just looking for *any* significance rather than actually doing hypothesis testing from theoretical decisions.
+
+To account for these issues of post hoc testing, the number of comparisons you must account for is not just the ones you formally tested, but the entire family of comparisons that your selection process implicitly considered.
 
 ------------------------------------------------------------------------
 
-## 2. Which Correction to Use?
+## 2. How to Correct for Experimentwise Error?
 
-There is no single universal correction for Type I error inflation. The right choice depends on two things: (1) whether your comparisons were planned or post hoc, and (2) whether your comparisons are pairwise only, or include complex comparisons.
+The solution to Type I error inflation is to apply a multiple comparison procedure, which is a method that adjusts how you evaluate significance when running more than one test. These procedures make sure your experimentwise error rate stays at .05 rather than ballooning beyond it. The general idea behind all of these methods is the same: make each individual test harder to pass, so that the cumulative probability of any false positive across all tests stays controlled.
 
-The decision tree below summarizes the recommendations:
+For instance, instead of requiring p \< .05 to declare a contrast significant, you might require p \< .017 if you are running three tests. Each individual hurdle is higher, but the payoff is that your overall false positive risk across all three tests stays at .05.
 
-![Decision tree for choosing a multiple comparison procedure](images/mcp-decision-tree.png){fig-align="center" width="600"}
+There is no single universal correction, and each one differs in the situations they are designed for. The right choice depends on two things:
+
+1)  Whether your comparisons were planned before data collection or chosen post hoc after examining the results.
+
+2)  Whether your comparisons are pairwise only (one group compared to another group), or include complex comparisons that involve averages of multiple groups.
 
 The three most common procedures are **Bonferroni**, **Tukey**, and **Scheffé**. We will cover each in turn, using the hypertension dataset to illustrate.
+
+Before we go into detail, a handy decision tree below summarizes the recommendations depending on your scenario (Note, "CV" stands for critical value, which we will get into).
+
+![Decision tree for choosing a multiple comparison procedure](images/mcp-decision-tree.png){fig-align="center" width="600"}
 
 ------------------------------------------------------------------------
 
@@ -82,11 +98,19 @@ Bonferroni is the simplest approach. If you are running $C$ tests and want your 
 
 $$\alpha_{Bonferroni} = \frac{\alpha_{EW}}{C} = \frac{.05}{C}$$
 
-Each individual comparison must then have $p < \alpha_{Bonferroni}$ to be declared significant. For example, if you plan 3 comparisons:
+Each individual comparison must then have $p < \alpha_{Bonferroni}$ to be declared significant. Think of your total allowable false positive risk as a budget. You only have five cents to spend across all your tests. Bonferroni simply splits that budget evenly, giving each test an equal share. The more tests you run, the smaller each share gets, and the harder each individual test becomes to pass.
+
+For example, if you plan 3 comparisons:
 
 $$\alpha_{Bonferroni} = \frac{.05}{3} = .0167$$
 
-This is conservative — by making each individual test harder to reject, the probability of *any* of them being a false positive is held at or below .05. It is a blunt instrument but it always works, as long as you can specify $C$ in advance.
+In this case, the budget for individual tests was $\alpha_{Bonferroni}=.0167$ each for your allowance of $\alpha_{EW}=.05$.
+
+This value of .0167 is conservative, meaning it is harder to reject individual tests.
+
+> Terminology note on testing: "Conservative" means tests are harder to reject. "Liberal" means tests are easier to reject. One is not better than the other inherently. It depends the context. With concern to Type I error, however, the more conservative your test, the least likely you are to make a false positive. However, this comes with a trade off in statistical power. So the more conservative your test is, the harder it is to reject. That means it is harder to make a false positive, but as a result, it also is harder to make a *correct* positive. Often times, when choosing your methods and anlyese, you will have to decide where on this trade off you want to be. But more on this later.
+
+Bonferroni is a blunt instrument for correction, but it always works, as long as you can specify $C$ in advance. Because of this, it is the most universally applied correction as it can be applied in any scenario. It just depends on what you set $C$ as.
 
 ### Setting C
 
@@ -96,21 +120,23 @@ Deciding what $C$ should be is where researchers sometimes go wrong. The rule is
 -   If you want to test all pairwise comparisons (or if your original plan was all pairwise but you ended up testing fewer), $C$ must be set to $\frac{a(a-1)}{2}$, where $a$ is the number of groups.
 -   If you intended to test a subset of pairwise comparisons but then tested additional ones after seeing the data, again $C = \frac{a(a-1)}{2}$.
 
-The key principle: if you let the data influence which comparisons you run, your $C$ expands to cover all comparisons that could have been selected.
+The key principle: if you let the data influence which comparisons you run, your $C$ needs to expand to cover all comparisons that could have been selected. This controls for the "eyeballing it" scenario.
+
+For an example, let's say after running an ANOVA for a variable with 5 groups, you want to test a pairwise comparison. This means you would have seen the results and the sizes of the means, so it is appropriate to control for all possible pairwise comparisons. That means you set $C$ as
+
+$$C =\frac{5(5-1)}{2}=\frac{20}{2}=10$$
+
+Therefore, your Bonferroni corrected alpha level is $\alpha_{Bonferroni}=.05/10=.005$. This means for any of the pairwise comparisons you make as a contrast for this ANOVA, the p values must be less than .005 to be considered significant.
 
 ### The Test Statistic and Critical Value
 
-The F statistic and confidence interval formulas for Bonferroni contrasts are identical to those from the Contrasts lesson — nothing changes there. What changes is the **critical value** you compare your F statistic to. Under the Bonferroni correction with equal variances:
+The F statistic and confidence interval formulas for Bonferroni contrasts are identical to those from the Contrasts lesson, nothing changes there. You can look those up if you want to. What does change is the **critical value** of your significance test. Under the Bonferroni correction with equal variances:
 
 $$CV = F_{\alpha/C;\; 1,\; df_{error}}$$
 
-The confidence interval formula is:
+This is more or less the same as what you would use for any contrast, except instead of just using $\alpha = .05$, you use whatever $\alpha/C$ comes out to be.
 
-$$\hat{\psi} \pm CV \sqrt{MS_W \sum_{j=1}^{a} \left(\frac{c_j^2}{n_j}\right)}$$
-
-where $CV = \sqrt{F_{\alpha/C;\; 1,\; df_{error}}}$.
-
-When variances are unequal, the same CV applies but the F statistic and CI use group-specific variances $s_j^2$ in place of the pooled $MS_W$, with adjusted degrees of freedom (the Welch-style correction from the Contrasts lesson).
+This new critical values redefines the confidence intervals as well. So as a result, the confidence intervals for Bonferroni corrected tests become wider.
 
 ### Advantage and Limitation
 
@@ -118,39 +144,58 @@ The main advantage of Bonferroni is its simplicity and flexibility — it works 
 
 The limitation is power. As $C$ grows, each individual threshold becomes more and more stringent, making it harder to detect real effects. For a small number of planned comparisons, Bonferroni is excellent. For a large number, or for post hoc complex comparisons where $C$ is theoretically infinite, it breaks down.
 
+### SPSS
+
+There is no official way to do Bonferroni in SPSS. ALl you need to do is look at your p value in the output, and compare that to what your $\alpha_{Bonefrroni} = \alpha/C$ level. However, if you want corrected confidence intervals, you **need** to manually set your confidence level
+
+There's different ways to do this in SPSS, however, I highly recommend using MANOVA because it gives you full control and scope over everything it is doing.
+
+``` text
+MANOVA pressure BY treat (1 4) 
+/print=cellinfo(means)
+/error=within
+/cinterval =individual(.9833) /* add this line to specific confidence levels
+/contrast(treat) = special (1    1     1     1
+                            1    1     1    -3
+                            .5   .5   -.5  -.5
+                            1   -1     0     0) 
+/design = treat(1) treat(2) treat(3).
+```
+
+The `/cinterval` line is where you specify the new Bonferroni confidence level. This level is simple equal to $1-(\alpha/c)$, so in our example with 3 contrast comparisons, it is $1−(.05/3)=1-.0166=.9833$. It is important to remember to put this in your syntax before you estimate the model or else you will get the wrong confidence intervals, and thus might be giving the wrong results.
+
+The output for this would look like
+
+
+![Contrasts Output with Bonferroni Corrections](images/bci.png){fig-align="center" width="600"}
+This piece of the output contains each of the contrasts I specified for treatment above. This isn't the best example, but we can see that the p values are greater than $\alpha/c = .0166$, thus none are significant after controlling for experimentwise error rate. The confidence intervals are also adjusted appropriately, as you can see in the top ".9833 confidence intervals". 
+
+This goes to show how simple and easy Bonferroni corrections are to use, and why more people should be using them. However, Bonferroni corrections are not always the most optimal corrections to use. Depending on the scenario, other techniques will be much better at controlling for experimentwise error rates. And while Bonferroni acts as a good "this is better than nothing" method, if you really care about getting your error rates as optimal, we will cover two over methods.
+
 ------------------------------------------------------------------------
 
 ## 4. Tukey's HSD
 
 ### The Logic
 
-Tukey's Honestly Significant Difference (HSD) procedure is designed specifically for **all pairwise comparisons**. Rather than dividing alpha by $C$, Tukey uses a different statistical distribution — the **studentized range distribution** — to set a single critical value that simultaneously controls the familywise error rate across all $\frac{a(a-1)}{2}$ pairwise comparisons.
+Tukey's Honestly Significant Difference (HSD) procedure is designed specifically for **pairwise comparisons**. Rather than dividing alpha by $C$, Tukey uses a different statistical distribution called the **studentized range distribution**. This method sets a single critical value that simultaneously controls the familywise error rate across *all* $\frac{a(a-1)}{2}$ pairwise comparisons.
 
-The core intuition is this: if you are going to run all pairwise comparisons, the most dangerous one — the one most likely to be a false positive — is the comparison between the largest and smallest group means. Tukey asks: how large can the range between the maximum and minimum group means get just by chance, assuming all population means are actually equal? It uses the sampling distribution of this worst-case difference to set a threshold, then applies that same threshold to all pairwise comparisons.
+The core intuition is this: if you are going to run all pairwise comparisons, the most dangerous one (i.e. the one most likely to be a false positive) is the comparison between the largest and smallest group means. Tukey asks: how large can the range between the maximum and minimum group means get just by chance, assuming all population means are actually equal? It uses the sampling distribution of this "worst-case scenario" difference to set a threshold, then applies that same threshold to all pairwise comparisons.
 
-Formally, Tukey computes a $q$ statistic for a pairwise comparison between groups $g$ and $h$:
+  Rather than using a $F$ or $t$ statistic, Tukey computes a "$q$ statistic" for a pairwise comparison between the lowest mean group $g$ and highest mean group $h$. I'll skip the function, but the bottom line is that this $q$ statistic operates similarly to a $t$ statistic in that it compares two means, but it accounts for the fact that you are selecting the most extreme pair from a family of comparisons, and it uses $MS_{within}$ as its error term. This makes the test more conservative than a plain $t$ test, and thus better at controlling for experimentwise error rates.
 
-$$q = \frac{\bar{Y}_g - \bar{Y}_h}{\sqrt{MS_W / n}}$$
+From the studentized range distribution of the $q$ statistic, you can ge tthe critical $q_{CV}$ value, which can be converted to a critical $F$ value:
 
-The maximum $q$ across all pairs, $q_{max}$, follows the **studentized range distribution** with parameters $a$ (number of groups) and $df_{error}$. From that distribution you find the critical value $q_{CV}$, which can be converted to a critical F value:
+$$F_{1,df_{error}} = \frac{q_{CV}^2}{2}.$$
+This fact will become important in the next subsection, but this F statistic is also used to compute a confidence interval for the mean-to-mean contrast comparisons.
 
-$$F_{CV} = \frac{q_{CV}^2}{2}$$
-
-### Test Equations
-
-Assuming equal variances, the Tukey F statistic for the pairwise comparison between groups $g$ and $h$ is:
-
-$$F_\psi = \frac{n_g n_h (\bar{Y}_g - \bar{Y}_h)^2}{(n_g + n_h) MS_W}$$
-
-and the confidence interval is:
-
-$$(\bar{Y}_g - \bar{Y}_h) \pm \frac{q_{CV}}{\sqrt{2}} \sqrt{MS_W \left(\frac{1}{n_g} + \frac{1}{n_h}\right)}$$
-
-The critical value $q_{CV}$ is looked up from a studentized range table using the number of groups $a$ and $df_{error}$. Note that **Tukey requires equal variances** — if that assumption is violated, Tukey is not appropriate.
+The takeaway is that this method gives you a more efficient method of testing mean-to-mean comparisons with the least amount of risk of committing a Type I error. What I mean by "efficient" is that it is able to find the optimal balance between being too conservative (low Type I error, low power) and too liberal (high Type I error, high power). When in doubt, you can always take the path with least amount of risk and do the most conservative test, but for researchers who want to increase the chances of finding an effect to the utmost degree, Tukey can be beneficial.
 
 ### Tukey vs. Bonferroni for Pairwise Comparisons
 
-When you plan to test *all* pairwise comparisons, both Tukey and Bonferroni (with $C = \frac{a(a-1)}{2}$) control the familywise error rate at .05. However, Tukey is more powerful in this situation, because its critical value is optimized for the structure of pairwise comparisons while Bonferroni is a general-purpose correction. The advantage grows as the number of groups increases:
+When you plan to test *all* pairwise comparisons, both Tukey and Bonferroni control the familywise error rate at .05. 
+
+However, Tukey is more powerful in this situation, because its critical value is optimized for the structure of pairwise comparisons while Bonferroni is a general-purpose correction. You can see this by looking at the relative increases of their critical values as the nuber of groups and maximum pairwise comparisons increase:
 
 | Groups | Comparisons | Tukey CV | Bonferroni CV |
 |--------|-------------|----------|---------------|
@@ -160,15 +205,28 @@ When you plan to test *all* pairwise comparisons, both Tukey and Bonferroni (wit
 | 5      | 10          | 10.16    | 11.76         |
 | 6      | 15          | 11.28    | 13.32         |
 
-(Critical F values shown for $df_{error} = 12$, $\alpha = .05$.)
+As the table shows, Tukey's critical value stays lower than Bonferroni's as more groups are added, meaning it is easier to reject the null with Tukey. Thus, you are able to control for inflated Type I error rates *while* keeping your tests as powerful as possible.
 
-As the table shows, Tukey's critical value stays lower than Bonferroni's as more groups are added, meaning it is easier to reject the null with Tukey. When the number of pairwise comparisons is small (e.g., just 2 groups), they are equivalent.
+However, when the number of pairwise comparisons is small (e.g., just 2 groups), they are equivalent. Therefore, the **rule of thumb** is that when all pairwise comparisons are of interest, Tukey is preferred over Bonferroni.
 
-**Rule of thumb:** when all pairwise comparisons are of interest, Tukey is preferred over Bonferroni.
+### SPSS
 
-### An Important Limitation
+Tukey cannot be run through MANOVA in SPSS. It must be done through the `ONEWAY` procedure. This means that for more complex designs (within-subjects, split-plot, etc. that we will do in the future), Tukey is generally not available unless you are willing to compute it by hand.
 
-Tukey cannot be run through MANOVA in SPSS. It must be done through the `ONEWAY` procedure. This means that for more complex designs (within-subjects, split-plot, etc.), Tukey is generally not available unless you are willing to compute it by hand.
+To get this, you should run code like this 
+
+``` text
+ONEWAY pressure BY treat
+/statistics descriptives
+/posthoc=tukey.
+```
+
+In the `/posthoc=` line, just put `tukey`. The output should give you a Tukey test for every single pariwise comaprison 
+
+![All Pairwise Comparisons with Tukey Corrected Significance Tests](images/Tukey.png){fig-align="center" width="600"}
+This output gives all possible pairwise mean comparisons in the treatment groups and does a Tukey QSD test for each. You can see in the left most column one group that is compared to a group in the second column. For example, the first row is the Drug Therapy group compared to the Biofeedback group. In this set up, there are some redundancies as each pairwise comparison will show up twice (the Drug Therapy vs Biofeedback comparison shows up again in fourth row for example). The significance column gives the p value based on the Tukey test, which you compare to .05, and the confidence intervals are already adjusted for the Tukey test.
+
+Again, this isn't the best example data set, but as we can see none of the pairwise comparisons are significant after controlling for experimentwise error rates using the Tukey test. 
 
 ------------------------------------------------------------------------
 
@@ -340,7 +398,7 @@ Any contrast F statistic must exceed 9.72 to be declared significant.
 The choice of correction method comes down to your research context:
 
 | Situation | Recommended Procedure |
-|------------------------|------------------------------------------------|
+|--------------------------|----------------------------------------------|
 | Small set of planned contrasts (pairwise or complex) | Bonferroni |
 | All pairwise comparisons planned or post hoc | Tukey |
 | Post hoc complex comparisons | Scheffé |

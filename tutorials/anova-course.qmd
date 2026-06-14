@@ -19,7 +19,7 @@ The SPSS data sets can be found on this [Google Link](https://drive.google.com/f
 
 [Open Tutorial](anova-lessons/SPSS-ANOVA-Intro.html)
 
-## Contrast Testing
+##  Contrast Testing
 
 [Open Tutorial](anova-lessons/Contrasts.html)
 

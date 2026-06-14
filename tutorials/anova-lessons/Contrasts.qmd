@@ -72,7 +72,10 @@ $$ \Psi_1 = 91.4 - 93 = -1.6 $$
 
 So the testing value for this contrast is $\Psi = -1.6$ (note, which order you subtract the means does not matter for the significance test, the only difference it will make will be the signs of the ends of the confidence intervals).
 
-I'll spare you the formulas, but in the end, this value will give us an F statistic and a p value, so we can see if this mean difference is significant or not. If it *is* significant, this could be *a* source of the significant omnibus ANOVA test, however there could be contrasts that are significant.
+I'll spare you the formulas, but in the end, this value will give us an F statistic and a p value, so we can see if this mean difference is significant or not. If it *is* significant, this could be *a* source of the significant omnibus ANOVA test, however there could be contrasts that are significant. The F statistic for the test follows the form
+
+$$CV = F_{\alpha;~ 1, ~df_{error}}.$$
+where $\alpha$ is your alpha level and $df_{error}$ is your degrees-of-freedom of the error variance.
 
 Unlike with t tests, you can test multiple means at once in any method so long as you can formulate them into a simple equality ($MEAN 1 = MEAN 2$). How this works is that you can test whether the *average* of multiple means differs from other means.
 
