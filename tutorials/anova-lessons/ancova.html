@@ -8,7 +8,7 @@
 
 <meta name="author" content="Michael Woller">
 
-<title>Introduction to SPSS and ANOVA – InfoGothic</title>
+<title>Analysis of Covariance – InfoGothic</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -174,25 +174,21 @@ window.Quarto = {
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction">Introduction</a>
+  <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction">1. Introduction</a></li>
+  <li><a href="#assumptions" id="toc-assumptions" class="nav-link" data-scroll-target="#assumptions">2. Assumptions</a></li>
+  <li><a href="#testing-homogeneity-of-regression-slopes" id="toc-testing-homogeneity-of-regression-slopes" class="nav-link" data-scroll-target="#testing-homogeneity-of-regression-slopes">3. Testing Homogeneity of Regression Slopes</a>
   <ul class="collapse">
-  <li><a href="#the-dataset" id="toc-the-dataset" class="nav-link" data-scroll-target="#the-dataset">The Dataset</a></li>
+  <li><a href="#spss-syntax" id="toc-spss-syntax" class="nav-link" data-scroll-target="#spss-syntax">SPSS Syntax</a></li>
+  <li><a href="#output" id="toc-output" class="nav-link" data-scroll-target="#output">Output</a></li>
   </ul></li>
-  <li><a href="#general-spss-notes" id="toc-general-spss-notes" class="nav-link" data-scroll-target="#general-spss-notes">1. General SPSS Notes</a></li>
-  <li><a href="#anova-partitioning-variability" id="toc-anova-partitioning-variability" class="nav-link" data-scroll-target="#anova-partitioning-variability">2. ANOVA: Partitioning Variability</a>
+  <li><a href="#testing-the-teaching-method-effect" id="toc-testing-the-teaching-method-effect" class="nav-link" data-scroll-target="#testing-the-teaching-method-effect">5. Testing the Teaching Method Effect</a>
   <ul class="collapse">
-  <li><a href="#full-and-reduced-models" id="toc-full-and-reduced-models" class="nav-link" data-scroll-target="#full-and-reduced-models">Full and Reduced Models</a></li>
-  <li><a href="#the-f-test" id="toc-the-f-test" class="nav-link" data-scroll-target="#the-f-test">The F Test</a></li>
+  <li><a href="#spss-syntax-1" id="toc-spss-syntax-1" class="nav-link" data-scroll-target="#spss-syntax-1">SPSS Syntax</a></li>
+  <li><a href="#output-1" id="toc-output-1" class="nav-link" data-scroll-target="#output-1">Output</a></li>
   </ul></li>
-  <li><a href="#one-way-anova-with-oneway" id="toc-one-way-anova-with-oneway" class="nav-link" data-scroll-target="#one-way-anova-with-oneway">3. One-Way ANOVA with ONEWAY</a></li>
-  <li><a href="#univariate-anova-with-unianova" id="toc-univariate-anova-with-unianova" class="nav-link" data-scroll-target="#univariate-anova-with-unianova">4. Univariate ANOVA with UNIANOVA</a>
-  <ul class="collapse">
-  <li><a href="#types-of-sums-of-squares" id="toc-types-of-sums-of-squares" class="nav-link" data-scroll-target="#types-of-sums-of-squares">Types of Sums of Squares</a></li>
-  </ul></li>
-  <li><a href="#manova" id="toc-manova" class="nav-link" data-scroll-target="#manova">5. MANOVA</a>
-  <ul class="collapse">
+  <li><a href="#mancova" id="toc-mancova" class="nav-link" data-scroll-target="#mancova">6. MANCOVA</a></li>
+  <li><a href="#conclusion" id="toc-conclusion" class="nav-link" data-scroll-target="#conclusion">7. Conclusion</a></li>
   <li><a href="#discussion-questions" id="toc-discussion-questions" class="nav-link" data-scroll-target="#discussion-questions">Discussion Questions</a></li>
-  </ul></li>
   </ul>
 </nav>
     </div>
@@ -201,7 +197,7 @@ window.Quarto = {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Introduction to SPSS and ANOVA</h1>
+<h1 class="title">Analysis of Covariance</h1>
 </div>
 
 
@@ -224,218 +220,130 @@ window.Quarto = {
 </header>
 
 
-<section id="introduction" class="level2">
-<h2 data-anchor-id="introduction">Introduction</h2>
-<p>In this lesson, there are three primary objectives: (1) to introduce you to running ANOVAs in SPSS using syntax, (2) to look at the similarities between the different procedures one can use in SPSS for conducting ANOVA, and (3) introduce you to contrasts and how to formulate them for hypothesis testing.</p>
-<p>We will test group differences among three groups using three SPSS procedures: one-way ANOVA, univariate ANOVA, and multivariate ANOVA (MANOVA). Note, SPSS can’t be ran natively in Quarto (how I am generating this page), so all results I am copy/pasting from SPSS output.</p>
-<section id="the-dataset" class="level3">
-<h3 data-anchor-id="the-dataset">The Dataset</h3>
-<p>The data we are using is labeled as OneWay.sav. This data comes from a study that tested a phenomenon known as <strong>stereotype threat</strong>. Aronson et al.&nbsp;(1998) describe this phenomenon as when “members of the stereotyped group often feel pressure in situations where their behavior can confirm the negative reputation that their group lacks a valued ability.” One such stereotype is that females are worse at math than males. Females in our study were assigned to take a math test in one of three conditions:</p>
-<ol type="1">
-<li>A control group.</li>
-<li>A condition in which they were “reminded” prior to testing of the belief that males perform better.</li>
-<li>A condition in which they were told to read a report that refutes the stereotype prior to testing.</li>
-</ol>
-<p>Stereotype threat would be evidenced if females performed worse when told that males outperform them. Here are the scores from the three groups:</p>
-<table class="caption-top table">
-<thead>
-<tr class="header">
-<th>Group 1</th>
-<th>Group 2</th>
-<th>Group 3</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>89</td>
-<td>87</td>
-<td>90</td>
-</tr>
-<tr class="even">
-<td>86</td>
-<td>81</td>
-<td>91</td>
-</tr>
-<tr class="odd">
-<td>97</td>
-<td>89</td>
-<td>90</td>
-</tr>
-<tr class="even">
-<td>85</td>
-<td>82</td>
-<td>89</td>
-</tr>
-<tr class="odd">
-<td>90</td>
-<td>83</td>
-<td>88</td>
-</tr>
-<tr class="even">
-<td>91</td>
-<td>83</td>
-<td>91</td>
-</tr>
-<tr class="odd">
-<td>87</td>
-<td>86</td>
-<td>87</td>
-</tr>
-<tr class="even">
-<td>88</td>
-<td>80</td>
-<td>85</td>
-</tr>
-<tr class="odd">
-<td>85</td>
-<td>82</td>
-<td>93</td>
-</tr>
-<tr class="even">
-<td>85</td>
-<td>91</td>
-<td>90</td>
-</tr>
-</tbody>
-</table>
-<hr>
+<section id="introduction" class="level1">
+<h1>1. Introduction</h1>
+<p>Every ANOVA design covered in this series has treated the outcome as a function of one or more categorical factors. But research participants are rarely identical to one another before a study begins. They bring prior knowledge, different levels of ability, and other characteristics that affect the outcome regardless of which group they were assigned to. When that background variation is large, it can drown out the effect you actually care about, making your <span class="math inline">\(F\)</span> test less powerful and your group mean estimates less accurate.</p>
+<p>Analysis of covariance, or ANCOVA, addresses this by incorporating one or more continuous variables alongside the categorical factor. These continuous variables are called <em>covariates</em>. Adding a covariate accomplishes two things at once. First, it absorbs variance in the outcome that would otherwise end up in the error term, shrinking <span class="math inline">\(SS_{Error}\)</span> and producing a more powerful test. This is the same logic behind adding predictors to a regression model: the more of the outcome you can account for, the less unexplained noise remains. Second, it adjusts the group means to reflect what they would have been had all groups started at the same covariate value. This adjustment is especially valuable in non-randomized studies, where groups may have differed on the covariate before the intervention ever took place. This is akin to interpreting a regression slope while controlling for the other predictors in the model.</p>
+<p>In full/reduced model terms, ANCOVA compares a full model that includes both the factor and the covariate against a reduced model that includes only the covariate. The question is whether adding the factor explains a meaningful amount of additional variance in the outcome after the covariate has already been accounted for.</p>
+<p>Throughout this lesson we will work with a fictional study examining whether teaching method affects student performance on a statistics exam. Students were assigned to one of three methods: traditional lecture, active learning, or AI-supported practice. Because students enter the course with different levels of prior knowledge, each student also completed a pretest before instruction began. The pretest score is the covariate, and the posttest score recorded at the end of the course is the outcome. The dataset contains 180 students and is stored in <code>ANCOVA.sav</code>. The relevant variables are <code>teaching_method</code> (1 = traditional lecture, 2 = active learning, 3 = AI-supported practice), <code>pretest_score</code>, and <code>posttest_score</code>. The central research question is: after controlling for pretest performance, do students in the three teaching methods differ in posttest performance? Note that this data is mostly made up, so do not think the resuls of the tests we will conduct is indicative of the research question in practice.</p>
 </section>
+<section id="assumptions" class="level1">
+<h1>2. Assumptions</h1>
+<p>ANCOVA inherits the usual ANOVA assumptions: independence of observations, normality of residuals, and homogeneity of error variance across groups. However, it also adds two of its own.</p>
+<p>The first is <strong>linearity</strong>: the relationship between the covariate and the outcome must be linear within each group. If the covariate and outcome are related in a curved or non-monotonic way, the standard ANCOVA adjustment will be wrong. In the teaching method study, linearity means that as pretest scores increase, posttest scores should increase at a roughly constant rate within each group. A violation would look something like this: students with very low pretest scores perform poorly on the posttest, students with moderate pretest scores improve substantially, but students with very high pretest scores plateau because they had little room left to grow. That kind of curved relationship cannot be captured by a straight line, and ANCOVA would produce adjusted group means that misrepresent where each group actually stands.</p>
+<p>The second is <strong>homogeneity of regression slopes</strong>: the relationship between the covariate and the outcome must be the same in every group. In other words, there should be no interaction between the covariate and the factor. In the teaching method study, a violation might look like this: pretest score is a strong predictor of posttest score in the traditional lecture group, because students who came in knowing more were better equipped to absorb a lecture-heavy format, while students who came in knowing less fell further behind. But in the AI-supported practice group, the software adapts to each student’s level, so high and low pretest scorers end up with similar posttest gains regardless of where they started. The slope relating pretest to posttest would then be steep in the lecture group and shallow in the AI group. Controlling for pretest score would require a different adjustment for each group, which is a fundamentally different kind of model than standard ANCOVA assumes.</p>
+<p>Homogeneity of regression slopes is not assumed without scrutiny. It is tested directly, and the result of that test determines how you proceed. If homogeneity holds, you can estimate and interpret the covariate-adjusted group means as a summary of the treatment effect. If it does not hold, the relationship between the factor and the outcome depends on the covariate value, and more complex modeling is needed.</p>
+<p>Because the homogeneity test must come before the treatment test, the two analyses are run in a specific order. That order is the backbone of this lesson.</p>
 </section>
-<section id="general-spss-notes" class="level2">
-<h2 data-anchor-id="general-spss-notes">1. General SPSS Notes</h2>
-<p>Before running any analyses, a few things to know about SPSS syntax.</p>
-<p><strong>Procedures</strong> - SPSS is broken into explicit <em>procedures</em>, which can comprise multiple lines of code. Each procedure begins differently, but they all end with a period. That is, a period tells SPSS that you are done describing a procedure and that SPSS should use your input to run it. Think of it like a sentence. Do not forget to end each procedure with a period, or SPSS will wait for more input. Many statistical analysis software are like this, so you may be familiar with the concept.</p>
-<p><strong>Comments</strong> - Comments in SPSS are plain-language parts of your syntax that are totally ignored by the computer. While comments in software like R or Python begin with <code>#</code>, in SPSS everything after <code>/*</code> is a comment. Anything denoted as a comment will not be read as syntax code. If you want to do a <em>procedure</em> as a comment, you start a line with <code>*</code> and end it with a period before moving onto actionable syntax.</p>
-<p><strong>Case</strong> - Syntax in SPSS does not have to be all caps. It can be lowercase too. However, much of what we will do is in all caps, since it makes it easier to distinguish between parts of the code.</p>
-<p><strong>General structure</strong> - In general, every procedure will follow this pattern:</p>
-<pre><code>STATE WHAT PROCEDURE YOU ARE USING
-STATE YOUR MODEL
-/ANY FURTHER OPTIONS WILL FOLLOW THE "/" SYMBOL IN THIS NEXT LINE.</code></pre>
-<p>SPSS will auto-colorize different blocks of syntax corresponding to what they represent. Do not worry if the coloring looks inconsistent. This does not mean anything important as long as your code is correct. Unfortunately, I cannot get code chunks in this in proper colors since Quarto doesn’t have a recognized SPSS theme.</p>
-<hr>
-</section>
-<section id="anova-partitioning-variability" class="level2">
-<h2 data-anchor-id="anova-partitioning-variability">2. ANOVA: Partitioning Variability</h2>
-<p>ANOVA answers a simple question: do the group means of the stereotype threat groups differ more than we would expect by chance? To answer it, ANOVA <strong>partitions</strong> the total variability in the outcome into two buckets:</p>
+<section id="testing-homogeneity-of-regression-slopes" class="level1">
+<h1>3. Testing Homogeneity of Regression Slopes</h1>
+<p>Before estimating the teaching method effect, we need to verify that the relationship between pretest score and posttest score is consistent across the three groups. If that relationship differs by group, the covariate is interacting with the factor, and the standard ANCOVA model is not appropriate.</p>
+<p>In full/reduced model terms, the homogeneity test compares:</p>
+<p>Full model: <span class="math display">\[Y\_{ij} = \mu + \alpha_j + \beta_1 X_{ij} + \beta_2* \alpha_j X_{ij} + \varepsilon_{ij}\]</span></p>
+<p>Reduced model: <span class="math display">\[Y\_{ij} = \mu + \alpha_j + \beta_1 X_{ij} + \varepsilon_{ij}\]</span></p>
+<p>Here <span class="math inline">\(\mu\)</span> is the grand mean, <span class="math inline">\(\alpha_j\)</span> is the effect of the* <span class="math inline">\(j\)</span>th level of the teaching method factor, <span class="math inline">\(X_{ij}\)</span> is the pretest score for participant <span class="math inline">\(i\)</span> in group <span class="math inline">\(j\)</span>, <span class="math inline">\(\beta_1\)</span> is the overall slope relating pretest to posttest, and <span class="math inline">\(\beta_2\)</span> captures how that slope differs across groups. The null hypothesis is <span class="math inline">\(\beta_2 = 0\)</span>: the covariate slope is the same in every group.</p>
+<p>This full model is sometimes called the interaction model because it includes the product of the factor and the covariate. In SPSS, fitting it requires building the model terms manually rather than using the default full factorial option.</p>
+<section id="spss-syntax" class="level2">
+<h2 data-anchor-id="spss-syntax">SPSS Syntax</h2>
+<p>To run the homogeneity test, use <code>UNIANOVA</code> with a custom model specification. The <code>/DESIGN</code> subcommand must include the factor, the covariate, and their interaction term explicitly:</p>
+<pre class="spss"><code>UNIANOVA posttest_score BY teaching_method WITH pretest_score
+  /METHOD = SSTYPE(3)
+  /DESIGN = teaching_method pretest_score teaching_method*pretest_score.</code></pre>
+<p>Each line serves a specific purpose:</p>
 <ul>
-<li><span class="math inline">\(SS_{between}\)</span> - variability <em>between</em> the groups, meaning how much the group means differ from each other. This is the variability we care about.</li>
-<li><span class="math inline">\(SS_{within}\)</span> (also called <span class="math inline">\(SS_{error}\)</span>) - variability <em>within</em> the groups, meaning how much individual scores differ from their own group mean. This is just noise, which is the random differences between individuals that have nothing to do with which group they were in.</li>
+<li><code>posttest_score BY teaching_method WITH pretest_score</code>: specifies the outcome (<code>BY</code> introduces the categorical factor, <code>WITH</code> introduces the continuous covariate)</li>
+<li><code>/METHOD = SSTYPE(3)</code>: requests Type III sums of squares, which adjusts each effect for all others in the model</li>
+<li><code>/DESIGN = teaching_method pretest_score teaching_method*pretest_score</code>: builds the model with main effects for both the factor and the covariate, plus their interaction term</li>
 </ul>
-<p>Combined, they make up the sum-of-squares total.</p>
-<p><span class="math display">\[SS_{total} = SS_{between} + SS_{within}\]</span></p>
-<p>Think of it like a pie. The whole pie is all the variability in your outcome data (math test scores of the females for each group). ANOVA slices it into a “signal” piece (<span class="math inline">\(SS_{between}\)</span>) and a “noise” piece (<span class="math inline">\(SS_{within}\)</span>).</p>
+<p>Note that the factor test row in this output should not be interpreted. Because the interaction term is present, the factor effect shown here is conditional on a specific covariate value rather than averaged across it, which is not the quantity of interest. The only row that matters at this stage is the interaction term.</p>
+<p>This means, the only purpose of this syntax is purely to test the interaction. Nothing else should be interpreted</p>
+</section>
+<section id="output" class="level2">
+<h2 data-anchor-id="output">Output</h2>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="images/ss-pie.svg" class="img-fluid figure-img" width="486"></p>
-<figcaption>Sum of squares total broken up to the between-group and within-group variability</figcaption>
+<p><img src="images/ancova-int.png" class="img-fluid figure-img"></p>
+<figcaption>SPSS output for the interaction model used to test homogeneity of regression slopes. The interaction term <code>teaching_method * pretest_score</code> (<span class="math inline">\(p = .375\)</span>) is the only row of interest at this stage.</figcaption>
 </figure>
 </div>
-<p>There are going to be differences between our control group, stereotype threat group, and stereotype refuted group. The question is, are the differences between these group means due to <em>true</em> differences, or is it just blind luck that they differ from each other (there is error).</p>
+<p>The output contains one row for each term in the model. The <code>teaching_method</code> row and the <code>pretest_score</code> row show the main effects, but neither should be interpreted at this stage. The model here is the full model, and the factor test in a model that includes the interaction term does not answer the question we care about. The only row that matters right now is <code>teaching_method * pretest_score</code>.</p>
+<p>That interaction term tests whether the slope relating pretest to posttest differs across teaching method groups. A significant result would indicate that the covariate’s relationship with the outcome depends on which group a student was in, which would violate the homogeneity assumption and require a different analytic approach. Here the interaction was not significant (<span class="math inline">\(p = .375\)</span>), meaning we fail to reject the null hypothesis that the slopes are equal across groups. The pretest-to-posttest relationship appears to operate the same way in all three teaching method conditions.</p>
+<p>As a final note, if the homogeneity assumption is violated, there are alternative methods that can accommodate a factor-by-covariate interaction, including Johnson-Neyman region of significance analysis, moderated regression, and heterogeneous slopes ANCOVA, though these fall outside the scope of this lesson.</p>
+</section>
+</section>
+<section id="testing-the-teaching-method-effect" class="level1">
+<h1>5. Testing the Teaching Method Effect</h1>
+<p>Having confirmed homogeneity of regression slopes, we can now test whether teaching method affects posttest scores after controlling for pretest performance. This is the ANCOVA proper.</p>
+<p>The full/reduced comparison here is different from the one in the previous step. Now the factor is the target of the test:</p>
+<p>Full model: <span class="math display">\[Y\_{ij} = \mu + \alpha_j + \beta_1 X_{ij}  + \varepsilon_{ij}\]</span></p>
+<p>Reduced model: <span class="math display">\[Y\_{ij} = \mu + \beta_1 X_{ij} + \varepsilon_{ij}\]</span></p>
+<p>The full model includes both the factor and the covariate. The reduced model includes only the covariate. The null hypothesis is <span class="math inline">\(\alpha_j = 0\)</span>: after accounting for pretest scores, all three teaching method groups have the same posttest mean. The <span class="math inline">\(F\)</span> test compares how much additional variance the factor accounts for beyond what the covariate already explains.</p>
+<p>This model is the reduced model from the homogeneity test: the one without the interaction term. In SPSS, it is fit using the default full factorial option, since no custom interaction needs to be specified.</p>
+<section id="spss-syntax-1" class="level2">
+<h2 data-anchor-id="spss-syntax-1">SPSS Syntax</h2>
+<pre class="spss"><code>UNIANOVA posttest_score BY teaching_method WITH pretest_score
+  /METHOD = SSTYPE(3)
+  /DESIGN = teaching_method pretest_score.</code></pre>
+<p>The structure is nearly identical to the previous syntax, with one important difference: the interaction term <code>teaching_method*pretest_score</code> is removed from <code>/DESIGN</code>. The model now contains only the main effects of the factor and the covariate.</p>
+<ul>
+<li><code>teaching_method</code> in <code>/DESIGN</code> — the factor whose effect we are testing</li>
+<li><code>pretest_score</code> in <code>/DESIGN</code> — the covariate being controlled for</li>
+<li><code>/METHOD = SSTYPE(3)</code> — each effect is adjusted for the other, so the teaching method test is net of the pretest score relationship</li>
+</ul>
+</section>
+<section id="output-1" class="level2">
+<h2 data-anchor-id="output-1">Output</h2>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="images/within_vs_between_variability.svg" class="img-fluid figure-img" width="489"></p>
-<figcaption>Variability Visualized</figcaption>
+<p><img src="images/ancova.png" class="img-fluid figure-img"></p>
+<figcaption>SPSS output for the ANCOVA with teaching method as the factor and pretest score as the covariate. The <code>teaching_method</code> row is the test of primary interest.</figcaption>
 </figure>
 </div>
-<p>You can see from this figure (data not exact to the table) that both panels have the same three group means (86, 83, 90), but the right panel has much more spread within each group. When within-group noise is high, the means of each blur together, and it gets harder to sort out whether the differences we see are <em>true</em> or not.</p>
-<p>In ANOVA, an **F test** is how we distinguish the mean differences (signal) from the noise of the variability within each group to see if those differences are real or just a figment of our imagination. The F statistic is literally a ratio of signal to noise:</p>
-<p>$$F = \frac{MS_{between}}{MS_{within}} = \frac{SS_{between} / df_{between}}{SS_{within} / df_{within}}$$</p>
-<p>where $MS$ stands for “mean square”, which is just the sum of squares divided by its degrees of freedom, which puts the two on the same scale so they can be compared fairly.</p>
-<p>Intuitively: a **large F** means the group means differ a lot relative to the within-group noise, like the left panel, where the dots cluster tightly and the three means stand clearly apart. A **small F** means the noise drowns out the signal, like the right panel, where the dots are so scattered that the same group means are hard to distinguish from chance variation. When F is large enough (relative to what we would expect by chance), we reject the null hypothesis that all group means are equal.</p>
-<p>This is what ANOVA is doing in a nutshell. It is analyzing these variances to determine if our groups are truly different or not. Hence the namesake of ANOVA, “analysis of variances”.</p>
-<section id="full-and-reduced-models" class="level3">
-<h3 data-anchor-id="full-and-reduced-models">Full and Reduced Models</h3>
-<p>ANOVA figures out the size of each slice by comparing two models:</p>
-<ul>
-<li><p>The <strong>reduced model</strong> assumes group membership does not matter. Everyone just gets the grand mean as their predicted score. All variability is unexplained, so the error of the reduced model (<span class="math inline">\(E_R\)</span>) equals <span class="math inline">\(SS_{total}\)</span>. In other words, if you had to guess a female student’s math score with no information other than the overall average across all three conditions, your best guess is that their score <em>is</em> that over all average and that your prediction error would be based on how far each score deviates from that overall average.</p></li>
-<li><p>The <strong>full model</strong> accounts for group membership. Each person gets their own group mean as their predicted score. If you know a student was in the stereotype threat condition, you use that group’s mean as your guess instead of the grand mean. This gives a level of accuracy to your guess that wasn’t provided in the reduced model. So just knowing what group a female belongs to has helped us explain some of that randomness. In other words, it diminished some of the error that our prediction would have had if we didn’t know her group.The remaining unexplained variability is how far each individual score deviates from their own group mean. This is <span class="math inline">\(SS_{within}\)</span>, so the error of the full model (<span class="math inline">\(E_F\)</span>) equals <span class="math inline">\(SS_{within}\)</span>.</p></li>
-</ul>
-<p>The difference between the two models’ errors is exactly <span class="math inline">\(SS_{between}\)</span>:</p>
-<p><span class="math display">\[E_R - E_F = SS_{between}\]</span></p>
-<p>Intuitively: the full model “explains away” some variability that the reduced model could not. How much it explained away is how important the group factor is. If knowing what experimental group the female student was in gives a big advantage on guessing their math score, then the group membership was very important and thus <span class="math inline">\(SS_{between}\)</span> will be large as the differences between <span class="math inline">\(E_R\)</span> and <span class="math inline">\(E_F\)</span> will be large If knowing the female student’s experimental group didn’t help in guessing their score at all, then <span class="math inline">\(SS_{between}\)</span> will be small as the differences between <span class="math inline">\(E_R\)</span> and <span class="math inline">\(E_F\)</span> will be small.</p>
+<p>The output table contains one row for each term in the model. Comparing this table to the interaction model output from the previous step, you will notice the interaction term is gone and the error degrees of freedom have increased from 174 to 176, recovering the two degrees of freedom that were spent estimating the interaction. This is the reduced model, and it is the correct one to use for interpreting the teaching method effect.</p>
+<p>The <code>pretest_score</code> row confirms that the covariate is doing meaningful work. Pretest performance was strongly related to posttest performance (<span class="math inline">\(p &lt; .001\)</span>), which means the ANCOVA adjustment is both appropriate and consequential. Students who entered with stronger prior knowledge tended to score higher at the end regardless of which group they were in, and the model has accounted for that.</p>
+<p>The row of interest is <code>teaching_method</code>. After controlling for pretest score, the teaching method effect was significant (<span class="math inline">\(p &lt; .001\)</span>). We reject the null hypothesis that the three groups have equal adjusted posttest means. At least one teaching method produced different posttest performance compared to the others, over and above what could be explained by where students started. The model accounts for 55.2% of the variance in posttest scores (<span class="math inline">\(R^2 = .552\)</span>), with teaching method contributing meaningfully to that explanation after the covariate is partialled out.</p>
+<p>The <code>Corrected Model</code> row tests the overall fit of the model. The <code>Corrected Total</code> row provides the total variance in posttest scores available to be explained. The <code>Total</code> row reflects raw sums that include the grand mean and should not be interpreted. The <code>Intercept</code> row tests whether the grand mean differs from zero, which is rarely of substantive interest.</p>
 </section>
-<section id="the-f-test" class="level3">
-<h3 data-anchor-id="the-f-test">The F Test</h3>
-<p>The mean square (MS) quantifies the sizes of each partition of variability. The general omnibus F test finds the ratio between the two partitions:</p>
-<p><span class="math display">\[F = \frac{(E_R - E_F)/(df_R - df_F)}{E_F/df_F} = \frac{SS_{Between}/df_{Between}}{SS_{Within}/df_{Within}} = \frac{MS_{Between}}{MS_{Within}}\]</span></p>
-<p>Where the degrees of freedom are:</p>
-<ul>
-<li><span class="math inline">\(df_{total}\)</span> = <span class="math inline">\(N - 1\)</span></li>
-<li><span class="math inline">\(df_{within}\)</span> = <span class="math inline">\(N - a\)</span></li>
-<li><span class="math inline">\(df_{between}\)</span> = <span class="math inline">\(a - 1\)</span></li>
-</ul>
-<p>What I mean by <em>omnibus</em> ANOVA is that we are looking into at everything together. So in this case, we are looking at ALL the data together.</p>
-<p>This F statistic is what will be used to get a p value to test if the group differences are significant or not.</p>
-<p>Next I will turn to introduce the different functions of SPSS you can use to do basic one-way ANOVAs, and the outputs they will give you for our data.</p>
+</section>
+<section id="mancova" class="level1">
+<h1>6. MANCOVA</h1>
+<p>Multivariate analysis of covariance, or MANCOVA, extends ANCOVA to designs with more than one outcome variable. Just as MANOVA tests whether a factor distinguishes groups across a set of outcomes considered jointly, MANCOVA does the same while controlling for one or more continuous covariates.</p>
+<p>The logic is identical to what you have seen in this lesson. A covariate is included to reduce error variance and adjust the multivariate group means. The homogeneity of regression slopes assumption extends to the multivariate case: the relationship between each covariate and the full set of outcomes should be consistent across groups.</p>
+<p>In SPSS, MANCOVA is specified with the <code>GLM</code> command using <code>WITH</code> to introduce covariates alongside <code>BY</code> for categorical factors. The covariate terms appear in the <code>/DESIGN</code> subcommand alongside the factor and any interaction terms needed for the homogeneity test. The same two-step logic applies: test homogeneity first, then test the factor effect in the reduced model if homogeneity holds.</p>
+<p>MANCOVA is relatively uncommon in practice compared to ANCOVA, and the analytic decisions involved, particularly around how to specify the covariate structure in repeated-measures designs, can become complex quickly. The core principles, however, are a direct extension of what you have already learned here.</p>
+</section>
+<section id="conclusion" class="level1">
+<h1>7. Conclusion</h1>
+<p>ANCOVA extends the ANOVA framework by incorporating continuous covariates alongside the categorical factor. It reduces error variance and adjusts group mean estimates, producing a more powerful and more interpretable test of the factor effect.</p>
+<p>The analysis proceeds in two steps. First, the homogeneity of regression slopes assumption is tested by fitting a model that includes the interaction between the factor and the covariate. If that interaction is not significant, the assumption holds and the main ANCOVA can proceed. Second, the factor effect is tested in a model that includes the factor and the covariate as main effects only, with the interaction removed.</p>
+</section>
+<section id="discussion-questions" class="level1">
+<h1>Discussion Questions</h1>
+<p><strong>Question 1:</strong> Why is it important to run the homogeneity test before testing the teaching method effect? What would it mean for your conclusions if the interaction had been significant?</p>
+<details>
+<summary>
+Answer
+</summary>
+The homogeneity test establishes whether a single covariate slope can represent the pretest-posttest relationship for all groups. ANCOVA assumes this is the case. If the interaction were significant, the slope would differ across groups, meaning the covariate’s influence on the outcome is moderated by group membership. In that situation, the covariate-adjusted group means would not have a straightforward interpretation, and the standard ANCOVA treatment test would be based on a misspecified model. A significant interaction would instead call for a more flexible approach that allows each group to have its own covariate slope.
+</details>
 <hr>
-</section>
-</section>
-<section id="one-way-anova-with-oneway" class="level2">
-<h2 data-anchor-id="one-way-anova-with-oneway">3. One-Way ANOVA with ONEWAY</h2>
-<p>The <code>ONEWAY</code> procedure in SPSS runs a one-way between-subjects ANOVA. It’s the simplest method to implement, but tends to be the least flexible because of this. The general syntax structure is:</p>
-<pre class="text"><code>ONEWAY          /* The procedure being used (a one-way ANOVA)
-DV BY IV        /* This line describes the model: Y (DV) predicted by X (IV)
-/STATISTICS DESCRIPTIVES.    /* Creates a table of descriptive statistics</code></pre>
-<p>For our stereotype threat data, where <code>Math</code> is the outcome and <code>Group</code> is the grouping variable:</p>
-<pre class="text"><code>ONEWAY              /* The procedure being used
-MATH BY GROUP       /* Math (DV) predicted by Group (IV)
-/STATISTICS DESCRIPTIVES.    /* Creates a table of descriptive statistics</code></pre>
-<p><img src="images/1.1.png" class="img-fluid" alt="ONEWAY Output"> The first table is the output for the descriptive statistics given by <code>/STATISTICS DESCRIPTIVES</code>.</p>
-<p>The ANOVA table gives the results of the omnibus ANOVA test. It gives you the sum of squares, degrees of freedom, and mean square for the between-group term, within-group (error) term, and the total. It also gives the F test and p value for the between-group term. Since the p value of .005 &lt; .05, we reject the null hypothesis of the ANOVA that there are no differences in the mean math score between the three treatments.</p>
+<p><strong>Question 2:</strong> The pretest score row is also significant in this output. Does that mean pretest performance is an important finding in its own right, or should it be interpreted differently in the context of ANCOVA?</p>
+<details>
+<summary>
+Answer
+</summary>
+In ANCOVA, the covariate is included as a control variable, not as a target of inference. A significant pretest score row tells you that the covariate was doing real work: it was substantially related to the outcome, which means it absorbed variance that would otherwise have inflated the error term. This is good news because it means the ANCOVA test of teaching method is more powerful than a plain ANOVA would have been. But the covariate result is not itself a finding about teaching methods. Its role is to improve the precision of the teaching method comparison.
+</details>
 <hr>
-</section>
-<section id="univariate-anova-with-unianova" class="level2">
-<h2 data-anchor-id="univariate-anova-with-unianova">4. Univariate ANOVA with UNIANOVA</h2>
-<p>The <code>UNIANOVA</code> procedure runs a General Linear Model using a univariate approach. This is only appropriate for between-subjects designs. The syntax is very similar to <code>ONEWAY</code> but uses a <code>/DESIGN</code> line to explicitly identify the grouping variable as the independent variable.</p>
-<pre class="text"><code>UNIANOVA          /* The procedure being used (univariate ANOVA)
-DV BY IV          /* Same as what is done above
-/DESIGN = IV.     /* DESIGN identifies the grouping variable as the IV</code></pre>
-<p>For our data:</p>
-<pre class="text"><code>UNIANOVA           /* The procedure being used
-MATH BY GROUP      /* Same as for ONEWAY
-/DESIGN = GROUP.   /* Identifies the grouping variable</code></pre>
-<p><img src="images/1.2.png" class="img-fluid" alt="UNIANOVA Output"> This is the focal output of the UNIANOVA function. On the left, you have rows labeled “Corrected Model”, which is equivalent to the “Group” row in this case. And you can ignore the “Intercept” line. What you need to focus is on the bottom three rows. Here you ge the sum of squares (specified as “Type III Sum of Squares” though all of our output will be this type of sum of squares), degrees of freedom, mean squares, and the F test. The results for the F test are significant, so we reject the null that the mean math test scores are the same for every treatment group.</p>
-<p>The UNIANOVA output will also give you the <span class="math inline">\(R^2\)</span> and adjusted-<span class="math inline">\(R^2\)</span> effect sizes. These are not always used in ANOVAs, so I would ignore them for now. We will cover different effect sizes in a future lesson.</p>
-<section id="types-of-sums-of-squares" class="level3">
-<h3 data-anchor-id="types-of-sums-of-squares">Types of Sums of Squares</h3>
-<p>You may have noticed that the UNIANOVA output labels its results “Type III Sum of Squares.” This is one of three ways SPSS can compute sums of squares, and it is worth knowing the difference even if it will not matter much until later in the lessons</p>
-<p>In a one-way design like ours, with only one grouping variable and equal group sizes, all three types give exactly the same answer. The distinction between the three methods only becomes consequential when there are multiple factors in the design and the group sizes are unequal.</p>
-<p>When that happens, <strong>Type I</strong> sums of squares test each effect in the order you list it, so the results can change depending on which factor you put first. <strong>Type II</strong> and <strong>Type III</strong> sums of squares remove that order dependency, with Type III being the most commonly used because it tests each effect after accounting for everything else in the model.</p>
-<p>This is actually one of the reasons this series uses SPSS MANOVA rather than other software. SPSS MANOVA defaults to Type III sums of squares and applies them consistently across all designs, from simple one-way ANOVAs all the way through complex split-plot designs, so you can trust that every effect you test is being evaluated on its own terms regardless of how the data are structured.</p>
-<p>For now, the main takeaway is simply that when you see “Type III” in SPSS output, it means each effect is being evaluated on its own terms, independent of the others</p>
-<hr>
-</section>
-</section>
-<section id="manova" class="level2">
-<h2 data-anchor-id="manova">5. MANOVA</h2>
-<p>The <code>MANOVA</code> procedure (Multivariate Analysis of Variance) is the most flexible of the three. It can be done for within-subjects, between-subjects, one-way, two-way, split plot, and other designs. We will use MANOVA for the majority of analyses this semester because of its flexibility.</p>
-<p>The general syntax is:</p>
-<pre class="text"><code>/* Multivariate ANOVA for Y (DV) by X (IV)
-/* Replace "min" and "max" with the grouping values (smallest to largest)
-
-MANOVA DV BY IV (min max)
-/PRINT CELLINFO(ALL)   /* Print descriptive information for each cell in the design
-/DESIGN.               /* Specifies the effects of interest within the specified model
-                       /* Default is a full factorial model</code></pre>
-<p>For our data:</p>
-<pre class="text"><code>MANOVA MATH BY GROUP (1 3)       /* DV "by" grouping var; ( ) enclose min and max grouping values
-/PRINT CELLINFO(ALL)             /* Print descriptive information for each cell
-/DESIGN.                         /* Specifies the effects of interest</code></pre>
-<p><img src="images/1.3.png" class="img-fluid" alt="MANOVA Output"> This is the important chunk of output for the MANOVA. The top table gives the descriptive statistics for each group. This is because we added the <code>\PRINT CELLINFO(ALL)</code> line. The bottom table is the ANOVA output, with the sum of squares, degrees of freedom, mean squares, F test, and p value. The top line <code>WITHIN CELLS</code> is the error term. The second term is the between-subjects line that we are testing. At the bottom, the <code>(Model)</code> line is the same as the between-subjects line. In the future, when we are doing different things, this will change.</p>
-<p>The results for the F test are significant, so we reject the null that the mean math test scores are the same for every treatment group.</p>
-<p>The MANOVA output will also give you the <span class="math inline">\(R^2\)</span> and adjusted-<span class="math inline">\(R^2\)</span> effect sizes. These are not always used in ANOVAs, so I would ignore them for now. We will cover different effect sizes in a future lesson.</p>
-<hr>
-<section id="discussion-questions" class="level3">
-<h3 data-anchor-id="discussion-questions">Discussion Questions</h3>
-<p>Here are some review questions if you want to practice your understanding!</p>
-<ol type="1">
-<li><p>Which analyses provided the same answer?</p></li>
-<li><p>What can be concluded about the stereotype threat hypothesis? Which claims can you make and which can you not?</p></li>
-<li><p>How are all three of the procedures related to one another? What similarities are there in terms of output and syntax? What are the notable differences? Why do you think SPSS has so many ways to perform an ANOVA?</p></li>
-</ol>
+<p><strong>Question 3:</strong> A colleague argues that since the students were randomly assigned to teaching method groups, the pretest scores should be roughly equal across groups anyway, so ANCOVA is unnecessary. How would you respond?</p>
+<details>
+<summary>
+Answer
+</summary>
+Random assignment ensures that group differences in pretest scores are due to chance, not systematic bias. But chance differences still add noise to the posttest scores, and that noise ends up in the error term. Even when randomization has worked well, including a covariate that strongly predicts the outcome can meaningfully reduce error variance and increase power. ANCOVA is useful in randomized experiments not because the groups are biased but because the covariate carries information about the outcome that goes beyond group assignment. In non-randomized studies the justification is even stronger, since pretest differences may reflect genuine selection effects that need to be statistically controlled before group comparisons are meaningful.
+</details>
 
 
-</section>
 </section>
 
 </main> <!-- /main -->

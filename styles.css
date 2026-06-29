@@ -1,27 +1,22 @@
 /* styles.css — additional overrides on top of custom.scss */
-
 /* Remove any remaining blue/colored backgrounds */
 .quarto-title-banner {
   background-image: none !important;
   background-color: #0d0d0f !important;
 }
-
 /* Ornamental divider between posts */
 .quarto-listing .quarto-post + .quarto-post {
   position: relative;
 }
-
 /* Make the main content column a bit wider */
 .page-columns .content {
   max-width: 780px;
 }
-
 /* Subtle warm glow on post title hover */
 .quarto-post:hover .listing-title {
   color: #d4c9b8 !important;
   transition: color 0.3s ease;
 }
-
 /* Inter for all metadata/small text */
 .metadata, .quarto-post .metadata,
 .metadata a, .quarto-post .metadata a,
@@ -33,7 +28,167 @@
   text-transform: uppercase;
   color: white !important;
 }
-
 .quarto-category {
   color: white !important;
+}
+.mermaid-js rect.basic.label-container {
+  fill: #ffffff !important;
+  stroke: #000000 !important;
+}
+.mermaid-js .nodeLabel,
+.mermaid-js .nodeLabel p {
+  color: #000000 !important;
+  font-size: 20px !important;
+}
+.mermaid-js .edgePaths path {
+  stroke: #ffffff !important;
+}
+.mermaid-js .edgeLabels .edgeLabel,
+.mermaid-js .edgeLabels .edgeLabel rect,
+.mermaid-js .labelBkg {
+  background-color: #4a4a4a !important;
+  fill: #4a4a4a !important;
+}
+.mermaid-js .edgeLabels .edgeLabel,
+.mermaid-js .edgeLabels .edgeLabel p,
+.mermaid-js .edgeLabels .edgeLabel span,
+.mermaid-js .labelBkg {
+  color: #000000 !important;
+  font-size: 20px !important;
+}
+.mermaid-js .marker {
+  stroke: #ffffff !important;
+  fill: #ffffff !important;
+}
+.concept-diagram {
+  display: block;
+  width: 100%;
+  background: #ffffff;
+  padding: 32px 40px;
+  border-radius: 6px;
+  margin: 1.5rem 0;
+}
+.concept-diagram text {
+  font-family: var(--font-sans, sans-serif);
+  fill: #1a1a1a;
+}
+.concept-diagram .title {
+  font-weight: 700;
+  font-size: 22px;
+  text-anchor: middle;
+}
+.concept-diagram .axis-label {
+  font-weight: 600;
+  font-size: 16px;
+  fill: #555;
+}
+.concept-diagram .header {
+  font-weight: 600;
+  font-size: 18px;
+  text-anchor: middle;
+}
+.concept-diagram .row-label {
+  font-weight: 600;
+  font-size: 18px;
+}
+.concept-diagram .callout-text {
+  font-weight: 600;
+  font-size: 15px;
+  text-anchor: middle;
+}
+.concept-diagram .fill-pink {
+  fill: #f5e3ea;
+}
+.concept-diagram .fill-green {
+  fill: #e6efdd;
+}
+.concept-diagram .cell-text {
+  font-weight: 400;
+  font-size: 16px;
+  text-anchor: middle;
+}
+.cmtable {
+  display: inline-block;
+  background: #ffffff;
+  padding: 24px 28px;
+  border-radius: 6px;
+  font-family: var(--font-sans, sans-serif);
+  margin: 1.5rem 0;
+}
+.cmtable table {
+  border-collapse: collapse;
+}
+.cmtable td {
+  border: 1px solid #999;
+  padding: 10px 26px;
+  text-align: center;
+  color: #1a1a1a;
+}
+.cmtable .corner {
+  border: none;
+}
+.cmtable .drug-header {
+  font-weight: 700;
+  font-size: 1.15em;
+  color: #444;
+  border: none;
+}
+.cmtable .row-label {
+  font-weight: 600;
+  border: 1px solid #999;
+}
+.cmtable .diag-label {
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+  font-weight: 700;
+  font-size: 1.1em;
+  color: #444;
+  border: none;
+  vertical-align: middle;
+}
+.cmtable .value {
+  font-weight: 700;
+}
+.cmtable .d1 { background: #aac4e8; }
+.cmtable .d2 { background: #b9a8d6; }
+.cmtable .d3 { background: #d9a8b0; }
+.cmtable .marginal-line {
+  margin-top: 16px;
+  font-size: 1.1em;
+  color: #1a1a1a;
+  display: flex;
+  gap: 40px;
+  align-items: baseline;
+}
+.cmtable .row-yellow {
+  background: #f5d98a;
+}
+.cmtable .row-red {
+  background: #d98a8a;
+}
+.concept-diagram .pie-a { fill: #7cb86c; }
+.concept-diagram .pie-b { fill: #e8b84b; }
+.concept-diagram .pie-ab { fill: #d96c5f; }
+.concept-diagram .pie-error { fill: #5b9bd5; }
+.concept-diagram .pie-label {
+  fill: #ffffff;
+  font-weight: 600;
+  font-size: 20px;
+  text-anchor: middle;
+}
+
+.mermaid-js .node .label-container {
+  fill: #ffffff !important;
+  stroke: #000000 !important;
+}
+.mermaid-js .node polygon {
+  fill: #ffffff !important;
+  stroke: #000000 !important;
+}
+
+.mermaid-js .node circle,
+.mermaid-js .node ellipse,
+.mermaid-js .node path {
+  fill: #ffffff !important;
+  stroke: #000000 !important;
 }

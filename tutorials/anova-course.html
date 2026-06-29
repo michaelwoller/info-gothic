@@ -81,6 +81,35 @@ document.addEventListener("DOMContentLoaded", function() {
 });
 </script>
 
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
 
 <link rel="stylesheet" href="../styles.css">
 </head>
@@ -170,54 +199,66 @@ document.addEventListener("DOMContentLoaded", function() {
 </ul>
 <p>Software such as SPSS or SAS provide better solutions. It’s possible to do these ANOVAs in R, but it will require fine grain math and coding skills from the researchers. Supposedly, in the future the professor who taught this course will be forced to switch to R, so maybe I can ask them for their material so I can redo some of this.</p>
 <p>The caveat of using SPSS is that I can’t run SPSS code natively in Quarto, which is how I am constructing this website. So all lessons will give you the syntax, but output will be done via screenshots as best as I can. But due to this limitation, the quality of the lesson material might ebb and flow depending on the topic.</p>
-<p>The SPSS data sets can be found on this <a href="https://drive.google.com/file/d/1PVQ5JurltWVhdv_w0Jv-HNHtXf46MnAw/view?usp=sharing">Google Link</a>.</p>
+<p>The SPSS data sets can be found on this <a href="https://drive.google.com/file/d/1lXPGTAjZTxcFbgGJBX-DfN4EWPlH3e9x/view?usp=sharing">Google Link</a>.</p>
+<p>The lessons build on each other sequentially. So you will not understand as well later lessons if you do not work through previous lessons. Also, some of these lessons were written months apart, so I apoligze if the formatting/notation is inconsistent throughout.</p>
 <section id="introduction-to-spss-and-one-way-anova" class="level2">
 <h2 data-anchor-id="introduction-to-spss-and-one-way-anova">Introduction to SPSS and One-Way ANOVA</h2>
+<p>This lesson introduces the logic of ANOVA through the one-way between-subjects design, covering how the <span class="math inline">\(F\)</span> test compares group means by partitioning total variance into between-group and within-group components. It also provides a practical introduction to running and interpreting ANOVA output in SPSS.</p>
 <p><a href="anova-lessons/SPSS-ANOVA-Intro.html">Open Tutorial</a></p>
+<hr>
 </section>
 <section id="contrast-testing" class="level2">
 <h2 data-anchor-id="contrast-testing">Contrast Testing</h2>
+<p>Contrast testing allows you to ask focused questions about specific group comparisons rather than relying on the omnibus <span class="math inline">\(F\)</span> test alone. This lesson covers how to specify and interpret planned contrasts in SPSS using the full/reduced model framework.</p>
 <p><a href="anova-lessons/Contrasts.html">Open Tutorial</a></p>
 <hr>
 </section>
 <section id="type-i-error-correction-bonferroni-tukey-and-scheffe-corrections" class="level2">
 <h2 data-anchor-id="type-i-error-correction-bonferroni-tukey-and-scheffe-corrections">Type I Error Correction: Bonferroni, Tukey, and Scheffe Corrections</h2>
-<p>Open Tutorial</p>
+<p>When multiple comparisons are made simultaneously, the probability of a false positive increases. This lesson covers the most common correction procedures and when to apply each one.</p>
+<p><a href="anova-lessons/Multiple-Corrections.html">Open Tutorial</a></p>
 <hr>
 </section>
-<section id="trend-analysis-linear-and-nonlineary-trajectories" class="level2">
-<h2 data-anchor-id="trend-analysis-linear-and-nonlineary-trajectories">Trend Analysis: Linear and Nonlineary Trajectories</h2>
-<p>Open Tutorial</p>
+<section id="trend-analysis-linear-and-nonlinear-trajectories" class="level2">
+<h2 data-anchor-id="trend-analysis-linear-and-nonlinear-trajectories">Trend Analysis: Linear and Nonlinear Trajectories</h2>
+<p>Trend analysis tests whether group means follow a systematic pattern across ordered levels of a factor, such as a linear increase or a quadratic curve. This lesson covers how to specify and interpret polynomial contrasts in SPSS.</p>
+<p><a href="anova-lessons/trend-analysis.html">Open Tutorial</a></p>
 <hr>
 </section>
 <section id="two-way-between-subjects-anova" class="level2">
 <h2 data-anchor-id="two-way-between-subjects-anova">Two-Way Between-Subjects ANOVA</h2>
-<p>Open Tutorial</p>
+<p>This lesson extends the one-way design to two categorical factors, introducing the concept of an interaction effect. You will learn how to interpret main effects and interactions and how to follow up a significant interaction with simple effects tests.</p>
+<p><a href="anova-lessons/twoway-anova.html">Open Tutorial</a></p>
 <hr>
 </section>
 <section id="higher-order-between-subjects-anova" class="level2">
 <h2 data-anchor-id="higher-order-between-subjects-anova">Higher Order Between-Subjects ANOVA</h2>
-<p>Open Tutorial</p>
+<p>Higher order designs include three or more between-subjects factors, producing main effects, two-way interactions, and a three-way interaction. This lesson covers how to interpret and follow up these more complex effect structures.</p>
+<p><a href="anova-lessons/higher-order-anova.html">Open Tutorial</a></p>
 <hr>
 </section>
-<section id="one-way-within-subejcts-anova-univariate-and-multivariate-method" class="level2">
-<h2 data-anchor-id="one-way-within-subejcts-anova-univariate-and-multivariate-method">One-Way Within-Subejcts ANOVA: Univariate and Multivariate Method</h2>
-<p>Open Tutorial</p>
+<section id="one-way-within-subjects-anova-univariate-and-multivariate-method" class="level2">
+<h2 data-anchor-id="one-way-within-subjects-anova-univariate-and-multivariate-method">One-Way Within-Subjects ANOVA: Univariate and Multivariate Method</h2>
+<p>Within-subjects designs measure the same participants across multiple conditions, reducing error variance by removing individual differences from the error term. This lesson covers both the univariate and multivariate approaches to testing within-subjects effects in SPSS.</p>
+<p><a href="anova-lessons/within-subjects-anova.html">Open Tutorial</a></p>
 <hr>
 </section>
-<section id="two-way-within-subejcts-anova" class="level2">
-<h2 data-anchor-id="two-way-within-subejcts-anova">Two-Way Within-Subejcts ANOVA</h2>
-<p>Open Tutorial</p>
+<section id="two-wayhigher-order-within-subjects-anova" class="level2">
+<h2 data-anchor-id="two-wayhigher-order-within-subjects-anova">Two-Way/Higher Order Within-Subjects ANOVA</h2>
+<p>This lesson extends the within-subjects design to two or more repeated factors, covering how to interpret interactions among within-subjects effects and how to conduct follow-up analyses.</p>
+<p><a href="anova-lessons/higher-order-within.html">Open Tutorial</a></p>
 <hr>
 </section>
 <section id="split-plot-anova" class="level2">
 <h2 data-anchor-id="split-plot-anova">Split-Plot ANOVA</h2>
-<p>Open Tutorial</p>
+<p>The split-plot design combines between-subjects and within-subjects factors in a single analysis, making it one of the most common designs in psychological research. This lesson covers the interpretation of main effects, interactions, and simple effects in mixed designs.</p>
+<p><a href="anova-lessons/split-plot.html">Open Tutorial</a></p>
 <hr>
 </section>
 <section id="ancova" class="level2">
 <h2 data-anchor-id="ancova">ANCOVA</h2>
-<p>Open Tutorial</p>
+<p>ANCOVA extends the ANOVA framework by adding a continuous covariate to the model, reducing error variance and adjusting group means for pre-existing differences. This lesson covers the two-step procedure of testing homogeneity of regression slopes before evaluating the factor effect.</p>
+<p><a href="anova-lessons/ancova.html">Open Tutorial</a></p>
 
 
 </section>

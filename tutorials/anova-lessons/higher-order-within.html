@@ -1,0 +1,1201 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.9.36">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Michael Woller">
+
+<title>Higher-Order Within-Subjects Designs – InfoGothic</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<link href="../../images/favicon.ico" rel="icon">
+<script src="../../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-dark-f418161beb48e0141c760e455f12af2c.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap-4d14f3be7bc8eb7ec2287338953877e0.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="dark">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+  var nav = document.querySelector(".navbar-nav");
+  var li = document.createElement("li");
+  li.className = "nav-item";
+  li.innerHTML = '<a class="nav-link ml-onclick-form" href="javascript:void(0)" onclick="ml(\'show\', \'18mxag\', true)">Mail List</a>';
+  var icons = nav.querySelector(".nav-item:has(.bi)");
+  nav.insertBefore(li, icons);
+});
+</script>
+<script src="../../site_libs/quarto-diagram/mermaid.min.js"></script>
+<script src="../../site_libs/quarto-diagram/mermaid-init.js"></script>
+<link href="../../site_libs/quarto-diagram/mermaid.css" rel="stylesheet">
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<link rel="stylesheet" href="../../styles.css">
+</head>
+
+<body class="nav-fixed quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="../../index.html">
+    <span class="navbar-title">InfoGothic</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../about.html"> 
+<span class="menu-text">About</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../tutorials.html"> 
+<span class="menu-text">Courses &amp; Tutorials</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../blog-posts.html"> 
+<span class="menu-text">Blog Posts</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="https://notes.infogothic.com"> 
+<span class="menu-text">Obsidian Notes</span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/michaelwoller"> <i class="bi bi-github" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://bsky.app/profile/infogothic.bsky.social"> <i class="bi bi-bluesky" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction">1. Introduction</a></li>
+  <li><a href="#the-2x3-design-data-and-notation" id="toc-the-2x3-design-data-and-notation" class="nav-link" data-scroll-target="#the-2x3-design-data-and-notation">2. The 2x3 Design: Data and Notation</a></li>
+  <li><a href="#forming-difference-scores-the-logic" id="toc-forming-difference-scores-the-logic" class="nav-link" data-scroll-target="#forming-difference-scores-the-logic">3. Forming Difference Scores: The Logic</a>
+  <ul class="collapse">
+  <li><a href="#main-effect-of-angle" id="toc-main-effect-of-angle" class="nav-link" data-scroll-target="#main-effect-of-angle">Main Effect of Angle</a></li>
+  <li><a href="#main-effect-of-noise" id="toc-main-effect-of-noise" class="nav-link" data-scroll-target="#main-effect-of-noise">Main Effect of Noise</a></li>
+  <li><a href="#interaction-of-angle-x-noise" id="toc-interaction-of-angle-x-noise" class="nav-link" data-scroll-target="#interaction-of-angle-x-noise">Interaction of Angle x Noise</a></li>
+  </ul></li>
+  <li><a href="#full-and-reduced-models-for-each-effect" id="toc-full-and-reduced-models-for-each-effect" class="nav-link" data-scroll-target="#full-and-reduced-models-for-each-effect">4. Full and Reduced Models for Each Effect</a>
+  <ul class="collapse">
+  <li><a href="#general-form" id="toc-general-form" class="nav-link" data-scroll-target="#general-form">General Form</a></li>
+  </ul></li>
+  <li><a href="#the-univariate-approach" id="toc-the-univariate-approach" class="nav-link" data-scroll-target="#the-univariate-approach">5. The Univariate Approach</a></li>
+  <li><a href="#spss-syntax-omnibus-tests" id="toc-spss-syntax-omnibus-tests" class="nav-link" data-scroll-target="#spss-syntax-omnibus-tests">6. SPSS Syntax: Omnibus Tests</a></li>
+  <li><a href="#follow-up-tests-decision-tree" id="toc-follow-up-tests-decision-tree" class="nav-link" data-scroll-target="#follow-up-tests-decision-tree">7. Follow-Up Tests: Decision Tree</a></li>
+  <li><a href="#type-i-error-correction" id="toc-type-i-error-correction" class="nav-link" data-scroll-target="#type-i-error-correction">8. Type I Error Correction</a></li>
+  <li><a href="#marginal-means-comparison" id="toc-marginal-means-comparison" class="nav-link" data-scroll-target="#marginal-means-comparison">9. Marginal Means Comparison</a>
+  <ul class="collapse">
+  <li><a href="#spss-for-marginal-means" id="toc-spss-for-marginal-means" class="nav-link" data-scroll-target="#spss-for-marginal-means">SPSS for Marginal Means</a></li>
+  </ul></li>
+  <li><a href="#simple-effects" id="toc-simple-effects" class="nav-link" data-scroll-target="#simple-effects">10. Simple Effects</a>
+  <ul class="collapse">
+  <li><a href="#spss-syntax-simple-effect-of-noise-within-angle" id="toc-spss-syntax-simple-effect-of-noise-within-angle" class="nav-link" data-scroll-target="#spss-syntax-simple-effect-of-noise-within-angle">SPSS Syntax: Simple Effect of Noise Within Angle</a></li>
+  </ul></li>
+  <li><a href="#cell-means-comparisons" id="toc-cell-means-comparisons" class="nav-link" data-scroll-target="#cell-means-comparisons">11. Cell Means Comparisons</a>
+  <ul class="collapse">
+  <li><a href="#spss-syntax-cell-mean-comparisons" id="toc-spss-syntax-cell-mean-comparisons" class="nav-link" data-scroll-target="#spss-syntax-cell-mean-comparisons">SPSS Syntax: Cell Mean Comparisons</a></li>
+  </ul></li>
+  <li><a href="#interaction-contrasts" id="toc-interaction-contrasts" class="nav-link" data-scroll-target="#interaction-contrasts">12. Interaction Contrasts</a>
+  <ul class="collapse">
+  <li><a href="#spss-syntax-interaction-contrasts" id="toc-spss-syntax-interaction-contrasts" class="nav-link" data-scroll-target="#spss-syntax-interaction-contrasts">SPSS Syntax: Interaction Contrasts</a></li>
+  </ul></li>
+  <li><a href="#a-brief-note-on-higher-order-designs" id="toc-a-brief-note-on-higher-order-designs" class="nav-link" data-scroll-target="#a-brief-note-on-higher-order-designs">13. A Brief Note on Higher-Order Designs</a></li>
+  <li><a href="#summary" id="toc-summary" class="nav-link" data-scroll-target="#summary">14. Summary</a></li>
+  <li><a href="#discussion-questions" id="toc-discussion-questions" class="nav-link" data-scroll-target="#discussion-questions">Discussion Questions</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Higher-Order Within-Subjects Designs</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Michael Woller </p>
+          </div>
+  </div>
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="introduction" class="level2">
+<h2 data-anchor-id="introduction">1. Introduction</h2>
+<p>In the One-Way Within-Subjects ANOVA lesson, every participant contributed one observation per level of a single repeated factor. This lesson extends that framework to designs with two or more within-subjects factors. Each participant is now measured across every combination of both factors, so the data form a fully crossed repeated-measures structure. Because every cell of the design contains data from every participant, we can ask three distinct questions for a two-way design: does the outcome differ across levels of the first factor, does it differ across levels of the second factor, and does the effect of one factor change depending on which level of the other factor we are at? If you have reviewed the Two-Way Between-Subjects ANOVA or Higher-Order Between-Subjects ANOVA, these concepts will be familiar. This lesson assumes you have gone over these other two lessons. For example, you should be familiar with what it means to average over another level (such as main effects), what a simple effect is, and what a marginal mean is. Intepretations of the output will assume you have this knowledge.</p>
+<p>The multivariate approach answers all three questions by forming appropriate difference scores, called D variables, from the original repeated-measures variables. The logic is identical to what you already know from the one-way case: a null hypothesis about a within-subjects effect is really a claim that a population mean of some D variable (or a set of D variables) equals zero. Aka, there is no change from measurement 1 to measurement 2. Testing that claim requires nothing more than a one-sample test on those D variables.</p>
+<p>The dataset used throughout this lesson is a 2x3 Noise-by-Angle reaction time study given in the TwoWayWithin.sav dataset. Participants completed a detection task under two noise conditions (Absent, Present) and three angle conditions (0, 4, and 8 degrees of rotation). Reaction time in milliseconds is the outcome. The six repeated-measures variables are named <code>abs0</code>, <code>abs4</code>, <code>abs8</code>, <code>pres0</code>, <code>pres4</code>, and <code>pres8</code>. The goal was to see if rotating an image in degrees prolongs the ability to react to the image.</p>
+<hr>
+</section>
+<section id="the-2x3-design-data-and-notation" class="level2">
+<h2 data-anchor-id="the-2x3-design-data-and-notation">2. The 2x3 Design: Data and Notation</h2>
+<p>The design crosses Noise (2 levels: Absent, Present) with Angle (3 levels: 0, 4, 8 degrees), producing six cells. We label the six repeated-measures variables Y1 through Y6 as follows:</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Variable</th>
+<th>Noise</th>
+<th>Angle</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Y1 (abs0)</td>
+<td>Absent</td>
+<td>0 degrees</td>
+</tr>
+<tr class="even">
+<td>Y2 (abs4)</td>
+<td>Absent</td>
+<td>4 degrees</td>
+</tr>
+<tr class="odd">
+<td>Y3 (abs8)</td>
+<td>Absent</td>
+<td>8 degrees</td>
+</tr>
+<tr class="even">
+<td>Y4 (pres0)</td>
+<td>Present</td>
+<td>0 degrees</td>
+</tr>
+<tr class="odd">
+<td>Y5 (pres4)</td>
+<td>Present</td>
+<td>4 degrees</td>
+</tr>
+<tr class="even">
+<td>Y6 (pres8)</td>
+<td>Present</td>
+<td>8 degrees</td>
+</tr>
+</tbody>
+</table>
+<p>The data is presented in the wide structure, where each individual has their own row, and each column represents its own measurement at a specific level of the within-subjects factor.</p>
+<p>The cell means from the data (n = 10) are as follows:</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 30%">
+<col style="width: 15%">
+<col style="width: 15%">
+<col style="width: 15%">
+<col style="width: 24%">
+</colgroup>
+<thead>
+<tr class="header">
+<th></th>
+<th>0 degrees</th>
+<th>4 degrees</th>
+<th>8 degrees</th>
+<th>Marginal (Noise)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>Absent</strong></td>
+<td>462</td>
+<td>510</td>
+<td>528</td>
+<td>500</td>
+</tr>
+<tr class="even">
+<td><strong>Present</strong></td>
+<td>492</td>
+<td>660</td>
+<td>762</td>
+<td>638</td>
+</tr>
+<tr class="odd">
+<td><strong>Marginal (Angle)</strong></td>
+<td>477</td>
+<td>585</td>
+<td>645</td>
+<td>569</td>
+</tr>
+</tbody>
+</table>
+<p>To represent all effects in the design, we need a total of (ab - 1) = (2)(3) - 1 = 5 D variables. The breakdown is:</p>
+<ul>
+<li>(a - 1) = 2 D variables for the Angle main effect (a = 3 levels)</li>
+<li>(b - 1) = 1 D variable for the Noise main effect (b = 2 levels)</li>
+<li>(a - 1)(b - 1) = 2 D variables for the Angle x Noise interaction</li>
+</ul>
+<p>You may notice that unlike the between-subjects designs covered earlier in this series, there is no discussion of balanced vs.&nbsp;unbalanced designs in any of the sections here The issues of unbalanced designs in between-subjects studies do not arise in the same way for within-subjects designs. Because every participant is measured in every condition, each person contributes exactly one score to every cell of the design by construction. There is no possibility of having unequal cell sizes the way there is when different participants are assigned to different groups. As long as you have no missing data for all participants across all conditions (e.g., everyone showed up to each session), a within-subjects design is always balanced.</p>
+<hr>
+</section>
+<section id="forming-difference-scores-the-logic" class="level2">
+<h2 data-anchor-id="forming-difference-scores-the-logic">3. Forming Difference Scores: The Logic</h2>
+<p>Each effect in a within-subjects design is captured by forming D variables that are weighted combinations of the original Y variables. The general rule is that a factor with k levels requires k - 1 D variables. For the interaction, we need (a - 1)(b - 1) D variables, and these are formed by taking element-wise products of the coefficients used for the corresponding main effect D variables.</p>
+<p>Like the two-way between-subjects designs. The omnibus test gives us two main effects and one interaction effect.</p>
+<section id="main-effect-of-angle" class="level3">
+<h3 data-anchor-id="main-effect-of-angle">Main Effect of Angle</h3>
+<p>Because Angle has three levels, we need two D variables. These are formed by combining across Noise levels first, then applying the angle contrast weights. SPSS uses orthonormalized versions of these weights internally (T3 and T4 in the transformation matrix), but the underlying logic matches the contrast coefficients you specify.</p>
+<p>The difference scores in these cases are just weighted averages of different outcomes. Don’t worry if you don’t understand this section. This isn’t necessary to know, but if people want to have a deeper understanding of the material, here are the formulations of the difference scores.</p>
+<p><strong>D1 (linear trend for Angle, combining across Noise):</strong></p>
+<p><span class="math display">\[D_{1i} = (-1)\left[\frac{Y_{1i} + Y_{4i}}{2}\right] + (0)\left[\frac{Y_{2i} + Y_{5i}}{2}\right] + (1)\left[\frac{Y_{3i} + Y_{6i}}{2}\right]\]</span></p>
+<p><strong>D2 (quadratic trend for Angle, combining across Noise):</strong></p>
+<p><span class="math display">\[D_{2i} = (1)\left[\frac{Y_{1i} + Y_{4i}}{2}\right] + (-2)\left[\frac{Y_{2i} + Y_{5i}}{2}\right] + (1)\left[\frac{Y_{3i} + Y_{6i}}{2}\right]\]</span></p>
+<p>D1 and D2 together represent the Angle main effect. D1 captures whether reaction time increases linearly across angle levels and D2 captures whether that increase bends.</p>
+</section>
+<section id="main-effect-of-noise" class="level3">
+<h3 data-anchor-id="main-effect-of-noise">Main Effect of Noise</h3>
+<p>Because Noise has two levels, we need only one D variable. This is formed by combining across Angle levels and taking the difference between the two Noise conditions. This corresponds to T2 in the transformation matrix.</p>
+<p><strong>D3 (Noise present minus Noise absent, combining across Angle):</strong></p>
+<p><span class="math display">\[D_{3i} = \frac{Y_{4i} + Y_{5i} + Y_{6i}}{3} - \frac{Y_{1i} + Y_{2i} + Y_{3i}}{3}\]</span></p>
+</section>
+<section id="interaction-of-angle-x-noise" class="level3">
+<h3 data-anchor-id="interaction-of-angle-x-noise">Interaction of Angle x Noise</h3>
+<p>The two interaction D variables are formed by multiplying the coefficients of each Angle D variable by the coefficients of the Noise D variable. We apply the angle contrast weights separately to the Noise-present and Noise-absent conditions and then take the difference. These correspond to T5 and T6 in the transformation matrix.</p>
+<p><strong>D4 (linear Angle trend x Noise):</strong></p>
+<p><span class="math display">\[D_{4i} = (1Y_{4i} + 0Y_{5i} - 1Y_{6i}) - (1Y_{1i} + 0Y_{2i} - 1Y_{3i})\]</span></p>
+<p>D4 asks whether the linear trend for Angle is steeper (or shallower) under Noise Present than under Noise Absent.</p>
+<p><strong>D5 (quadratic Angle trend x Noise):</strong></p>
+<p><span class="math display">\[D_{5i} = (1Y_{4i} - 2Y_{5i} + 1Y_{6i}) - (1Y_{1i} - 2Y_{2i} + 1Y_{3i})\]</span></p>
+<p>D5 asks whether the quadratic curvature in the Angle trend differs between Noise conditions. D4 and D5 together represent the Angle x Noise interaction.</p>
+<p>The reason why we look at the trend analysis D variables for the interaction is that an interaction is ultimately a question about whether a pattern changes across conditions. D4 asks whether the slope of the angle effect is steeper in one noise condition than the other, and D5 asks whether the shape of that curve differs between conditions. By testing these two D variables we are essentially asking: does noise change how angle affects reaction time, and if so, in what way?</p>
+<hr>
+</section>
+</section>
+<section id="full-and-reduced-models-for-each-effect" class="level2">
+<h2 data-anchor-id="full-and-reduced-models-for-each-effect">4. Full and Reduced Models for Each Effect</h2>
+<section id="general-form" class="level3">
+<h3 data-anchor-id="general-form">General Form</h3>
+<p>For a single D variable <span class="math inline">\(D_v\)</span>, the full and reduced models are:</p>
+<ul>
+<li><strong>Full model:</strong> <span class="math inline">\(D_{vi} = \mu_v + \varepsilon_{vi}\)</span></li>
+<li><strong>Reduced model:</strong> <span class="math inline">\(D_{vi} = \varepsilon_{vi}\)</span></li>
+</ul>
+<p>The null hypothesis for an effect is that the population means of all D variables associated with that effect simultaneously equal zero. When an effect involves multiple D variables (as Angle and the interaction do), we need the multivariate extension of this test, which compares the determinants of the full and reduced error matrices.</p>
+<p>Lastly, just as a useful guide, here are the degrees of freedom for each effect are:</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Effect</th>
+<th>Numerator df</th>
+<th>Denominator df</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Angle main effect</td>
+<td>a - 1 = 2</td>
+<td>n - a + 1 = 8</td>
+</tr>
+<tr class="even">
+<td>Noise main effect</td>
+<td>b - 1 = 1</td>
+<td>n - b + 1 = 9</td>
+</tr>
+<tr class="odd">
+<td>Angle x Noise interaction</td>
+<td>(a-1)(b-1) = 2</td>
+<td>n - (a-1)(b-1) = 8</td>
+</tr>
+</tbody>
+</table>
+<hr>
+</section>
+</section>
+<section id="the-univariate-approach" class="level2">
+<h2 data-anchor-id="the-univariate-approach">5. The Univariate Approach</h2>
+<p>SPSS produces two sets of output for within-subjects effects: a multivariate section and a univariate (labeled “averaged”) section. The distinction matters, so it is worth explaining briefly why this lesson focuses exclusively on the multivariate output.</p>
+<p>The univariate approach pools the error variance across all D variables for a given effect into a single error term. This pooling is only valid if the variances of the D variables satisfies a condition called <strong>sphericity</strong> (or, equivalently, compound symmetry). When sphericity holds, the univariate approach can be more powerful than the multivariate approach. When sphericity is violated, however, the univariate approach produces inflated Type I error rates that cannot be trusted. Review the One-Way Within-Subjects ANOVA lesson for more detail.</p>
+<p>The multivariate approach makes no sphericity assumption. It remains valid regardless of how the variances and covariances happen to be structured. For this reason, the multivariate approach is the safer and more general default, and it is what we use throughout this lesson.</p>
+<p>One notable exception is worth flagging: when a factor has only two levels, a single D variable represents that factor’s effect entirely. With one D variable the multivariate and univariate results are identical by construction. The distinction between approaches only has practical consequences for effects with three or more levels.</p>
+<p>So in practice, the multivariate method will almost always be a better option because sphericity will become harder and harder to fulfill as the complexity of the within-subjects ANOVA.</p>
+<hr>
+</section>
+<section id="spss-syntax-omnibus-tests" class="level2">
+<h2 data-anchor-id="spss-syntax-omnibus-tests">6. SPSS Syntax: Omnibus Tests</h2>
+<p>The omnibus test for all three effects is obtained with a single <code>MANOVA</code> command using the <code>/WSFACTORS</code> subcommand. Two important details require care before you run it.</p>
+<ol type="1">
+<li><strong>Variable order matters</strong></li>
+</ol>
+<p>The variables listed in the <code>MANOVA</code> command must be ordered to match the factor order in <code>/WSFACTORS</code>. The rule is that the first factor named in <code>/WSFACTORS</code> groups the variables into blocks, and the second factor determines the order within each block. Below, you will see I named <code>noise(2) angle(3)</code>, so the variables are organized as two noise blocks (Absent, then Present), each containing the three angle levels in order (Angle 0, 4, and 8). So the necessary order I put when loading in the variables has to be <code>abs0 abs4 abs8 pres0 pres4 pres8</code>: all three angle conditions under Noise Absent come first, then all three angle conditions under Noise Present.</p>
+<p>The variable order and the <code>/WSFACTORS</code> specification must be consistent with each other. If you change one without changing the other, SPSS will assign the D variable coefficients to the wrong cells and produce silently incorrect output. For example, if you wanted to list Angle first in <code>/WSFACTORS</code>, you would also need to reorder the variables so that the two noise levels within each angle condition are grouped together: <code>abs0 pres0 abs4 pres4 abs8 pres8</code> with <code>/WSFACTORS angle(3) noise(2)</code>. Either ordering is valid as long as the variable list and the factor specification tell the same story.</p>
+<p>This is a bit abstract, so the Disscusion Questions section has some examples you can practice.</p>
+<ol start="2" type="1">
+<li><strong>Verify with <code>/PRINT TRANSFORM</code></strong></li>
+</ol>
+<p>This subcommand prints the transformation matrix SPSS used to construct the D variables. The T columns correspond to the D variables defined in Section 3. Inspecting the sign patterns before interpreting output is essential for confirming SPSS tested what you intended.</p>
+<p>The omnibus test SPSS code can look something like this:</p>
+<pre class="spss"><code>MANOVA
+  abs0 abs4 abs8 pres0 pres4 pres8     
+  /WSFACTORS noise(2) angle(3)          
+  /PRINT TRANSFORM.                    </code></pre>
+<p>Output for these SPSS tests is going to start getting long, so I will break it down from top to bottom.</p>
+<p>Starting with the top, we get the D variable output from the <code>/PRINT TRANSFORM</code> option.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/within-2D.png" class="img-fluid figure-img"></p>
+<figcaption>Orthonormalized Transformation Matrix from SPSS showing T1 through T6 for the 2x3 noise-by-angle design</figcaption>
+</figure>
+</div>
+<p>This output isn’t necessary to know, but it can verify whether or not SPSS is calculating the correct difference scores from the appropriate full/reduced models. T1 is the grand mean and is not of interest. The remaining columns correspond to the five D variables from Section 3. T2 assigns negative weights to the three Noise-Absent variables and positive weights to the three Noise-Present variables, which is the Noise main effect D variable (D3). T3 and T4 assign opposite signs to the 0-degree and 8-degree conditions while treating the two Noise levels symmetrically, which are the two Angle main effect D variables (D1 and D2). T5 and T6 flip the sign pattern between the Noise-Absent and Noise-Present rows, which is the signature of an interaction: the angle contrast is being applied in opposite directions across noise conditions. These are D4 and D5.</p>
+<p>If these sign patterns do not match what you expect based on your <code>/WSFACTORS</code> specification and variable order, stop and correct the syntax before reading any further output.</p>
+<p>Next in the output is the grand mean test in the “Between-Subjects Effects” block.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/within-multibetween.png" class="img-fluid figure-img"></p>
+<figcaption>SPSS Between-Subjects Effects output showing the grand mean test</figcaption>
+</figure>
+</div>
+<p>Recall that this is not that important since it is obvious that the mean of all people averaged together is not 0.</p>
+<p>Next in the list is the main effect of Noise.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/within-main2.png" class="img-fluid figure-img"></p>
+<figcaption>SPSS output showing the main effect of Noise</figcaption>
+</figure>
+</div>
+<p>This shows us that the main effect of noise is significant <span class="math inline">\(p &lt; .001\)</span>. Recall what I said in Section 5. Since there is only two levels for this variable, the univariate and multivariate approaches will be equivalent. So there is only one table of output. So there is a significant difference between the means of the present Nois group while averaging over the Angle groups.</p>
+<p>Next in the output is the main effect of Angle. This output has more to it since Angle has three levels, which means two D variables are involved and SPSS produces both a multivariate and a univariate section.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/within-main2.png" class="img-fluid figure-img"></p>
+<figcaption>SPSS output showing the main effect of Angle including Mauchly’s test, multivariate tests, and univariate averaged tests</figcaption>
+</figure>
+</div>
+<p>The output starts with <strong>Mauchly’s test of sphericity</strong>. This tests whether the variances of the D variables are equal, which is the assumption the univariate approach requires. A significant Mauchly’s test is a warning that the univariate results below it may not be trustworthy as spherecity does not hold. However, even when Mauchly’s test is not significant, it is not a guaranteed that sphericity holds, especially with small samples where the test has low power. This is one of the reasons we prefer the multivariate approach.</p>
+<p>Below that is the <strong>multivariate tests</strong> section, which is the output we care about. SPSS reports four test statistics: Pillai’s trace, Hotelling’s trace, Wilks’ lambda, and Roy’s largest root. These are four different mathematical approaches to the same underlying question: is the effect real or is it noise? They were developed at different points in history and each has slightly different statistical properties. Roy’s largest root is the most powerful but also the most anti-conservative, Pillai’s trace is the most robust when sample sizes are small or covariances are unequal, and Wilks’ lambda and Hotelling’s trace fall somewhere in between. In practice they tend to diverge most in designs with many dependent variables where the effect is not concentrated in a single contrast but spread unevenly across several, such as a MANOVA with five or six outcome measures and a small sample. In our design, however, SPSS prints “<span class="math inline">\(F\)</span> statistics are exact,” which means the design is simple enough that all four methods produce precisely the same F value rather than slightly different approximations. It does not matter which row you read. Thus, we know that the Angle main effect is significant (<span class="math inline">\(p\)</span> &lt; .001)</p>
+<p>This means that reaction time differs significantly across angle levels when combining across noise conditions. Participants were slower to respond as the angle of rotation increased, with average reaction times rising from 477 ms at 0 degrees to 585 ms at 4 degrees to 645 ms at 8 degrees.</p>
+<p>At the bottom is the <strong>univariate averaged tests</strong> section. This is the output you would read if you were taking the univariate approach, which pools error across D variables under the sphericity assumption. As discussed in Section 5, we do not use this. It is shown here only so you know what it is and can confidently skip past it.</p>
+<p>Lastly, we have the interaction effect at the very end of the output.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/within-int.png" class="img-fluid figure-img"></p>
+<figcaption>SPSS output for the Noise by Angle interaction showing Mauchly’s sphericity test, multivariate tests, and univariate averaged tests</figcaption>
+</figure>
+</div>
+<p>We know this is the interaction as it is <code>NOISE BY ANGLE</code>. Recall that <code>BY</code> means we are crossing the variables. The structure of this output is identical to what we saw for the Angle main effect: Mauchly’s test at the top, the multivariate tests in the middle, and the univariate averaged tests at the bottom. Read the multivariate section and skip the rest. The interaction is significant, <span class="math inline">\(p &lt; .001\)</span>.</p>
+<p>This means that the effect of noise on reaction time is not the same across all angle conditions. At 0 degrees, noise made almost no difference (462 ms vs.&nbsp;492 ms). By 8 degrees, that gap had grown to 234 ms (528 ms vs.&nbsp;762 ms). In other words, noise becomes increasingly disruptive as the mental rotation task gets harder.</p>
+</section>
+<section id="follow-up-tests-decision-tree" class="level2">
+<h2 data-anchor-id="follow-up-tests-decision-tree">7. Follow-Up Tests: Decision Tree</h2>
+<p>Just like what we discussed in the Two-Way Between-Subjects ANOVA and Higher-Order Between-Subjects ANOVA lessons, there are a set of follow-up tests you should conduct, depending on whether ot not the interaction is significant.</p>
+<p>The decision logic for follow-up tests in a two-way within-subjects design mirrors the structure you already know from two-way between-subjects ANOVA: the interaction result determines which path you take, and every comparison you make within that path uses the D variable framework introduced above.</p>
+<p>For convenience, I am pasting the same flowchart we used prior again.</p>
+<div class="cell" data-layout-align="default">
+<div class="cell-output-display">
+<div>
+<p></p><figure class="figure"><p></p>
+<div>
+<pre class="mermaid mermaid-js">flowchart TD
+    A[Is the A x B&lt;br/&gt;interaction significant?] --&gt;|Yes| B[Test simple effects&lt;br/&gt;OR interaction contrasts]
+    A --&gt;|No| F[Is the main effect&lt;br/&gt;of A significant?]
+    B --&gt; C[Simple effects: effect of&lt;br/&gt;one factor at each level&lt;br/&gt;of the other]
+    B --&gt; D[Interaction contrasts: does&lt;br/&gt;a specific contrast on A&lt;br/&gt;depend on B?]
+    C --&gt;|Significant&lt;br/&gt;simple effect| E[Cell means comparisons&lt;br/&gt;within that slice]
+    F --&gt;|Yes| G[Individual contrasts&lt;br/&gt;for marginal means]
+    F --&gt;|No| H[Is the main effect&lt;br/&gt;of B significant?]
+    H --&gt;|Yes| I[Individual contrasts&lt;br/&gt;for marginal means]
+    H --&gt;|No| J[Stop, nothing&lt;br/&gt;further to test]
+</pre>
+</div>
+<p></p></figure><p></p>
+</div>
+</div>
+</div>
+<hr>
+</section>
+<section id="type-i-error-correction" class="level2">
+<h2 data-anchor-id="type-i-error-correction">8. Type I Error Correction</h2>
+<p>Before I continue to the follow up tests, I just want to remind you of the Type I error corrections. Since we are doing follow up tests, this is something you have to keep in mind. I am going to defer to the Two-Way Between-Subjects ANOVA lesson for a lot of the details, as the general concepts about deciding on families and controlling for each branch of the flow chart is covered in detail there.</p>
+<p>However, there are two differences:</p>
+<ol type="1">
+<li><strong>Tukey’s HSD is not appropriate for within-subjects comparisons.</strong> Tukey’s procedure assumes that all comparisons share a common error variance. In a within-subjects design, that assumption is equivalent to requiring sphericity, and the multivariate approach is used precisely to avoid making that assumption. Applying Tukey’s procedure here would reintroduce the problem we sidestepped by choosing the multivariate approach, and familywise Type I error would no longer be controlled at the nominal level when sphericity is violated. Between-subjects designs do not face this restriction because pooling error across cells is defensible when the homogeneity of variance assumption holds. Within-subjects designs have no analogous safe pooling structure without sphericity.</li>
+</ol>
+<p>2 <strong>The Scheffé correction becomes the Roy-Bose correction.</strong> The Roy-Bose extension is the within-subjects analogue of the Scheffé correction. It controls the familywise error rate over the entire family of possible contrasts for a given effect, making it appropriate for post hoc exploration. The specific critical value formula depends on which type of comparison you are making.</p>
+<p>This requires specific equations for the critical values.</p>
+<p><strong>For marginal means comparisons</strong> (main effect follow-up on a factor with a levels):</p>
+<p><span class="math display">\[CV_{Roy-Bose} = \frac{(n-1)(a-1)}{n-a+1} \cdot F(.05;\, a-1,\, n-a+1)\]</span></p>
+<p><strong>For interaction contrasts:</strong></p>
+<p><span class="math display">\[CV_{Roy-Bose} = \frac{(n-1)(a-1)(b-1)}{n-(a-1)(b-1)} \cdot F(\alpha_{.05};\, (a-1)(b-1),\, n-(a-1)(b-1))\]</span> &gt; Recall that in planned contrast, if you want to be optimal, you should compare the Bonferroni and Roy-Bose critical values, and go with the method that has the lowest critical <span class="math inline">\(F\)</span> value.</p>
+<p>SPSS doesn’t have an easy way to introduce the Roy-Bose procedure, so if you wish to do this, you would need to manually calculate the critical value to compare your tests’ <span class="math inline">\(F\)</span> statistic with.</p>
+<p>Going forward, I am going to be ignoring these and just compare the results to an unadjusted <span class="math inline">\(\alpha = .05\)</span>.</p>
+</section>
+<section id="marginal-means-comparison" class="level2">
+<h2 data-anchor-id="marginal-means-comparison">9. Marginal Means Comparison</h2>
+<p>This section applies when the interaction is <strong>not</strong> significant and a main effect is. Though our data does have a significant interaction, we will pursue a hypothetical where this is not true. The first thing to do is check the main effects of each variable. If the main effects are significant, then we need to follow up with marginal mean comparisons. In our case, all main effects were significant. So now the goal is to compare specific marginal means for these factors while average across levels of the other factor(s).</p>
+<p>For the case of Noise, we actually can’t do marginal means comparisons since there are only two groups. So the main effect compares those two means directly. Therefore, we will conduct marginal means for Angle.</p>
+<section id="spss-for-marginal-means" class="level3">
+<h3 data-anchor-id="spss-for-marginal-means">SPSS for Marginal Means</h3>
+<p>Let’s say we are interest in comparing the 0 degree Angle measurement to the 4 degree Angle measurement.</p>
+<p>The SPSS code for this is as follows.</p>
+<pre><code>MANOVA
+  abs0 abs4 abs8 pres0 pres4 pres8
+  /WSFACTORS noise(2) angle(3)
+  /CONTRAST(angle) = special(1  1  1    
+                              1 -1  0  
+                              1  1 -2)  
+  /PRINT TRANSFORM
+  /WSDESIGN = angle(1) angle(2).      </code></pre>
+<p>As always for within-subjects designs using MANOVA, the variable order in the <code>MANOVA</code> command and the factor specification in <code>/WSFACTORS</code> must be consistent with each other. If they do not match, the contrast weights will be applied to the wrong cells and the output will be incorrect without any warning from SPSS. Use <code>/PRINT TRANSFORM</code> to verify that the D variables SPSS constructed match what you intended before reading any results. See the One-Way Within-Subjects ANOVA lesson for more detail.</p>
+<p>The <code>/CONTRAST(angle)</code> subcommand defines the contrast matrix for the Angle factor. The first row is always a grand mean row that SPSS, given as a row of 1’s. The second row compares 0 degrees against 4 degrees, averaging across both noise conditions. The third row compares the average of 0 and 4 degrees against 8 degrees, averaging across noise conditions. The reason I included this complex comparison is not because I am intereted in it conceptually, but I included it because the two contrasts in this matrix must orthogonal to each other, meaning they carve up the angle effect into two non-overlapping pieces and can therefore be tested in the same command without any issues. <strong>REMEBER THAT ALL CONTRASTS FOR WITHIN-SUBJECTS FACTORS MUST BE ORTHOGONAL.</strong> Sometimes this requires adding non-important contrasts. This is ok. You will just ignore the output in your study if you did not plan to be interested in them.</p>
+<p>Lastly, the <code>/WSDESIGN</code> subcommand tells SPSS which rows of the contrast matrix to actually test. <code>angle(1)</code> requests the test of the first substantive contrast row (0 vs.&nbsp;4 degrees) and <code>angle(2)</code> requests the second (average of 0 and 4 vs.&nbsp;8 degrees). Since these are marginal means, not including anything about Noise in this line automatically tells SPSS to marginalize over Noise.</p>
+<p>If you want to test polynomial trends for Angle instead, replace the contrast matrix rows with the appropriate polynomial coefficients:</p>
+<pre class="spss"><code>* Trend contrasts for Angle marginal means.
+MANOVA
+  abs0 abs4 abs8 pres0 pres4 pres8
+  /WSFACTORS noise(2) angle(3)
+  /CONTRAST(angle) = special(1  1  1    
+                             -1  0  1   
+                              1 -2  1) 
+  /PRINT TRANSFORM
+  /WSDESIGN = angle(1) angle(2).</code></pre>
+<p>Recall that the linear and polynomial trend contrasts are orthogonal by default.</p>
+<p>The output for the contrasts are given in two blocks. The first block is for the first, focal contrast that compares 0 degrees against 4 degrees while combining over Noise:</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/within-MM1.png" class="img-fluid figure-img"></p>
+<figcaption>SPSS parameter estimates for the first angle contrast comparing 0 degrees against 4 degrees combining across noise conditions</figcaption>
+</figure>
+</div>
+<p>The coefficient of -108 tells us that the marginal mean at 0 degrees is 108 ms lower than the marginal mean at 4 degrees, averaging across both Noise conditions. This difference is significant, <span class="math inline">\(p &lt; .001\)</span>, with a 95% confidence interval ranging from -147 ms to -69 ms. In other words, participants were reliably slower to respond when the angle of rotation increased from 0 to 4 degrees, regardless of whether Noise was present or absent.</p>
+<p>Even though we aren’t interested in the complex comparison, I am including it here for completion.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/within-MM2.png" class="img-fluid figure-img"></p>
+<figcaption>SPSS output for the second angle contrast comparing the average of 0 and 4 degrees against 8 degrees combining across noise conditions</figcaption>
+</figure>
+</div>
+<p>The coefficient of -131.64 tells us that the average of the 0 and 4 degree marginal means is 131.64 ms lower than the 8 degree marginal mean, combining across both noise conditions. This difference is also significant, <span class="math inline">\(p &lt; .001\)</span>, with a 95% confidence interval ranging from -177 ms to -86 ms. Participants were reliably slower at 8 degrees than at the lower two angle levels.</p>
+<p>Now we turn to the branch of the flow chart when the interaction is significant.</p>
+</section>
+</section>
+<section id="simple-effects" class="level2">
+<h2 data-anchor-id="simple-effects">10. Simple Effects</h2>
+<p>Simple effects are looking at the effect of one factor at specific levels of the other factor(s). Recall that this should only be done when the interaction is significant in the omnibus test, which is true in our data.</p>
+<blockquote class="blockquote">
+<p>Recall that “simple” means within a level of a factor.</p>
+</blockquote>
+<p>The logic is to restrict attention to the subset of variables that correspond to one level of the conditioning factor. D variables formed within that subset use the same contrast logic as before but applied only to those variables. Test the simple effect with a multivariate <span class="math inline">\(F\)</span> if the focal factor has more than two levels, or with the the generic <span class="math inline">\(F\)</span> test if it has exactly two levels.</p>
+<p>For our data, the interaction tells us that noise and angle do not operate independently. Looking at the cell means, noise makes almost no difference at 0 degrees (462 ms vs.&nbsp;492 ms, a gap of 30 ms), but that gap grows dramatically as the rotation angle increases: 150 ms at 4 degrees and 234 ms at 8 degrees. This pattern suggests that noise becomes increasingly disruptive as the mental rotation task gets harder. The natural way to unpack this is to test the simple effect of Noise separately at each angle level, asking: is noise making a significant difference here, and does that answer change depending on which angle we are looking at?</p>
+<section id="spss-syntax-simple-effect-of-noise-within-angle" class="level3">
+<h3 data-anchor-id="spss-syntax-simple-effect-of-noise-within-angle">SPSS Syntax: Simple Effect of Noise Within Angle</h3>
+<p>Though we could do simple effect tests for Angle within Noise, conceptually, we are much more interested in the simple effects of Noise within the different levels of Angle. The following syntax does this.</p>
+<pre class="spss"><code>MANOVA
+  abs0 abs4 abs8 pres0 pres4 pres8
+  /WSFACTORS noise(2) angle(3)
+  /PRINT TRANSFORM
+  /WSDESIGN = noise W angle(1),
+              noise W angle(2),
+              noise W angle(3).</code></pre>
+<p>The <code>/WSDESIGN</code> subcommand is where the simple effects are specified. The <code>W</code> keyword means “within,” so <code>noise W angle(1)</code> is asking for the effect of Noise within the first level of Angle, which is the 0 degree condition. The number in parentheses after <code>angle</code> refers to the level of the conditioning factor, not a contrast row, so <code>angle(1)</code>, <code>angle(2)</code>, and <code>angle(3)</code> correspond to the 0, 4, and 8 degree conditions respectively. Running all three in the same command produces a separate test for each angle level in a single pass through the output.</p>
+<p>The other rules of within-subjects syntax applies.</p>
+<p>At the top of the output, we have the difference scores from <code>/PRINT TRANSFORM</code>, but I will skip that. The simple effects are reported in different output chunks in order of how you specified them in <code>/WSDESIGN</code>. The following output goes from the first level of Angle to the last:</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/within-simple1.png" class="img-fluid figure-img"></p>
+<figcaption>SPSS output for the simple effect of Noise at 0 degrees</figcaption>
+</figure>
+</div>
+<p>At 0 degrees, the simple effect of Noise is not significant, <span class="math inline">\(p = .244\)</span>. The 30 ms gap between Noise Absent (462 ms) and Noise Present (492 ms) at this angle level is small enough that we cannot rule out chance as an explanation.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/within-simple2.png" class="img-fluid figure-img"></p>
+<figcaption>SPSS output for the simple effect of Noise at 4 degrees</figcaption>
+</figure>
+</div>
+<p>At 4 degrees, the simple effect of Noise is significant, <span class="math inline">\(p = .002\)</span>. The gap has grown to 150 ms (510 ms vs.&nbsp;660 ms), and we can now conclude that noise is genuinely slowing participants down at this level of rotation.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/within-simple3.png" class="img-fluid figure-img"></p>
+<figcaption>SPSS output for the simple effect of Noise at 8 degrees</figcaption>
+</figure>
+</div>
+<p>At 8 degrees, the simple effect of Noise is highly significant, <span class="math inline">\(p &lt; .001\)</span>. The gap has grown to 234 ms (528 ms vs.&nbsp;762 ms), and the error term is actually smaller here than at the other angle levels, making this the most decisive test of the three. Taken together, these three simple effects show that Noise has no meaningful impact when the rotation task is easy (0 degrees), but becomes increasingly disruptive as the task gets harde (8 degrees).</p>
+<p>Because Noise has only two levels, SPSS produces a single table per angle level with no separate multivariate vs.&nbsp;univariate distinction. The results are equivalent in both frameworks.</p>
+<p>There are two more simple effects we can do for Noise within Angle, but we will skip this for now. Now we turn to what to do after getting significant simple effects.</p>
+</section>
+</section>
+<section id="cell-means-comparisons" class="level2">
+<h2 data-anchor-id="cell-means-comparisons">11. Cell Means Comparisons</h2>
+<p>Once a simple effect is established as significant, the next step is to compare specific cell means. Recall that simple effects just tell you there is a difference in the means of one factor within specific levels of another factor. It does not tell you where this difference lies. Cell mean comparisons can lead us there.</p>
+<p>The logic follows to form a single D variable that captures the contrast of interest, applying weights only to the outcome variables within the relevant level of the factors. Though this can get pretty technical, so we will by pass it.</p>
+<section id="spss-syntax-cell-mean-comparisons" class="level3">
+<h3 data-anchor-id="spss-syntax-cell-mean-comparisons">SPSS Syntax: Cell Mean Comparisons</h3>
+<p>There are many cell mean comparisons we could look at. For now, let’s say we are interest in comparing the linear trend 0 degrees Angle level towards the 8 degrees Angle level within the two different Noise groups.</p>
+<p>The syntax would be the following</p>
+<pre><code>MANOVA
+  abs0 abs4 abs8 pres0 pres4 pres8
+  /WSFACTORS noise(2) angle(3)
+  /CONTRAST(angle) = special(1  1  1    
+                               1  0 -1 
+                               1 -2  1) 
+  /PRINT TRANSFORM
+  /WSDESIGN = angle(1) W noise(1),     
+              angle(1) W noise(2),     
+              angle(2) W noise(1),      
+              angle(2) W noise(2).     </code></pre>
+<p>The <code>/CONTRAST(angle)</code> subcommand defines the contrast matrix for Angle. As always, the first row is the grand mean row required by SPSS. The second row is the linear contrast, which compares 0 degrees against 8 degrees by assigning weights of 1 and -1 to those conditions and 0 to the 4 degree condition, which drops it from the comparison entirely. The third row is a quadratic contrast that compares the average of the 0 and 8 degree conditions against the 4 degree condition. These two contrasts are orthogonal to each other, which is a requirement for running them in the same <code>MANOVA</code> command. If your desired contrasts are not orthogonal, they must each go in their own separate command.</p>
+<p>The <code>/WSDESIGN</code> subcommand then specifies which comparisons to test and where. The number in parentheses <strong>before</strong> the <code>W</code> refers to a row of the contrast matrix, so <code>angle(1)</code> means the first substantive contrast row (linear) and <code>angle(2)</code> means the second (quadratic). The number in parentheses <strong>after</strong> the <code>W</code> refers to the level of the conditioning factor, so <code>noise(1)</code> is the Noise Absent condition and <code>noise(2)</code> is the Noise Present condition. Putting it together, <code>angle(1) W noise(1)</code> tests the linear trend within Noise Absent, and <code>angle(1) W noise(2)</code> tests the same comparison within Noise Present.</p>
+<p>There will be a lot of output for this syntax, so we will briefly cover all the cell mean comparisons only. It is important to keep in mind what each piece of the design line refers to what comparison, as the output will be labeled based on that.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/within-cell1.png" class="img-fluid figure-img"></p>
+<figcaption>SPSS output for the 0 vs 8 degree comparison within Noise Absent</figcaption>
+</figure>
+</div>
+<p>Within the Noise Absent condition, participants were significantly faster at 0 degrees than at 8 degrees, <span class="math inline">\(p = .007\)</span>. The coefficient of -46.67 ms tells us the size of that gap: reaction times at 0 degrees were about 47 ms lower than at 8 degrees when Noise was absent.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/within-cell2.png" class="img-fluid figure-img"></p>
+<figcaption>SPSS output for the 0 vs 8 degree comparison within Noise Present</figcaption>
+</figure>
+</div>
+<p>Within the Noise Present condition, the same comparison is again significant, <span class="math inline">\(p &lt; .001\)</span>, but the effect is dramatically larger. The coefficient of -190.92 ms means that reaction times at 0 degrees were nearly 191 ms lower than at 8 degrees when noise was present. Comparing this to the 47 ms gap in the Noise Absent condition makes the interaction concrete: Noise amplifies the Angle effect by a factor of roughly four.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/within-cell3.png" class="img-fluid figure-img"></p>
+<figcaption>SPSS output for the quadratic angle contrast within Noise Absent</figcaption>
+</figure>
+</div>
+<p>The quadratic contrast within Noise Absent is not significant, <span class="math inline">\(p = .485\)</span>. The average of the 0 and 8 degree conditions does not meaningfully differ from the 4 degree condition when noise is absent, suggesting the Angle effect is fairly linear in that condition.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/within-cell4.png" class="img-fluid figure-img"></p>
+<figcaption>SPSS output for the quadratic angle contrast within Noise Present</figcaption>
+</figure>
+</div>
+<p>The quadratic contrast within Noise Present is significant, <span class="math inline">\(p = .032\)</span>. When noise is present, the 4 degree condition pulls away from the average of the 0 and 8 degree conditions, suggesting the Angle effect is not purely linear under noise. The pattern is more complex, with the 4 degree condition showing a disproportionately large reaction time relative to what a straight line through 0 and 8 degrees would predict.</p>
+<p>Keep in mind that before I ran the test, I said I was only interested in the linear trend. So realistically and ethically, I should only look at those effects and plan my Type I error control around this. However, if I decide to include the quadratic effects, this is a bit <span class="math inline">\(p\)</span> hacky, so it will be imperative to do Type I error control. It is recommended practice to stick to what you planned, regardless of the outcome of the test. In fact, not doing this and people just taking any signficant results is part of the reason for the replication crisis. Be the change you want to see!</p>
+</section>
+</section>
+<section id="interaction-contrasts" class="level2">
+<h2 data-anchor-id="interaction-contrasts">12. Interaction Contrasts</h2>
+<p>The last follow-up tests are interaction contrasts. Interaction contrasts offer an alternative path for decomposing a significant interaction without first computing simple effects. Rather than asking about the full effect of one factor at each level of the other, an interaction contrast asks whether a specific contrast on Factor A differs between two specific levels of Factor B.</p>
+<p>The D variable logiv for an interaction contrast uses an element-wise product of the coefficient vector for a contrast on Factor A with the coefficient vector for a contrast on Factor B. Again, its a bit complicated, so we will skip it.</p>
+<section id="spss-syntax-interaction-contrasts" class="level3">
+<h3 data-anchor-id="spss-syntax-interaction-contrasts">SPSS Syntax: Interaction Contrasts</h3>
+<p>Let’s say we are interested in whether or not the linear and quadratic trend differ across the two Noise groups. That is, does the way reaction time changes across angle levels depend on whether noise is present or absent? Rather than testing the full simple effect of Angle within each Noise condition, interaction contrasts let us ask this question one trend at a time: does the linear increase across angle levels differ between noise conditions, and separately, does the quadratic bend differ between noise conditions?</p>
+<p>The SPSS syntax to do this is given below:</p>
+<pre class="spss"><code>MANOVA
+  abs0 abs4 abs8 pres0 pres4 pres8
+  /WSFACTORS noise(2) angle(3)
+  /CONTRAST(noise)  = special(1  1   
+                               1 -1)  
+  /CONTRAST(angle) = special(1  1  1  
+                              1  0 -1  
+                              1 -2  1) 
+  /PRINT TRANSFORM
+  /WSDESIGN = angle(1) BY noise(1),   
+              angle(2) BY noise(1).   </code></pre>
+<p>This syntax introduces two new elements compared to what we have seen before. First, we now need a <code>/CONTRAST</code> specification for both factors, not just Angle. The Noise contrast matrix has a grand mean row and a single substantive row comparing Noise Absent against Noise Present. The Angle contrast matrix is the same one used in the cell means comparisons: a grand mean row, a 0 vs.&nbsp;8 degree row, and a quadratic row. Again, contrasts must be orthogonal here.</p>
+<p>The key new element is the <code>BY</code> keyword in <code>/WSDESIGN</code>. Where <code>W</code> specifies a simple effect of one factor within a level of another, <code>BY</code> crosses a specific contrast from one factor with a specific contrast from another. So <code>angle(1) BY noise(1)</code> takes the first substantive Angle contrast (0 vs.&nbsp;8 degrees) and crosses it with the first substantive Noise contrast (Absent vs.&nbsp;Present), producing a single D variable that asks: is the 0 vs.&nbsp;8 degree difference bigger in one noise condition than the other? <code>angle(2) BY noise(1)</code> does the same thing for the quadratic Angle contrast. As before, the number before <code>BY</code> refers to a contrast row for Angle and the number after <code>BY</code> refers to a contrast row for Noise, not a factor level.</p>
+<p>If you have more levels in each within-subjects factor, the design line can get very messy, but the logic stays the same.</p>
+<p>We will go over the output of each interaction contrast piece by piece. Make sure you are looking at the correctly labeled part of the output.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/within-int1.png" class="img-fluid figure-img"></p>
+<figcaption>SPSS output for the linear angle by noise interaction contrast</figcaption>
+</figure>
+</div>
+<p>The linear Angle contrast differs significantly between Noise conditions, <span class="math inline">\(p &lt; .001\)</span>. The coefficient of 102 ms tells us the size of that difference: the gap between 0 and 8 degrees is 102 ms larger under Noise Present than under Noise Absent. In other words, the linear increase in reaction time across Angle levels is substantially steeper when Noise is present, which is the core of what the interaction is capturing.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/within-int2.png" class="img-fluid figure-img"></p>
+<figcaption>SPSS output for the quadratic angle by noise interaction contrast</figcaption>
+</figure>
+</div>
+<p>The quadratic Angle contrast does not differ significantly between noise conditions, <span class="math inline">\(p = .343\)</span>. The bend in the Angle effect, that is, whether the 4 degree condition falls above or below a straight line connecting 0 and 8 degrees, is similar regardless of whether Noise is present or absent.</p>
+<p>Taken together, the two interaction contrasts show us that Noise changes the slope of the Angle effect but not its shape.</p>
+</section>
+</section>
+<section id="a-brief-note-on-higher-order-designs" class="level2">
+<h2 data-anchor-id="a-brief-note-on-higher-order-designs">13. A Brief Note on Higher-Order Designs</h2>
+<p>The logic of the two-way within-subjects design extends naturally to designs with three or more within-subjects factors. A 2x3x4 design, for example, would produce three main effects, three two-way interactions, and one three-way interaction, all tested using the same D variable framework. The total number of D variables needed is still (abc - 1), partitioned among effects in the same way: a - 1 for Factor A, b - 1 for Factor B, c - 1 for Factor C, (a-1)(b-1) for the A x B interaction, and so on up to (a-1)(b-1)(c-1) for the three-way interaction.</p>
+<p>The SPSS <code>MANOVA</code> syntax scales up in a straightforward way. You add the additional factor to <code>/WSFACTORS</code>, extend the variable list accordingly, and make sure the variable order is consistent with the factor specification as described in Section 6. The <code>/PRINT TRANSFORM</code> check becomes even more important in higher-order designs because there are more D variables to verify and more opportunities for a variable ordering mistake to go undetected.</p>
+<p>Follow-up tests and Type I error control follow the same logic described in the Higher-Order Between-Subjects ANOVA lesson. The interaction hierarchy still applies: start with the highest-order interaction and work downward. The within-subjects specific considerations from Section 8 also carry over directly, Bonferroni and Roy-Bose Scheffe remain the appropriate correction strategies and Tukey remains unavailable.</p>
+<p>The one thing that does become more complicated in higher-order within-subjects designs is the D variable bookkeeping. In a three-way design the interaction D variables are formed by multiplying the coefficients of all three main effect contrast vectors together, which can produce a large number of D variables that are easy to lose track of. Carefully labeling your D variables before running any syntax and verifying the transformation matrix output before interpreting results is especially important here.</p>
+<p>Realistically, I am not familiar with any studies that would do a design like this in psychology. Perhaps in other fields of study, but in Psychology, it is hard enough to get people to commit to any ammount of repeated-measures experiments, especially if the length of time is more than one day.</p>
+<p>But just keep this all in mind for whatever you might try to do/analyze in the future.</p>
+<hr>
+</section>
+<section id="summary" class="level2">
+<h2 data-anchor-id="summary">14. Summary</h2>
+<p>The multivariate approach to higher-order within-subjects designs is a coherent extension of the one-way case. Every effect in the design is captured by a set of D variables formed from weighted combinations of the original repeated-measures variables. The omnibus test for each effect is a multivariate <span class="math inline">\(F\)</span> test that asks whether the population means of those D variables are simultaneously zero. Follow-up tests use the same D variable logic.</p>
+<p>In general, the step-by-step process on how to handle two-way or higher order within-subjects ANOVAs follow the between-subjects form. The SPSS syntax and output gets more messy, but the procedure remains the same. However, for Type I error control, you cannot use the Tukey HSD correction and you must use the Roy-Bose correction instead of Scheffé.</p>
+</section>
+<section id="discussion-questions" class="level2">
+<h2 data-anchor-id="discussion-questions">Discussion Questions</h2>
+<p><strong>1.</strong> A researcher designs a 4x2 within-subjects study with factors Condition (4 levels) and Time (2 levels). How many D variables are needed in total, and how many are assigned to each effect?</p>
+<details>
+<summary>
+Click to reveal answer
+</summary>
+<p>The total number of D variables needed is (ab - 1) = (4)(2) - 1 = 7. The Condition main effect requires a - 1 = 3 D variables. The Time main effect requires b - 1 = 1 D variable. The Condition x Time interaction requires (a - 1)(b - 1) = 3 D variables.</p>
+</details>
+<hr>
+<p><strong>2.</strong> You specify <code>/WSFACTORS noise(2) angle(3)</code> but accidentally list the variables as <code>abs0 pres0 abs4 pres4 abs8 pres8</code>. What will happen to the transformation matrix, and how would you detect the problem?</p>
+<details>
+<summary>
+Click to reveal answer
+</summary>
+<p>SPSS uses the variable list and the <code>/WSFACTORS</code> specification together to figure out which variable belongs to which cell. The first factor named in <code>/WSFACTORS</code> groups the variables into blocks, and the second factor determines the order within each block. So <code>/WSFACTORS noise(2) angle(3)</code> tells SPSS to expect two noise blocks, each containing three angle conditions in order, giving the variable arrangement <code>abs0 abs4 abs8 pres0 pres4 pres8</code>.</p>
+<p>If you list the variables as <code>abs0 pres0 abs4 pres4 abs8 pres8</code> but keep <code>/WSFACTORS noise(2) angle(3)</code>, SPSS will still run without an error, but it will assign the wrong variable to the wrong cell. It will treat <code>abs0</code> and <code>pres0</code> as the two angle conditions within the first noise level, and <code>abs4</code> and <code>pres4</code> as the two angle conditions within the second noise level, which is not what the data actually represent. The D variables it constructs will be meaningless combinations of the original variables and the output will be silently wrong.</p>
+<p>You would catch this by checking the <code>/PRINT TRANSFORM</code> output. T2, which should show equal negative weights for all three Noise Absent variables and equal positive weights for all three Noise Present variables, will instead show a different pattern. Any mismatch between the transformation matrix and the D variable definitions from Section 3 is a sign that the variable order or the factor specification needs to be corrected before reading any results.</p>
+</details>
+<hr>
+<p><strong>3.</strong> Explain in your own words why the multivariate and univariate approaches give identical results for the Noise main effect but not for the Angle main effect or the interaction.</p>
+<details>
+<summary>
+Click to reveal answer
+</summary>
+<p>The Noise main effect is represented by a single D variable because Noise has only two levels. With only one D variable there is nothing to pool and no sphericity assumption to worry about, so the multivariate and univariate approaches are doing exactly the same calculation and will always give the same answer. The Angle main effect and the interaction each require two D variables. The univariate approach pools the error across those D variables under the sphericity assumption, while the multivariate approach does not. When sphericity does not hold, the two approaches give different answers and we trust the multivariate output. The general rule is simple: when an effect has only one D (i.e., has two levels) variable the two approaches agree, and when there is more than one D variable (i.e., more than two levels) they may not.</p>
+</details>
+<hr>
+<p><strong>4.</strong> A colleague argues that Tukey’s HSD should be used to control familywise error rate when comparing cell means in a within-subjects design, because it is more powerful than Bonferroni. How do you respond?</p>
+<details>
+<summary>
+Click to reveal answer
+</summary>
+<p>Tukey’s HSD is not appropriate for within-subjects comparisons. Tukey assumes that all comparisons share a common error variance, which is the assumption of Spherecity. This is the same assumption we have been trying to avoid by using the multivariate approach in the first place. Using Tukey here would reintroduce the very problem we sidestepped. The appropriate alternatives are Bonferroni for a small planned set of comparisons and the Roy-Bose Scheffe extension for post hoc exploration. Bonferroni can actually be more powerful than Roy-Bose Scheffe when the number of planned comparisons is small.</p>
+<p>We could use Tukey if we do have sphericity and are doing the univariate method. However, the univariate method is not preferred over the multivariate method due to the fact that sphericity is rarely guaranteed in practice, and with small samples like ours there is not enough power to reliably detect when it is violated. The multivariate approach works regardless, so there is little reason to take the risk.</p>
+</details>
+<hr>
+<p><strong>5.</strong> A researcher runs a 2x4 within-subjects design crossing Feedback Type (Positive, Negative) with Practice Sessions (1, 2, 3, 4) and finds a significant interaction. What follow-up options do they have, and give an example of three specific tests they could run?</p>
+<details>
+<summary>
+Click to reveal answer
+</summary>
+<p>When the interaction is significant there are two broad paths, as shown in the decision tree: simple effects or interaction contrasts.</p>
+<p>The simple effects path involves testing the effect of one factor at each level of the other. There are 4 simple effects of Feedback Type within each session level, and 2 simple effects of Practice Sessions within each feedback level, giving 6 simple effects in total. Any that come back significant can then be followed up with cell means comparisons within that slice. Three specific examples would be: the simple effect of Feedback Type at Session 1, the simple effect of Feedback Type at Session 4, or the simple effect of Practice Sessions within the Positive Feedback condition.</p>
+<p>The interaction contrasts path instead asks whether a specific contrast on one factor depends on a specific contrast on the other. Three specific examples would be: does the linear trend across sessions differ between Positive and Negative feedback, does the quadratic trend across sessions differ between the two feedback types, or is the difference between Session 1 and Session 4 larger under one feedback condition than the other.</p>
+</details>
+
+
+</section>
+
+</main> <!-- /main -->
+<!-- MailerLite Universal -->
+<script>
+    (function(w,d,e,u,f,l,n){w[f]=w[f]||function(){(w[f].q=w[f].q||[])
+    .push(arguments);},l=d.createElement(e),l.async=1,l.src=u,
+    n=d.getElementsByTagName(e)[0],n.parentNode.insertBefore(l,n);})
+    (window,document,'script','https://assets.mailerlite.com/js/universal.js','ml');
+    ml('account', '2295583');
+</script>
+<!-- End MailerLite Universal -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/infogothic\.com");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

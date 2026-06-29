@@ -233,7 +233,7 @@ window.Quarto = {
 <p>From my experience leading the lab lectures of this course, this lesson tends to be the most unintuitive lesson, at least at first. Contrasts will become more clear when we start doing more specific comparisons.</p>
 <section id="the-dataset" class="level3">
 <h3 data-anchor-id="the-dataset">The Dataset</h3>
-<p>The motivating example is a context where a researcher is interested in treatments to reduce hypertension of the blood stream. Consider a hypothetical study with four independent groups of subjects, each of whom is assigned randomly to one of the following treatments: drug therapy, biofeedback, dietary modification, or a treatment combining all aspects of the other treatments. For simplicity, suppose the dependent variable is a single blood pressure reading taken 2 weeks after the termination of treatment.</p>
+<p>We will be using the Contrasts.sav dataset for this lesson. The motivating example is a context where a researcher is interested in treatments to reduce hypertension of the blood stream. Consider a hypothetical study with four independent groups of subjects, each of whom is assigned randomly to one of the following treatments: drug therapy, biofeedback, dietary modification, or a treatment combining all aspects of the other treatments. For simplicity, suppose the dependent variable is a single blood pressure reading taken 2 weeks after the termination of treatment.</p>
 <p>The data would consist of four groups.</p>
 <table class="caption-top table">
 <thead>
@@ -297,7 +297,8 @@ window.Quarto = {
 <p>The <span class="math inline">\(\Psi\)</span> represents the value of the mean differences from our sample. That is, when we plug in our group means to calculate the value of <span class="math inline">\(\Psi\)</span>.</p>
 <p><span class="math display">\[ \Psi_1 = 91.4 - 93 = -1.6 \]</span></p>
 <p>So the testing value for this contrast is <span class="math inline">\(\Psi = -1.6\)</span> (note, which order you subtract the means does not matter for the significance test, the only difference it will make will be the signs of the ends of the confidence intervals).</p>
-<p>I’ll spare you the formulas, but in the end, this value will give us an F statistic and a p value, so we can see if this mean difference is significant or not. If it <em>is</em> significant, this could be <em>a</em> source of the significant omnibus ANOVA test, however there could be contrasts that are significant.</p>
+<p>I’ll spare you the formulas, but in the end, this value will give us an F statistic and a p value, so we can see if this mean difference is significant or not. If it <em>is</em> significant, this could be <em>a</em> source of the significant omnibus ANOVA test, however there could be contrasts that are significant. The F statistic for the test follows the form</p>
+<p><span class="math display">\[CV = F_{\alpha;~ 1, ~df_{error}}.\]</span> where <span class="math inline">\(\alpha\)</span> is your alpha level and <span class="math inline">\(df_{error}\)</span> is your degrees-of-freedom of the error variance.</p>
 <p>Unlike with t tests, you can test multiple means at once in any method so long as you can formulate them into a simple equality (<span class="math inline">\(MEAN 1 = MEAN 2\)</span>). How this works is that you can test whether the <em>average</em> of multiple means differs from other means.</p>
 <p>For example, let’s say I want to see if the combined treatment group differs from the average of all the other treatments. We can formulate the null hypothesis as:</p>
 <p><span class="math display">\[ \mu_{combined} = \frac{\mu_{drug~therapy}+\mu_{biofeedback}+\mu_{diet}}{3} \]</span> If we do some algebra, we can get this as a difference that equals 0:</p>
@@ -390,7 +391,7 @@ window.Quarto = {
 <figcaption>ONEWAY output</figcaption>
 </figure>
 </div>
-<p>The new and important part of the output are at the bottom and labeled as contrasts. The “Contrast Coefficients” block just print the contrasts you put in the syntax. The “Contrast Tests” table gives the t tests for the contrasts. The “Assumes/Does not assume equal variances” blocks just give you two different results depending on your homoskedasticity assumption (covered in a future lesson), but we are interested in the top half of the table. The contrasts are labeled in the order you inputted them.</p>
+<p>The new and important part of the output are at the bottom and labeled as contrasts. The “Contrast Coefficients” block just print the contrasts you put in the syntax. The “Contrast Tests” table gives the t tests for the contrasts. The “Assumes/Does not assume equal variances” blocks just give you two different results depending on your homoskedasticity assumption (covered in a future lesson), but this assumption essentially means you assume the variances of the scores within each group are the same. We are interested in the top half of the table. The contrasts are labeled in the order you inputted them.</p>
 <ul>
 <li><strong>Value of Contrast</strong> - the <span class="math inline">\(\Psi\)</span> contrast value</li>
 <li><strong>Std. Error</strong> - the standard error of the <span class="math inline">\(\Psi\)</span></li>
@@ -420,10 +421,10 @@ window.Quarto = {
 <p>Guidelines for the special matrix:</p>
 <ol type="1">
 <li><p><strong>The first row consists of all ones.</strong> This adds the grand mean to our model (equivalently, the intercept in the regression framework). Without it, SPSS would not know what baseline to use for your contrasts. I usually put this directly after <code>special(</code> on that same line for clarity, that way each contrast is on an individual row.</p></li>
-<li><p><strong>The special matrix must always be a square matrix</strong>, with the number of columns and rows equal to <span class="math inline">\(a\)</span>, the number of groups. Within the MANOVA function, you can test <span class="math inline">\(a - 1\)</span> contrasts per special matrix. With our data of 4 groups, we can only test 3 contrasts at a time, and we <em>must</em> test three contrasts at a time. You have no choice in this. If you were interested in more than <span class="math inline">\(a-1\)</span> contrasts (e.g., in this case I wanted to test 4 contrasts), then you have to run multiple MANOVA procedures just with different contrasts in the special matrix.</p></li>
+<li><p><strong>The special matrix must always be a square matrix</strong>. This means the rows and columns need to be equal in size (including the ros of all 1’s). The number of columns and rows must be equal to <span class="math inline">\(a\)</span>, which is the number of groups for your group variable. Within the MANOVA function, you can test <span class="math inline">\(a - 1\)</span> contrasts per special matrix. This means with our data of 4 groups, we can only test 3 contrasts at a time, and we <em>must</em> test three contrasts at a time. You have no choice in this for this method. If you were interested in more than <span class="math inline">\(a-1\)</span> contrasts (e.g., if I wanted to test 4 contrasts), then you have to run multiple MANOVA procedures just with different contrasts in the special matrix.</p></li>
 </ol>
 <p>Sometimes this limitation means that some of your contrasts will be redundant. For example, if I wanted to only test 2 contrasts, I still have to fit 3 in the matrix. In this case, that third contrast I fit is just fluff. I don’t care about the output, so I can ignore it. In fact, you <em>should</em> ignore it because it is bad science to take significant results after you’ve already decided that you don’t care about it. This is called “p hacking”.</p>
-<p>Here’s an example</p>
+<p>Here’s an example where I am interested in 4 contrasts. The first MANOVA block has the first three contrasts (stated in a square matrix, including the first row of ones). The second MANOVA block contains the the fourth contrast I am interested in (.5, .5, 0, -1), and the other two contrasts are redundant and just necessary.</p>
 <pre class="text"><code>MANOVA pressure BY treat (1 4)
 /print=cellinfo(means)
 /error=within
