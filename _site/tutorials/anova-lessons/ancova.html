@@ -1,0 +1,757 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.9.36">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Michael Woller">
+
+<title>Analysis of Covariance – InfoGothic</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<link href="../../images/favicon.ico" rel="icon">
+<script src="../../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-dark-f418161beb48e0141c760e455f12af2c.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap-4d14f3be7bc8eb7ec2287338953877e0.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="dark">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+  var nav = document.querySelector(".navbar-nav");
+  var li = document.createElement("li");
+  li.className = "nav-item";
+  li.innerHTML = '<a class="nav-link ml-onclick-form" href="javascript:void(0)" onclick="ml(\'show\', \'18mxag\', true)">Mail List</a>';
+  var icons = nav.querySelector(".nav-item:has(.bi)");
+  nav.insertBefore(li, icons);
+});
+</script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<link rel="stylesheet" href="../../styles.css">
+</head>
+
+<body class="nav-fixed quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="../../index.html">
+    <span class="navbar-title">InfoGothic</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../about.html"> 
+<span class="menu-text">About</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../tutorials.html"> 
+<span class="menu-text">Courses &amp; Tutorials</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../blog-posts.html"> 
+<span class="menu-text">Blog Posts</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="https://notes.infogothic.com"> 
+<span class="menu-text">Obsidian Notes</span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/michaelwoller"> <i class="bi bi-github" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://bsky.app/profile/infogothic.bsky.social"> <i class="bi bi-bluesky" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction">1. Introduction</a></li>
+  <li><a href="#assumptions" id="toc-assumptions" class="nav-link" data-scroll-target="#assumptions">2. Assumptions</a></li>
+  <li><a href="#testing-homogeneity-of-regression-slopes" id="toc-testing-homogeneity-of-regression-slopes" class="nav-link" data-scroll-target="#testing-homogeneity-of-regression-slopes">3. Testing Homogeneity of Regression Slopes</a>
+  <ul class="collapse">
+  <li><a href="#spss-syntax" id="toc-spss-syntax" class="nav-link" data-scroll-target="#spss-syntax">SPSS Syntax</a></li>
+  <li><a href="#output" id="toc-output" class="nav-link" data-scroll-target="#output">Output</a></li>
+  </ul></li>
+  <li><a href="#testing-the-teaching-method-effect" id="toc-testing-the-teaching-method-effect" class="nav-link" data-scroll-target="#testing-the-teaching-method-effect">5. Testing the Teaching Method Effect</a>
+  <ul class="collapse">
+  <li><a href="#spss-syntax-1" id="toc-spss-syntax-1" class="nav-link" data-scroll-target="#spss-syntax-1">SPSS Syntax</a></li>
+  <li><a href="#output-1" id="toc-output-1" class="nav-link" data-scroll-target="#output-1">Output</a></li>
+  </ul></li>
+  <li><a href="#mancova" id="toc-mancova" class="nav-link" data-scroll-target="#mancova">6. MANCOVA</a></li>
+  <li><a href="#conclusion" id="toc-conclusion" class="nav-link" data-scroll-target="#conclusion">7. Conclusion</a></li>
+  <li><a href="#discussion-questions" id="toc-discussion-questions" class="nav-link" data-scroll-target="#discussion-questions">Discussion Questions</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Analysis of Covariance</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Michael Woller </p>
+          </div>
+  </div>
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="introduction" class="level1">
+<h1>1. Introduction</h1>
+<p>Every ANOVA design covered in this series has treated the outcome as a function of one or more categorical factors. But research participants are rarely identical to one another before a study begins. They bring prior knowledge, different levels of ability, and other characteristics that affect the outcome regardless of which group they were assigned to. When that background variation is large, it can drown out the effect you actually care about, making your <span class="math inline">\(F\)</span> test less powerful and your group mean estimates less accurate.</p>
+<p>Analysis of covariance, or ANCOVA, addresses this by incorporating one or more continuous variables alongside the categorical factor. These continuous variables are called <em>covariates</em>. Adding a covariate accomplishes two things at once. First, it absorbs variance in the outcome that would otherwise end up in the error term, shrinking <span class="math inline">\(SS_{Error}\)</span> and producing a more powerful test. This is the same logic behind adding predictors to a regression model: the more of the outcome you can account for, the less unexplained noise remains. Second, it adjusts the group means to reflect what they would have been had all groups started at the same covariate value. This adjustment is especially valuable in non-randomized studies, where groups may have differed on the covariate before the intervention ever took place. This is akin to interpreting a regression slope while controlling for the other predictors in the model.</p>
+<p>In full/reduced model terms, ANCOVA compares a full model that includes both the factor and the covariate against a reduced model that includes only the covariate. The question is whether adding the factor explains a meaningful amount of additional variance in the outcome after the covariate has already been accounted for.</p>
+<p>Throughout this lesson we will work with a fictional study examining whether teaching method affects student performance on a statistics exam. Students were assigned to one of three methods: traditional lecture, active learning, or AI-supported practice. Because students enter the course with different levels of prior knowledge, each student also completed a pretest before instruction began. The pretest score is the covariate, and the posttest score recorded at the end of the course is the outcome. The dataset contains 180 students and is stored in <code>ANCOVA.sav</code>. The relevant variables are <code>teaching_method</code> (1 = traditional lecture, 2 = active learning, 3 = AI-supported practice), <code>pretest_score</code>, and <code>posttest_score</code>. The central research question is: after controlling for pretest performance, do students in the three teaching methods differ in posttest performance? Note that this data is mostly made up, so do not think the resuls of the tests we will conduct is indicative of the research question in practice.</p>
+</section>
+<section id="assumptions" class="level1">
+<h1>2. Assumptions</h1>
+<p>ANCOVA inherits the usual ANOVA assumptions: independence of observations, normality of residuals, and homogeneity of error variance across groups. However, it also adds two of its own.</p>
+<p>The first is <strong>linearity</strong>: the relationship between the covariate and the outcome must be linear within each group. If the covariate and outcome are related in a curved or non-monotonic way, the standard ANCOVA adjustment will be wrong. In the teaching method study, linearity means that as pretest scores increase, posttest scores should increase at a roughly constant rate within each group. A violation would look something like this: students with very low pretest scores perform poorly on the posttest, students with moderate pretest scores improve substantially, but students with very high pretest scores plateau because they had little room left to grow. That kind of curved relationship cannot be captured by a straight line, and ANCOVA would produce adjusted group means that misrepresent where each group actually stands.</p>
+<p>The second is <strong>homogeneity of regression slopes</strong>: the relationship between the covariate and the outcome must be the same in every group. In other words, there should be no interaction between the covariate and the factor. In the teaching method study, a violation might look like this: pretest score is a strong predictor of posttest score in the traditional lecture group, because students who came in knowing more were better equipped to absorb a lecture-heavy format, while students who came in knowing less fell further behind. But in the AI-supported practice group, the software adapts to each student’s level, so high and low pretest scorers end up with similar posttest gains regardless of where they started. The slope relating pretest to posttest would then be steep in the lecture group and shallow in the AI group. Controlling for pretest score would require a different adjustment for each group, which is a fundamentally different kind of model than standard ANCOVA assumes.</p>
+<p>Homogeneity of regression slopes is not assumed without scrutiny. It is tested directly, and the result of that test determines how you proceed. If homogeneity holds, you can estimate and interpret the covariate-adjusted group means as a summary of the treatment effect. If it does not hold, the relationship between the factor and the outcome depends on the covariate value, and more complex modeling is needed.</p>
+<p>Because the homogeneity test must come before the treatment test, the two analyses are run in a specific order. That order is the backbone of this lesson.</p>
+</section>
+<section id="testing-homogeneity-of-regression-slopes" class="level1">
+<h1>3. Testing Homogeneity of Regression Slopes</h1>
+<p>Before estimating the teaching method effect, we need to verify that the relationship between pretest score and posttest score is consistent across the three groups. If that relationship differs by group, the covariate is interacting with the factor, and the standard ANCOVA model is not appropriate.</p>
+<p>In full/reduced model terms, the homogeneity test compares:</p>
+<p>Full model: <span class="math display">\[Y\_{ij} = \mu + \alpha_j + \beta_1 X_{ij} + \beta_2* \alpha_j X_{ij} + \varepsilon_{ij}\]</span></p>
+<p>Reduced model: <span class="math display">\[Y\_{ij} = \mu + \alpha_j + \beta_1 X_{ij} + \varepsilon_{ij}\]</span></p>
+<p>Here <span class="math inline">\(\mu\)</span> is the grand mean, <span class="math inline">\(\alpha_j\)</span> is the effect of the* <span class="math inline">\(j\)</span>th level of the teaching method factor, <span class="math inline">\(X_{ij}\)</span> is the pretest score for participant <span class="math inline">\(i\)</span> in group <span class="math inline">\(j\)</span>, <span class="math inline">\(\beta_1\)</span> is the overall slope relating pretest to posttest, and <span class="math inline">\(\beta_2\)</span> captures how that slope differs across groups. The null hypothesis is <span class="math inline">\(\beta_2 = 0\)</span>: the covariate slope is the same in every group.</p>
+<p>This full model is sometimes called the interaction model because it includes the product of the factor and the covariate. In SPSS, fitting it requires building the model terms manually rather than using the default full factorial option.</p>
+<section id="spss-syntax" class="level2">
+<h2 data-anchor-id="spss-syntax">SPSS Syntax</h2>
+<p>To run the homogeneity test, use <code>UNIANOVA</code> with a custom model specification. The <code>/DESIGN</code> subcommand must include the factor, the covariate, and their interaction term explicitly:</p>
+<pre class="spss"><code>UNIANOVA posttest_score BY teaching_method WITH pretest_score
+  /METHOD = SSTYPE(3)
+  /DESIGN = teaching_method pretest_score teaching_method*pretest_score.</code></pre>
+<p>Each line serves a specific purpose:</p>
+<ul>
+<li><code>posttest_score BY teaching_method WITH pretest_score</code>: specifies the outcome (<code>BY</code> introduces the categorical factor, <code>WITH</code> introduces the continuous covariate)</li>
+<li><code>/METHOD = SSTYPE(3)</code>: requests Type III sums of squares, which adjusts each effect for all others in the model</li>
+<li><code>/DESIGN = teaching_method pretest_score teaching_method*pretest_score</code>: builds the model with main effects for both the factor and the covariate, plus their interaction term</li>
+</ul>
+<p>Note that the factor test row in this output should not be interpreted. Because the interaction term is present, the factor effect shown here is conditional on a specific covariate value rather than averaged across it, which is not the quantity of interest. The only row that matters at this stage is the interaction term.</p>
+<p>This means, the only purpose of this syntax is purely to test the interaction. Nothing else should be interpreted</p>
+</section>
+<section id="output" class="level2">
+<h2 data-anchor-id="output">Output</h2>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/ancova-int.png" class="img-fluid figure-img"></p>
+<figcaption>SPSS output for the interaction model used to test homogeneity of regression slopes. The interaction term <code>teaching_method * pretest_score</code> (<span class="math inline">\(p = .375\)</span>) is the only row of interest at this stage.</figcaption>
+</figure>
+</div>
+<p>The output contains one row for each term in the model. The <code>teaching_method</code> row and the <code>pretest_score</code> row show the main effects, but neither should be interpreted at this stage. The model here is the full model, and the factor test in a model that includes the interaction term does not answer the question we care about. The only row that matters right now is <code>teaching_method * pretest_score</code>.</p>
+<p>That interaction term tests whether the slope relating pretest to posttest differs across teaching method groups. A significant result would indicate that the covariate’s relationship with the outcome depends on which group a student was in, which would violate the homogeneity assumption and require a different analytic approach. Here the interaction was not significant (<span class="math inline">\(p = .375\)</span>), meaning we fail to reject the null hypothesis that the slopes are equal across groups. The pretest-to-posttest relationship appears to operate the same way in all three teaching method conditions.</p>
+<p>As a final note, if the homogeneity assumption is violated, there are alternative methods that can accommodate a factor-by-covariate interaction, including Johnson-Neyman region of significance analysis, moderated regression, and heterogeneous slopes ANCOVA, though these fall outside the scope of this lesson.</p>
+</section>
+</section>
+<section id="testing-the-teaching-method-effect" class="level1">
+<h1>5. Testing the Teaching Method Effect</h1>
+<p>Having confirmed homogeneity of regression slopes, we can now test whether teaching method affects posttest scores after controlling for pretest performance. This is the ANCOVA proper.</p>
+<p>The full/reduced comparison here is different from the one in the previous step. Now the factor is the target of the test:</p>
+<p>Full model: <span class="math display">\[Y\_{ij} = \mu + \alpha_j + \beta_1 X_{ij}  + \varepsilon_{ij}\]</span></p>
+<p>Reduced model: <span class="math display">\[Y\_{ij} = \mu + \beta_1 X_{ij} + \varepsilon_{ij}\]</span></p>
+<p>The full model includes both the factor and the covariate. The reduced model includes only the covariate. The null hypothesis is <span class="math inline">\(\alpha_j = 0\)</span>: after accounting for pretest scores, all three teaching method groups have the same posttest mean. The <span class="math inline">\(F\)</span> test compares how much additional variance the factor accounts for beyond what the covariate already explains.</p>
+<p>This model is the reduced model from the homogeneity test: the one without the interaction term. In SPSS, it is fit using the default full factorial option, since no custom interaction needs to be specified.</p>
+<section id="spss-syntax-1" class="level2">
+<h2 data-anchor-id="spss-syntax-1">SPSS Syntax</h2>
+<pre class="spss"><code>UNIANOVA posttest_score BY teaching_method WITH pretest_score
+  /METHOD = SSTYPE(3)
+  /DESIGN = teaching_method pretest_score.</code></pre>
+<p>The structure is nearly identical to the previous syntax, with one important difference: the interaction term <code>teaching_method*pretest_score</code> is removed from <code>/DESIGN</code>. The model now contains only the main effects of the factor and the covariate.</p>
+<ul>
+<li><code>teaching_method</code> in <code>/DESIGN</code> — the factor whose effect we are testing</li>
+<li><code>pretest_score</code> in <code>/DESIGN</code> — the covariate being controlled for</li>
+<li><code>/METHOD = SSTYPE(3)</code> — each effect is adjusted for the other, so the teaching method test is net of the pretest score relationship</li>
+</ul>
+</section>
+<section id="output-1" class="level2">
+<h2 data-anchor-id="output-1">Output</h2>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/ancova.png" class="img-fluid figure-img"></p>
+<figcaption>SPSS output for the ANCOVA with teaching method as the factor and pretest score as the covariate. The <code>teaching_method</code> row is the test of primary interest.</figcaption>
+</figure>
+</div>
+<p>The output table contains one row for each term in the model. Comparing this table to the interaction model output from the previous step, you will notice the interaction term is gone and the error degrees of freedom have increased from 174 to 176, recovering the two degrees of freedom that were spent estimating the interaction. This is the reduced model, and it is the correct one to use for interpreting the teaching method effect.</p>
+<p>The <code>pretest_score</code> row confirms that the covariate is doing meaningful work. Pretest performance was strongly related to posttest performance (<span class="math inline">\(p &lt; .001\)</span>), which means the ANCOVA adjustment is both appropriate and consequential. Students who entered with stronger prior knowledge tended to score higher at the end regardless of which group they were in, and the model has accounted for that.</p>
+<p>The row of interest is <code>teaching_method</code>. After controlling for pretest score, the teaching method effect was significant (<span class="math inline">\(p &lt; .001\)</span>). We reject the null hypothesis that the three groups have equal adjusted posttest means. At least one teaching method produced different posttest performance compared to the others, over and above what could be explained by where students started. The model accounts for 55.2% of the variance in posttest scores (<span class="math inline">\(R^2 = .552\)</span>), with teaching method contributing meaningfully to that explanation after the covariate is partialled out.</p>
+<p>The <code>Corrected Model</code> row tests the overall fit of the model. The <code>Corrected Total</code> row provides the total variance in posttest scores available to be explained. The <code>Total</code> row reflects raw sums that include the grand mean and should not be interpreted. The <code>Intercept</code> row tests whether the grand mean differs from zero, which is rarely of substantive interest.</p>
+</section>
+</section>
+<section id="mancova" class="level1">
+<h1>6. MANCOVA</h1>
+<p>Multivariate analysis of covariance, or MANCOVA, extends ANCOVA to designs with more than one outcome variable. Just as MANOVA tests whether a factor distinguishes groups across a set of outcomes considered jointly, MANCOVA does the same while controlling for one or more continuous covariates.</p>
+<p>The logic is identical to what you have seen in this lesson. A covariate is included to reduce error variance and adjust the multivariate group means. The homogeneity of regression slopes assumption extends to the multivariate case: the relationship between each covariate and the full set of outcomes should be consistent across groups.</p>
+<p>In SPSS, MANCOVA is specified with the <code>GLM</code> command using <code>WITH</code> to introduce covariates alongside <code>BY</code> for categorical factors. The covariate terms appear in the <code>/DESIGN</code> subcommand alongside the factor and any interaction terms needed for the homogeneity test. The same two-step logic applies: test homogeneity first, then test the factor effect in the reduced model if homogeneity holds.</p>
+<p>MANCOVA is relatively uncommon in practice compared to ANCOVA, and the analytic decisions involved, particularly around how to specify the covariate structure in repeated-measures designs, can become complex quickly. The core principles, however, are a direct extension of what you have already learned here.</p>
+</section>
+<section id="conclusion" class="level1">
+<h1>7. Conclusion</h1>
+<p>ANCOVA extends the ANOVA framework by incorporating continuous covariates alongside the categorical factor. It reduces error variance and adjusts group mean estimates, producing a more powerful and more interpretable test of the factor effect.</p>
+<p>The analysis proceeds in two steps. First, the homogeneity of regression slopes assumption is tested by fitting a model that includes the interaction between the factor and the covariate. If that interaction is not significant, the assumption holds and the main ANCOVA can proceed. Second, the factor effect is tested in a model that includes the factor and the covariate as main effects only, with the interaction removed.</p>
+</section>
+<section id="discussion-questions" class="level1">
+<h1>Discussion Questions</h1>
+<p><strong>Question 1:</strong> Why is it important to run the homogeneity test before testing the teaching method effect? What would it mean for your conclusions if the interaction had been significant?</p>
+<details>
+<summary>
+Answer
+</summary>
+The homogeneity test establishes whether a single covariate slope can represent the pretest-posttest relationship for all groups. ANCOVA assumes this is the case. If the interaction were significant, the slope would differ across groups, meaning the covariate’s influence on the outcome is moderated by group membership. In that situation, the covariate-adjusted group means would not have a straightforward interpretation, and the standard ANCOVA treatment test would be based on a misspecified model. A significant interaction would instead call for a more flexible approach that allows each group to have its own covariate slope.
+</details>
+<hr>
+<p><strong>Question 2:</strong> The pretest score row is also significant in this output. Does that mean pretest performance is an important finding in its own right, or should it be interpreted differently in the context of ANCOVA?</p>
+<details>
+<summary>
+Answer
+</summary>
+In ANCOVA, the covariate is included as a control variable, not as a target of inference. A significant pretest score row tells you that the covariate was doing real work: it was substantially related to the outcome, which means it absorbed variance that would otherwise have inflated the error term. This is good news because it means the ANCOVA test of teaching method is more powerful than a plain ANOVA would have been. But the covariate result is not itself a finding about teaching methods. Its role is to improve the precision of the teaching method comparison.
+</details>
+<hr>
+<p><strong>Question 3:</strong> A colleague argues that since the students were randomly assigned to teaching method groups, the pretest scores should be roughly equal across groups anyway, so ANCOVA is unnecessary. How would you respond?</p>
+<details>
+<summary>
+Answer
+</summary>
+Random assignment ensures that group differences in pretest scores are due to chance, not systematic bias. But chance differences still add noise to the posttest scores, and that noise ends up in the error term. Even when randomization has worked well, including a covariate that strongly predicts the outcome can meaningfully reduce error variance and increase power. ANCOVA is useful in randomized experiments not because the groups are biased but because the covariate carries information about the outcome that goes beyond group assignment. In non-randomized studies the justification is even stronger, since pretest differences may reflect genuine selection effects that need to be statistically controlled before group comparisons are meaningful.
+</details>
+
+
+</section>
+
+</main> <!-- /main -->
+<!-- MailerLite Universal -->
+<script>
+    (function(w,d,e,u,f,l,n){w[f]=w[f]||function(){(w[f].q=w[f].q||[])
+    .push(arguments);},l=d.createElement(e),l.async=1,l.src=u,
+    n=d.getElementsByTagName(e)[0],n.parentNode.insertBefore(l,n);})
+    (window,document,'script','https://assets.mailerlite.com/js/universal.js','ml');
+    ml('account', '2295583');
+</script>
+<!-- End MailerLite Universal -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/infogothic\.com");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

@@ -2,11 +2,11 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://infogothic.com/tutorials/anova-lessons/Contrasts.html</loc>
-    <lastmod>2026-06-07T20:23:50.070Z</lastmod>
+    <lastmod>2026-06-21T18:40:18.595Z</lastmod>
   </url>
   <url>
     <loc>https://infogothic.com/tutorials/anova-lessons/Multiple-Comparisons.html</loc>
-    <lastmod>2026-06-11T02:34:54.505Z</lastmod>
+    <lastmod>2026-06-21T18:45:57.328Z</lastmod>
   </url>
   <url>
     <loc>https://infogothic.com/tutorials/regression-lessons/nonlinear-regression.html</loc>
@@ -30,7 +30,7 @@
   </url>
   <url>
     <loc>https://infogothic.com/tutorials/reg-course.html</loc>
-    <lastmod>2026-06-11T02:42:18.775Z</lastmod>
+    <lastmod>2026-06-22T18:54:04.233Z</lastmod>
   </url>
   <url>
     <loc>https://infogothic.com/about.html</loc>
@@ -78,14 +78,42 @@
   </url>
   <url>
     <loc>https://infogothic.com/tutorials/anova-course.html</loc>
-    <lastmod>2026-06-07T19:54:20.610Z</lastmod>
+    <lastmod>2026-06-26T19:24:31.063Z</lastmod>
   </url>
   <url>
     <loc>https://infogothic.com/tutorials/anova-lessons/SPSS-ANOVA-Intro.html</loc>
-    <lastmod>2026-06-07T20:23:55.400Z</lastmod>
+    <lastmod>2026-06-24T19:38:09.560Z</lastmod>
   </url>
   <url>
     <loc>https://infogothic.com/blog-posts.html</loc>
     <lastmod>2026-04-26T21:47:26.773Z</lastmod>
+  </url>
+  <url>
+    <loc>https://infogothic.com/tutorials/anova-lessons/trend-analysis.html</loc>
+    <lastmod>2026-06-21T22:30:14.985Z</lastmod>
+  </url>
+  <url>
+    <loc>https://infogothic.com/tutorials/anova-lessons/twoway-anova.html</loc>
+    <lastmod>2026-06-24T19:28:40.588Z</lastmod>
+  </url>
+  <url>
+    <loc>https://infogothic.com/tutorials/anova-lessons/higher-order-anova.html</loc>
+    <lastmod>2026-06-24T19:22:10.116Z</lastmod>
+  </url>
+  <url>
+    <loc>https://infogothic.com/tutorials/anova-lessons/within-subjects-anova.html</loc>
+    <lastmod>2026-06-24T20:23:26.998Z</lastmod>
+  </url>
+  <url>
+    <loc>https://infogothic.com/tutorials/anova-lessons/higher-order-within.html</loc>
+    <lastmod>2026-06-23T00:42:40.398Z</lastmod>
+  </url>
+  <url>
+    <loc>https://infogothic.com/tutorials/anova-lessons/split-plot.html</loc>
+    <lastmod>2026-06-26T18:36:59.678Z</lastmod>
+  </url>
+  <url>
+    <loc>https://infogothic.com/tutorials/anova-lessons/ancova.html</loc>
+    <lastmod>2026-06-26T19:22:27.552Z</lastmod>
   </url>
 </urlset>

@@ -185,7 +185,10 @@ window.Quarto = {
   <li><a href="#the-f-test" id="toc-the-f-test" class="nav-link" data-scroll-target="#the-f-test">The F Test</a></li>
   </ul></li>
   <li><a href="#one-way-anova-with-oneway" id="toc-one-way-anova-with-oneway" class="nav-link" data-scroll-target="#one-way-anova-with-oneway">3. One-Way ANOVA with ONEWAY</a></li>
-  <li><a href="#univariate-anova-with-unianova" id="toc-univariate-anova-with-unianova" class="nav-link" data-scroll-target="#univariate-anova-with-unianova">4. Univariate ANOVA with UNIANOVA</a></li>
+  <li><a href="#univariate-anova-with-unianova" id="toc-univariate-anova-with-unianova" class="nav-link" data-scroll-target="#univariate-anova-with-unianova">4. Univariate ANOVA with UNIANOVA</a>
+  <ul class="collapse">
+  <li><a href="#types-of-sums-of-squares" id="toc-types-of-sums-of-squares" class="nav-link" data-scroll-target="#types-of-sums-of-squares">Types of Sums of Squares</a></li>
+  </ul></li>
   <li><a href="#manova" id="toc-manova" class="nav-link" data-scroll-target="#manova">5. MANOVA</a>
   <ul class="collapse">
   <li><a href="#discussion-questions" id="toc-discussion-questions" class="nav-link" data-scroll-target="#discussion-questions">Discussion Questions</a></li>
@@ -227,7 +230,7 @@ window.Quarto = {
 <p>We will test group differences among three groups using three SPSS procedures: one-way ANOVA, univariate ANOVA, and multivariate ANOVA (MANOVA). Note, SPSS can’t be ran natively in Quarto (how I am generating this page), so all results I am copy/pasting from SPSS output.</p>
 <section id="the-dataset" class="level3">
 <h3 data-anchor-id="the-dataset">The Dataset</h3>
-<p>The data we are using today comes from a study that tested a phenomenon known as <strong>stereotype threat</strong>. Aronson et al.&nbsp;(1998) describe this phenomenon as when “members of the stereotyped group often feel pressure in situations where their behavior can confirm the negative reputation that their group lacks a valued ability.” One such stereotype is that females are worse at math than males. Females in our study were assigned to take a math test in one of three conditions:</p>
+<p>The data we are using is labeled as OneWay.sav. This data comes from a study that tested a phenomenon known as <strong>stereotype threat</strong>. Aronson et al.&nbsp;(1998) describe this phenomenon as when “members of the stereotyped group often feel pressure in situations where their behavior can confirm the negative reputation that their group lacks a valued ability.” One such stereotype is that females are worse at math than males. Females in our study were assigned to take a math test in one of three conditions:</p>
 <ol type="1">
 <li>A control group.</li>
 <li>A condition in which they were “reminded” prior to testing of the belief that males perform better.</li>
@@ -393,7 +396,15 @@ MATH BY GROUP      /* Same as for ONEWAY
 /DESIGN = GROUP.   /* Identifies the grouping variable</code></pre>
 <p><img src="images/1.2.png" class="img-fluid" alt="UNIANOVA Output"> This is the focal output of the UNIANOVA function. On the left, you have rows labeled “Corrected Model”, which is equivalent to the “Group” row in this case. And you can ignore the “Intercept” line. What you need to focus is on the bottom three rows. Here you ge the sum of squares (specified as “Type III Sum of Squares” though all of our output will be this type of sum of squares), degrees of freedom, mean squares, and the F test. The results for the F test are significant, so we reject the null that the mean math test scores are the same for every treatment group.</p>
 <p>The UNIANOVA output will also give you the <span class="math inline">\(R^2\)</span> and adjusted-<span class="math inline">\(R^2\)</span> effect sizes. These are not always used in ANOVAs, so I would ignore them for now. We will cover different effect sizes in a future lesson.</p>
+<section id="types-of-sums-of-squares" class="level3">
+<h3 data-anchor-id="types-of-sums-of-squares">Types of Sums of Squares</h3>
+<p>You may have noticed that the UNIANOVA output labels its results “Type III Sum of Squares.” This is one of three ways SPSS can compute sums of squares, and it is worth knowing the difference even if it will not matter much until later in the lessons</p>
+<p>In a one-way design like ours, with only one grouping variable and equal group sizes, all three types give exactly the same answer. The distinction between the three methods only becomes consequential when there are multiple factors in the design and the group sizes are unequal.</p>
+<p>When that happens, <strong>Type I</strong> sums of squares test each effect in the order you list it, so the results can change depending on which factor you put first. <strong>Type II</strong> and <strong>Type III</strong> sums of squares remove that order dependency, with Type III being the most commonly used because it tests each effect after accounting for everything else in the model.</p>
+<p>This is actually one of the reasons this series uses SPSS MANOVA rather than other software. SPSS MANOVA defaults to Type III sums of squares and applies them consistently across all designs, from simple one-way ANOVAs all the way through complex split-plot designs, so you can trust that every effect you test is being evaluated on its own terms regardless of how the data are structured.</p>
+<p>For now, the main takeaway is simply that when you see “Type III” in SPSS output, it means each effect is being evaluated on its own terms, independent of the others</p>
 <hr>
+</section>
 </section>
 <section id="manova" class="level2">
 <h2 data-anchor-id="manova">5. MANOVA</h2>

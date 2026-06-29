@@ -21,7 +21,7 @@ Type I error inflation works the same way. Each additional significance test is 
 
 This lesson is about how to keep that risk of finding false results under control.
 
-We will continue with the hypertension dataset from the previous lesson: four treatment groups (drug therapy, biofeedback, dietary modification, and a combination treatment), with blood pressure as the dependent variable. The combination treatment group had the lowest mean ($\bar{X} = 83$), while the other three groups had means of 91.4, 93, and 92 respectively.
+We will continue with the hypertension dataset from the previous lesson, but it is labeled MultipleCorrections.sav this time. This data consists of four treatment groups (drug therapy, biofeedback, dietary modification, and a combination treatment), with blood pressure as the dependent variable. The combination treatment group had the lowest mean ($\bar{X} = 83$), while the other three groups had means of 91.4, 93, and 92 respectively.
 
 ------------------------------------------------------------------------
 
@@ -74,7 +74,7 @@ To account for these issues of post hoc testing, the number of comparisons you m
 
 The solution to Type I error inflation is to apply a multiple comparison procedure, which is a method that adjusts how you evaluate significance when running more than one test. These procedures make sure your experimentwise error rate stays at .05 rather than ballooning beyond it. The general idea behind all of these methods is the same: make each individual test harder to pass, so that the cumulative probability of any false positive across all tests stays controlled.
 
-For instance, instead of requiring p \< .05 to declare a contrast significant, you might require p \< .017 if you are running three tests. Each individual hurdle is higher, but the payoff is that your overall false positive risk across all three tests stays at .05.
+For instance, instead of requiring $p < .05$ to declare a contrast significant, you might require $p < .017$ if you are running three tests. Each individual hurdle is higher, but the payoff is that your overall false positive risk across all three tests stays at .05.
 
 There is no single universal correction, and each one differs in the situations they are designed for. The right choice depends on two things:
 
@@ -86,7 +86,17 @@ The three most common procedures are **Bonferroni**, **Tukey**, and **Scheffé**
 
 Before we go into detail, a handy decision tree below summarizes the recommendations depending on your scenario (Note, "CV" stands for critical value, which we will get into).
 
-![Decision tree for choosing a multiple comparison procedure](images/mcp-decision-tree.png){fig-align="center" width="600"}
+```{mermaid}
+%%| echo: false
+flowchart TD
+    A[Were the comparisons planned in advance?] -->|Yes| B[Pairwise comparisons only?]
+    A -->|No| C[Pairwise comparisons only?]
+    B -->|Yes| D["If all C = a(a-1)/2 comparisons, then use Tukey"]
+    B -->|Yes, alternative route| E["Compare critical values: Tukey vs Bonferroni, based on df and C"]
+    B -->|No, includes complex comparisons| F["Compare critical values: Scheffe vs Bonferroni, based on df and C"]
+    C -->|Yes| G[Use Tukey]
+    C -->|No, includes complex comparisons| H[Use Scheffe]
+```
 
 ------------------------------------------------------------------------
 
@@ -144,7 +154,7 @@ The main advantage of Bonferroni is its simplicity and flexibility — it works 
 
 The limitation is power. As $C$ grows, each individual threshold becomes more and more stringent, making it harder to detect real effects. For a small number of planned comparisons, Bonferroni is excellent. For a large number, or for post hoc complex comparisons where $C$ is theoretically infinite, it breaks down.
 
-### SPSS
+### Bonferroni in SPSS
 
 There is no official way to do Bonferroni in SPSS. ALl you need to do is look at your p value in the output, and compare that to what your $\alpha_{Bonefrroni} = \alpha/C$ level. However, if you want corrected confidence intervals, you **need** to manually set your confidence level
 
@@ -164,11 +174,11 @@ MANOVA pressure BY treat (1 4)
 
 The `/cinterval` line is where you specify the new Bonferroni confidence level. This level is simple equal to $1-(\alpha/c)$, so in our example with 3 contrast comparisons, it is $1−(.05/3)=1-.0166=.9833$. It is important to remember to put this in your syntax before you estimate the model or else you will get the wrong confidence intervals, and thus might be giving the wrong results.
 
-The output for this would look like
-
+The output for this would look like:
 
 ![Contrasts Output with Bonferroni Corrections](images/bci.png){fig-align="center" width="600"}
-This piece of the output contains each of the contrasts I specified for treatment above. This isn't the best example, but we can see that the p values are greater than $\alpha/c = .0166$, thus none are significant after controlling for experimentwise error rate. The confidence intervals are also adjusted appropriately, as you can see in the top ".9833 confidence intervals". 
+
+This piece of the output contains each of the contrasts I specified for treatment above. This isn't the best example, but we can see that the p values are greater than $\alpha/c = .0166$, thus none are significant after controlling for experimentwise error rate. The confidence intervals are also adjusted appropriately, as you can see in the top ".9833 confidence intervals".
 
 This goes to show how simple and easy Bonferroni corrections are to use, and why more people should be using them. However, Bonferroni corrections are not always the most optimal corrections to use. Depending on the scenario, other techniques will be much better at controlling for experimentwise error rates. And while Bonferroni acts as a good "this is better than nothing" method, if you really care about getting your error rates as optimal, we will cover two over methods.
 
@@ -180,22 +190,21 @@ This goes to show how simple and easy Bonferroni corrections are to use, and why
 
 Tukey's Honestly Significant Difference (HSD) procedure is designed specifically for **pairwise comparisons**. Rather than dividing alpha by $C$, Tukey uses a different statistical distribution called the **studentized range distribution**. This method sets a single critical value that simultaneously controls the familywise error rate across *all* $\frac{a(a-1)}{2}$ pairwise comparisons.
 
-The core intuition is this: if you are going to run all pairwise comparisons, the most dangerous one (i.e. the one most likely to be a false positive) is the comparison between the largest and smallest group means. Tukey asks: how large can the range between the maximum and minimum group means get just by chance, assuming all population means are actually equal? It uses the sampling distribution of this "worst-case scenario" difference to set a threshold, then applies that same threshold to all pairwise comparisons.
+The core intuition is this: if you are going to run all pairwise comparisons, the most dangerous one (i.e. the one most likely to be a false positive) is the comparison between the largest and smallest group means. Tukey asks: how large can the range between the maximum and minimum group means get just by chance, assuming all population means are actually equal? It uses the sampling distribution of this "worst-case scenario" difference to set a threshold, then applies that same threshold to all pairwise comparisons. This works regardless of if the contrasts are planned or post hoc.
 
-  Rather than using a $F$ or $t$ statistic, Tukey computes a "$q$ statistic" for a pairwise comparison between the lowest mean group $g$ and highest mean group $h$. I'll skip the function, but the bottom line is that this $q$ statistic operates similarly to a $t$ statistic in that it compares two means, but it accounts for the fact that you are selecting the most extreme pair from a family of comparisons, and it uses $MS_{within}$ as its error term. This makes the test more conservative than a plain $t$ test, and thus better at controlling for experimentwise error rates.
+Rather than using a $F$ or $t$ statistic, Tukey computes a "$q$ statistic" for a pairwise comparison between the lowest mean group $g$ and highest mean group $h$. I'll skip the function, but the bottom line is that this $q$ statistic operates similarly to a $t$ statistic in that it compares two means, but it accounts for the fact that you are selecting the most extreme pair from a family of comparisons, and it uses $MS_{within}$ as its error term. This makes the test more conservative than a plain $t$ test, and thus better at controlling for experimentwise error rates.
 
 From the studentized range distribution of the $q$ statistic, you can ge tthe critical $q_{CV}$ value, which can be converted to a critical $F$ value:
 
-$$F_{1,df_{error}} = \frac{q_{CV}^2}{2}.$$
-This fact will become important in the next subsection, but this F statistic is also used to compute a confidence interval for the mean-to-mean contrast comparisons.
+$$F_{1,df_{error}} = \frac{q_{CV}^2}{2}.$$ This fact will become important in the next subsection, but this F statistic is also used to compute a confidence interval for the mean-to-mean contrast comparisons.
 
 The takeaway is that this method gives you a more efficient method of testing mean-to-mean comparisons with the least amount of risk of committing a Type I error. What I mean by "efficient" is that it is able to find the optimal balance between being too conservative (low Type I error, low power) and too liberal (high Type I error, high power). When in doubt, you can always take the path with least amount of risk and do the most conservative test, but for researchers who want to increase the chances of finding an effect to the utmost degree, Tukey can be beneficial.
 
 ### Tukey vs. Bonferroni for Pairwise Comparisons
 
-When you plan to test *all* pairwise comparisons, both Tukey and Bonferroni control the familywise error rate at .05. 
+When you plan to test *all* pairwise comparisons, both Tukey and Bonferroni control the familywise error rate at .05.
 
-However, Tukey is more powerful in this situation, because its critical value is optimized for the structure of pairwise comparisons while Bonferroni is a general-purpose correction. You can see this by looking at the relative increases of their critical values as the nuber of groups and maximum pairwise comparisons increase:
+However, Tukey is more powerful in this situation, because its critical value (CV) is optimized for the structure of pairwise comparisons while Bonferroni is a general-purpose correction. You can see this by looking at the relative increases of their critical values as the number of groups and maximum pairwise comparisons increase:
 
 | Groups | Comparisons | Tukey CV | Bonferroni CV |
 |--------|-------------|----------|---------------|
@@ -209,11 +218,39 @@ As the table shows, Tukey's critical value stays lower than Bonferroni's as more
 
 However, when the number of pairwise comparisons is small (e.g., just 2 groups), they are equivalent. Therefore, the **rule of thumb** is that when all pairwise comparisons are of interest, Tukey is preferred over Bonferroni.
 
-### SPSS
+Comparing these critical values can help you determine in what situations Tukey or Bonferroni is more preferable. The test with the lower CV is more powerful and is preferable. Traditionally, researchers had to reference critical value tables to figure these out, but nowadays there are easy to use calculators online.
+
+For Bonferroni, you can use a generic critical $F$ value calculator. I cannot find one developed specifically for Bonferroni CV's (there are calculators that give you Bonferroni adjusted alpha levels and $p$ values though).
+
+[Here's a calculator I like](https://www.danielsoper.com/statcalc/calculator.aspx?id=4). There are two caveats:
+
+1)  You must make the first degree of freedom 1 and the second degree of freedom $N-a$.
+
+2)  You need to put in your adjusted alpha level $\alpha /c$ in the probability level.
+
+To get the Tukey $F$ statistic CV, you need to first get the q statistic CV and then convert it to an $F$ statistic. It's a bit obnoxious I know, but feel free to code and host a program that does this automatically if you can. I will gladly link to you.
+
+[Here's a calcualtor to get you the critical q value](https://elvers.us/stats/tables/qprobability.html). There are som caveats:
+
+1)  Use the Critical $q$ value option.
+
+2)  Number of means equals the number of groups in your group variable.
+
+3)  $df_{error}$ is $N-a$
+
+4)  In this case, keep $/alpha = .05$
+
+Then, you just need to plug this $q$ statistic into the equation I gave abov, given again here
+
+$$F_{1,df_{error}} = \frac{q_{CV}^2}{2}.$$ Whichever of these two methods has the smaller critical $F$ value is the one you should use.
+
+Again, this is if you want to be optimal. One can use Bonferroni if you want, but just be aware you are losing power.
+
+### Tukey SPSS
 
 Tukey cannot be run through MANOVA in SPSS. It must be done through the `ONEWAY` procedure. This means that for more complex designs (within-subjects, split-plot, etc. that we will do in the future), Tukey is generally not available unless you are willing to compute it by hand.
 
-To get this, you should run code like this 
+To get this, you should run code like this
 
 ``` text
 ONEWAY pressure BY treat
@@ -221,12 +258,13 @@ ONEWAY pressure BY treat
 /posthoc=tukey.
 ```
 
-In the `/posthoc=` line, just put `tukey`. The output should give you a Tukey test for every single pariwise comaprison 
+In the `/posthoc=` line, just put `tukey`. The output should give you a Tukey test for every single pariwise comaprison
 
 ![All Pairwise Comparisons with Tukey Corrected Significance Tests](images/Tukey.png){fig-align="center" width="600"}
+
 This output gives all possible pairwise mean comparisons in the treatment groups and does a Tukey QSD test for each. You can see in the left most column one group that is compared to a group in the second column. For example, the first row is the Drug Therapy group compared to the Biofeedback group. In this set up, there are some redundancies as each pairwise comparison will show up twice (the Drug Therapy vs Biofeedback comparison shows up again in fourth row for example). The significance column gives the p value based on the Tukey test, which you compare to .05, and the confidence intervals are already adjusted for the Tukey test.
 
-Again, this isn't the best example data set, but as we can see none of the pairwise comparisons are significant after controlling for experimentwise error rates using the Tukey test. 
+Again, this isn't the best example data set, but as we can see none of the pairwise comparisons are significant after controlling for experimentwise error rates using the Tukey test.
 
 ------------------------------------------------------------------------
 
@@ -234,43 +272,35 @@ Again, this isn't the best example data set, but as we can see none of the pairw
 
 ### The Logic
 
-Scheffé is designed for **post hoc complex comparisons** — the situation where you decide which contrasts to test only after examining the data, and your contrasts may include complex (non-pairwise) comparisons.
+Scheffé was designed for **post hoc complex comparisons**. This is the situation where you decide which contrasts to test only after examining the data, and your contrasts may include complex (non-pairwise) comparisons.
 
-In this situation, Bonferroni does not apply because $C$ is not defined — you did not select a pre-specified set of contrasts. And Tukey does not apply because Tukey only handles pairwise differences. Scheffé handles the general case.
+In this situation, Bonferroni should *not* be applied because $C$ is not defined as you did not select a pre-specified set of contrasts. And Tukey does not apply to complex comparisons because Tukey only handles pairwise differences. Scheffé can be used when complex comparisons in both planned or post hoc comparisons. In planned complex comparisons, it competes with Bonferroni. In post hoc complex comparisons, it is the only option.
 
-The key insight behind Scheffé is that, in a post hoc setting, you are implicitly searching across *all possible contrasts* — not just pairwise ones, but any weighted combination of group means. Among all possible contrasts, one of them will necessarily have the largest $SS_\psi$ — the largest contrast sum of squares. Scheffé identifies what the maximum $F$ statistic could be under this worst-case selection and uses that as the critical value.
+The key insight behind Scheffé is that, in a post hoc setting, you are implicitly searching across *all possible contrasts*. You are not just examining pairwise comparisons but any combination of group means. Among all possible contrasts, one of them will necessarily have the largest $SS_\psi$ (the largest contrast sum of squares). Scheffé identifies what the maximum $F$ statistic could be under this worst-case selection and uses that as the critical value. In this sense, it operates with a similar philosophy to Tukey's HSD test, but it operates in a braoder spectrum of possible contrasts.
 
-It turns out that the worst-case contrast can capture at most all of the between-groups sum of squares, $SS_B$. Since the omnibus F statistic is $F_{omnibus} = SS_B / [(a-1) \cdot MS_W]$, the maximum possible contrast F is:
+To get in the weeds a bit (the techncial details are not htat important), it turns out that the worst-case contrast can capture at most all of the between-groups sum of squares, $SS_B$. Since the omnibus $F$ statistic (the $F$ statistic from the original ANOVA) is $F_{omnibus} = SS_B / [(a-1) \cdot MS_W]$, the maximum possible contrast F is:
 
 $$F_{max} = (a - 1) \cdot F_{omnibus}$$
 
-This leads directly to Scheffé's critical value:
+This leads directly to Scheffé's critical value, which is helpful to know:
 
 $$CV_{Scheffé} = (a - 1) \cdot F_{.05;\; a-1,\; N-a}$$
 
-This is a fixed value that depends only on the number of groups and the error degrees of freedom — it does not change regardless of how many contrasts you test. That is what makes Scheffé appropriate for post hoc work: you do not need to pre-specify $C$.
+This is a fixed value that depends only on the number of groups and the error degrees of freedom. It does not change regardless of how many contrasts you test. That is what makes Scheffé appropriate for post hoc work: you do not need to pre-specify $C$.
 
-### Test Equations
+Another conseqeunce of this is that the Scheffé test *cannot* be significant if the omnibus test is not significant. Therefore, it is not possible for you to get a Type I error for the Scheffé test being significant in scenarios where the main ANOVA is not significant (this is not true for Bonferroni or Tukey). It is also *guaranteed* that one Scheffé contrast test will be significant if the omnibus ANOVA was significant.
 
-Assuming equal variances, the F statistic is identical to the standard contrast F:
+This isn't that important in practical research, but at least can inform you if you did something wrong.
 
-$$F_\psi = \frac{(\hat{\psi})^2}{\left[MS_W \sum_{j=1}^{a} \left(\frac{c_j^2}{n_j}\right)\right]}$$
+This formula for the CV will become important in the next section where we should compare the Scheffé to Bonferroni approaches. If you are interested in the $F$ statistic or confidence interval equations for this method, I suggest you look them up. Note that they are different than the general formulas for the $F$ statistic.
 
-The confidence interval is:
-
-$$\hat{\psi} \pm \sqrt{(a-1) F_{.05;\; a-1,\; N-a}} \cdot \sqrt{MS_W \sum_{j=1}^{a} \left(\frac{c_j^2}{n_j}\right)}$$
-
-You compare the calculated $F_\psi$ to $(a-1) F_{.05;\; a-1,\; N-a}$. If $F_\psi$ exceeds the critical value, the contrast is significant.
-
-**Important:** Scheffé requires equal variances. If heterogeneity of variance is present, Scheffé is not appropriate.
-
-### The Omnibus Connection
-
-There is a useful and elegant link between Scheffé and the omnibus ANOVA: **if and only if the omnibus F test is significant, at least one contrast will be significant by Scheffé's method**. Conversely, if the omnibus test is non-significant, Scheffé cannot produce any significant contrasts. This means that if your omnibus ANOVA is non-significant, you can skip Scheffé entirely — you already know the answer.
+Before we move on, it is important to note that Scheffé requires equal variances. If heterogeneity of variance is present (aka, the group variances in their data is not equal amongst eachother), Scheffé is not appropriate.
 
 ### Scheffé vs. Bonferroni: When to Use Which
 
-Both Scheffé and Bonferroni can be used for planned complex comparisons. The question is which one gives you more power (i.e., lower critical value) for your specific situation. The answer depends on how many comparisons you are making:
+As specified before, in situations where you are doing a post hoc comparisons of complex contrasts (i.e., non-pairwise contrasts), you must use Scheffé because Bonferroni requires planned comparison contrasts ($C$). However, in situations where you are looking at complex contrasts that were *planned*, then it is possible to use either Bonferroni or Scheffé.
+
+In this scenario, the question is which one gives you more power (i.e., lower critical value) for your specific situation and which one is more conservative (i.e., lower Type I error but lower power). The answer depends on how many comparisons you are making:
 
 | C (# Comparisons) | Bonferroni CV | Scheffé CV |
 |-------------------|---------------|------------|
@@ -284,81 +314,33 @@ Both Scheffé and Bonferroni can be used for planned complex comparisons. The qu
 
 (For $a = 4$ groups, $df_{error} = 30$.)
 
-Bonferroni's critical value increases with $C$, while Scheffé's stays fixed. They cross over at around 8 comparisons. So:
+Bonferroni's critical value increases with $C$, while Scheffé's stays fixed regardless of the number of contrasts you are comparing. In this example, they cross over at around 8 comparisons. So, as a general rule:
 
 -   For a **small number of planned comparisons**, Bonferroni has more power and should be preferred.
 -   For a **large number of comparisons or post hoc complex contrasts**, Scheffé is preferred (and may be the only valid option).
 -   **Scheffé should not be used unless at least one comparison is complex.** For pairwise-only post hoc comparisons, use Tukey.
 
-------------------------------------------------------------------------
+In terms of scenarios where you want to optimize your power, you will need to calculate the CV's and go with the method that has the smaller value. You can use the same online calculator for Bonferroni as I gave above (repeated here for convenience):
 
-## 6. Implementing MCPs in SPSS
+> [Here's a calculator I like](https://www.danielsoper.com/statcalc/calculator.aspx?id=4). There are two caveats:
 
-### Pairwise Comparisons with ONEWAY
+> 1)  You must make the first degree of freedom 1 and the second degree of freedom $N-a$.
 
-The easiest way to run all three procedures for all pairwise comparisons is via the `ONEWAY` command. Just add a `/posthoc=` line:
+> 2)  You need to put in your adjusted alpha level $\alpha /c$ in the probability level.
 
-``` text
-ONEWAY pressure BY treat
-/statistics descriptives
-/posthoc=tukey scheffe bonferroni.
-```
+For Scheffé's test, you can actually use the same $F$ critical value calculator. There are a few important caveats though:
 
-This produces a "Multiple Comparisons" table in the output that lists every pairwise mean difference for each correction method, along with its standard error, adjusted $p$ value, and 95% confidence interval. The output is easy to read and directly interpretable.
+1)  You will use the regular $F$ statistic degrees of freedom. That is, the first degree of freedom is $a-1$ and the second degree of freedom is $N-a$.
 
-![ONEWAY output with Tukey, Scheffé, and Bonferroni pairwise comparisons](images/3.1.png)
+2)  The alpha level should stay at $\alpha = .05$.
 
-In the output, each row shows a pair of groups (I) and (J), the mean difference (I–J), the standard error, the adjusted significance value, and the 95% CI. For Tukey and Bonferroni, you can use the $p$ values directly — they are adjusted. For Scheffé in pairwise mode, the $p$ values are also valid here since ONEWAY computes them correctly.
+3)  After you calculate the $F$ statistic using the two above steps, you must multiple this $F$ value by $(a-1)$. E.g., if you got an $F$ value of $3.2$ with $a=4$ groups, the Scheffé critical $F$ value is $(4-1)3.2 = 9.6$. This last step is important because if you do not multiply the $F$ value you get from the calculator, your CV for the Scheffé test *will be wrong*.
 
-This syntax works well when your goal is all pairwise comparisons. However, **if you want to test specific planned contrasts or complex comparisons, you need to use MANOVA** with the `/cinterval` line instead.
+The last thing is to compare the Bonferroni value and the Scheffé value and go with the test that has the lowest CV. Again, there is not an easier way of doing it. So if you are really worried in a case where you are doing planned comaprisons, you could always just do Bonferroni (as this is the most common and easily defended). Bonferroni will be more powerful if you don't have a large number of groups (common in psychological researcher). Just note that you might be at more risk of Type I error if you don't compare.
 
-**Note:** ONEWAY cannot do within-subjects or factorial designs. For those, you will always need MANOVA.
+### Scheffé in SPSS
 
-### Bonferroni with MANOVA
-
-To apply a Bonferroni correction to specific planned contrasts in MANOVA, you use the `/cinterval=individual(#)` line. The `#` is the confidence level for each *individual* interval, calculated as:
-
-$$\# = 1 - \frac{\alpha}{C} = 1 - \frac{.05}{C}$$
-
-For our hypertension example, suppose you planned the following 3 contrasts before data collection:
-
-1.  Drug therapy & biofeedback & diet vs. combination ($\psi_1$)
-2.  Drug therapy & biofeedback vs. diet & combination ($\psi_2$)
-3.  Drug therapy vs. biofeedback ($\psi_3$)
-
-With $C = 3$:
-
-$$\# = 1 - \frac{.05}{3} = 1 - .0167 = .9833$$
-
-The SPSS syntax is:
-
-``` text
-MANOVA pressure BY treat (1 4)
-/print=cellinfo(means)
-/error=within
-/cinterval =individual(.9833)
-/contrast(treat) = special (1    1    1    1
-                             1    1    1   -3
-                             .5   .5  -.5  -.5
-                             1   -1    0    0)
-/design = treat(1) treat(2) treat(3).
-```
-
-The number `.9833` tells SPSS to construct a 98.33% confidence interval for each individual contrast. This is what makes the family-wise error rate .05 across 3 contrasts: each comparison gets a stricter interval than the usual 95%.
-
-To assess significance, compare each $p$ value in the output to your corrected $\alpha = .05/C = .0167$. If $p < .0167$, the contrast is significant under Bonferroni.
-
-![MANOVA output with Bonferroni correction (individual .9833 confidence intervals)](images/3.2.png)
-
-The output shows the `Coeff.` (your $\hat{\psi}$), `Std. Err.`, `t-Value`, `Sig. t` (the $p$ value), and the lower and upper bounds of the confidence interval. Compare each $p$ value to $\alpha/C$. Note that the confidence intervals printed reflect the Bonferroni-corrected width.
-
-**To get the F statistic from this output:** square the $t$-Value. So $t^2 = F$.
-
-**If you plan to test 4 comparisons** (across one or two MANOVA calls), the corrected confidence level would be $1 - (.05/4) = .9875$, regardless of how many contrasts appear in each individual MANOVA call.
-
-### Scheffé with MANOVA
-
-To apply a Scheffé correction in MANOVA, change the `/cinterval` line to use the joint and univariate Scheffé specification:
+To apply a Scheffé correction, you need to use MANOVA. (Note, I am aware of a few other options to get you "Scheffé" test results in SPSS, however I honestly don't know what these are doing as the results are wrong. So just use this method.). First, change the `/cinterval` line to use the joint and univariate Scheffé specification:
 
 ``` text
 MANOVA pressure BY treat (1 4)
@@ -376,30 +358,35 @@ Two things have changed from the Bonferroni syntax:
 
 **The `/cinterval` line** now uses `joint(.95) univariate(scheffe)`. `joint(.95)` keeps the *family-wise* error rate at .05 across all contrasts tested together. `univariate(scheffe)` specifies the Scheffé method for each individual contrast interval.
 
-**The `/design` line** has changed from `treat(1) treat(2) treat(3)` to simply `treat`. This is critical. MANOVA uses the `/design` line not only to specify what goes in the model, but also to define what constitutes a *family* of tests. If you leave it as `treat(1) treat(2) treat(3)`, MANOVA treats each contrast as its own separate family, which sets $\alpha_{PC} = .05$ for each one individually — defeating the purpose of the correction. Writing `/design = treat.` tells MANOVA to treat all contrasts together as a single family, so the correction applies across all of them jointly.
+**The `/design` line** has changed from `treat(1) treat(2) treat(3)` to simply `treat`. *This is critical*. MANOVA uses the `/design` line not only to specify what goes in the model, but also to define what constitutes a *family* of tests (a family of tests simply means the set of comparisons over which the experimentwise error rate of .05 is being controlled together). If you leave it as `treat(1) treat(2) treat(3)`, MANOVA treats each contrast as its own separate family, which sets $\alpha_{PC} = .05$ for each one individually, defeating the purpose of the correction. Writing `/design = treat.` tells MANOVA to treat all contrasts together as a single family, so the correction applies across all of them jointly.
 
-![MANOVA output with Scheffé correction (joint .95 univariate Scheffé confidence intervals)](images/3.3.png)
+![MANOVA output with Scheffé correction (joint .95 univariate Scheffé confidence intervals)](images/scheffe.png)
 
-**Critical warning about the Scheffé output:** The $p$ values in the Scheffé MANOVA output are **not corrected**. Do not use them for significance testing. SPSS provides the Scheffé-corrected confidence intervals and the $t$ statistics (which you square to get $F$), but the printed $p$ values are the ordinary uncorrected ones. To assess significance with Scheffé, you must either:
+This output gives you the contrast $\Psi$ coefficients, their standard errors, the $t$ statistics (square them to get the Scheffé $F$ statistics), and Scheffé 95% confidence intervals.
+
+**Critical warning about the Scheffé output:** The $p$ values in the Scheffé MANOVA output are **not corrected**. **Do not use them for significance testing**. SPSS provides the Scheffé-corrected confidence intervals and the $t$ statistics, but the printed $p$ values are the ordinary uncorrected ones. To assess significance with Scheffé, you must either:
 
 1.  Compare the calculated $F_\psi = t^2$ to the Scheffé critical value $(a-1) F_{.05;\; a-1,\; N-a}$, or
 2.  Check whether the Scheffé confidence interval excludes zero.
+
+This is just a limitation of SPSS.
 
 For our hypertension example with $a = 4$ groups and $df_{error} = 16$ (since $n = 5$ per group, $N = 20$), the Scheffé critical value is:
 
 $$CV_{Scheffé} = (4-1) \times F_{.05;\; 3,\; 16} = 3 \times 3.24 = 9.72$$
 
-Any contrast F statistic must exceed 9.72 to be declared significant.
+Any contrast F statistic must exceed 9.72 to be declared significant. In our cases, none do, and we can also see how 0 is contained within each of the confidence intervals too.
 
 ------------------------------------------------------------------------
 
 ## 7. Summary: Choosing Your MCP
 
-The choice of correction method comes down to your research context:
+The choice of correction method comes down to your research context. I recommend referencing the flow chart I gave above, but here are some rules of thumb.
 
 | Situation | Recommended Procedure |
 |--------------------------|----------------------------------------------|
 | Small set of planned contrasts (pairwise or complex) | Bonferroni |
+| A larger set of planned pairwise contrasts | Comapre Bonferroni and Tukey CVs; use the lower one |
 | All pairwise comparisons planned or post hoc | Tukey |
 | Post hoc complex comparisons | Scheffé |
 | Planned contrasts with many comparisons | Compare Bonferroni and Scheffé CVs; use the lower one |
@@ -408,9 +395,25 @@ A few additional reminders:
 
 -   Tukey and Scheffé **require equal variances**. If the homogeneity of variance assumption is violated, use Bonferroni (which can accommodate heterogeneous variances via the unequal variance formulas).
 -   Tukey **cannot be implemented via MANOVA** in SPSS; use `ONEWAY` for Tukey.
--   For Scheffé in MANOVA, always use `/design = treat.` (not the individual contrast design) to ensure the correction applies family-wide.
--   For Scheffé, **never use the output** $p$ values — only use the $F$ statistic vs. the critical value or the confidence intervals.
+-   For Scheffé in MANOVA, always use `/design = GROUP_VARIABLE` (not the individual contrast design) to ensure the correction applies family-wide.
+-   For Scheffé, **never use the output** $p$ values. Only use the $F$ statistic vs. the critical value or the confidence intervals.
 -   If the omnibus ANOVA is non-significant, Scheffé will never find a significant contrast. You can skip it.
+
+------------------------------------------------------------------------
+
+## 8. Bonus: False Discovery Rate
+
+All of the procedures covered so far control the "familywise" error rate. Aka, the probability of making any false positive across your whole set of tests (the whole experiment is a "family" in our scenarios, but families can be more specific). This is a strict standard, and it gets harder to satisfy as the number of comparisons grows.
+
+An alternative approach, common when researchers run a very large number of tests (common in fields like genomics, neuroimaging, or any study with dozens of comparisons), is to control the false discovery rate (FDR) instead. Rather than asking "what is the chance of even one false positive?", FDR asks a more forgiving question: "of the tests I declare significant, what proportion are likely to be false positives?"
+
+For example, controlling FDR at .05 means that, on average, no more than 5% of your significant results are expected to be false positives, not that there is only a 5% chance of any false positive occurring at all. This distinction makes FDR considerably less conservative than Bonferroni or Scheffé, which is exactly why it became popular in contexts where dozens or hundreds of tests are unavoidable and familywise correction would leave you with almost no power to detect anything.
+
+Imagine if you did 100 tests on neuroimaging data (I've seen much higher). The Bonferroni corrected level would be $.05/100 = .0005$, which is lower than many programs will even print for you by default. It's just not practical. So the FDR method gives researchers a way to correct for error *after* they concluded significance on a regular $\alpha=.05$.
+
+The most common method for controlling FDR is the Benjamini-Hochberg procedure, which ranks your $p$ values from smallest to largest and compares each one to a sliding threshold rather than a single fixed cutoff.
+
+We will not cover the mechanics of FDR control in this course, since our designs typically involve a small, manageable number of planned or post hoc contrasts where familywise correction is appropriate. But it is worth knowing that FDR exists as the standard approach once the number of comparisons becomes very large, and you may encounter it when reading research in other fields.
 
 ------------------------------------------------------------------------
 

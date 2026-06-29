@@ -13,13 +13,21 @@ Software such as SPSS or SAS provide better solutions. It's possible to do these
 
 The caveat of using SPSS is that I can't run SPSS code natively in Quarto, which is how I am constructing this website. So all lessons will give you the syntax, but output will be done via screenshots as best as I can. But due to this limitation, the quality of the lesson material might ebb and flow depending on the topic.
 
-The SPSS data sets can be found on this [Google Link](https://drive.google.com/file/d/1PVQ5JurltWVhdv_w0Jv-HNHtXf46MnAw/view?usp=sharing).
+The SPSS data sets can be found on this [Google Link](https://drive.google.com/file/d/1lXPGTAjZTxcFbgGJBX-DfN4EWPlH3e9x/view?usp=sharing).
+
+The lessons build on each other sequentially. So you will not understand as well later lessons if you do not work through previous lessons. Also, some of these lessons were written months apart, so I apoligze if the formatting/notation is inconsistent throughout.
 
 ## Introduction to SPSS and One-Way ANOVA
 
+This lesson introduces the logic of ANOVA through the one-way between-subjects design, covering how the $F$ test compares group means by partitioning total variance into between-group and within-group components. It also provides a practical introduction to running and interpreting ANOVA output in SPSS.
+
 [Open Tutorial](anova-lessons/SPSS-ANOVA-Intro.html)
 
-##  Contrast Testing
+------------------------------------------------------------------------
+
+## Contrast Testing
+
+Contrast testing allows you to ask focused questions about specific group comparisons rather than relying on the omnibus $F$ test alone. This lesson covers how to specify and interpret planned contrasts in SPSS using the full/reduced model framework.
 
 [Open Tutorial](anova-lessons/Contrasts.html)
 
@@ -27,46 +35,62 @@ The SPSS data sets can be found on this [Google Link](https://drive.google.com/f
 
 ## Type I Error Correction: Bonferroni, Tukey, and Scheffe Corrections
 
-Open Tutorial
+When multiple comparisons are made simultaneously, the probability of a false positive increases. This lesson covers the most common correction procedures and when to apply each one.
+
+[Open Tutorial](anova-lessons/Multiple-Corrections.html)
 
 ------------------------------------------------------------------------
 
-## Trend Analysis: Linear and Nonlineary Trajectories
+## Trend Analysis: Linear and Nonlinear Trajectories
 
-Open Tutorial
+Trend analysis tests whether group means follow a systematic pattern across ordered levels of a factor, such as a linear increase or a quadratic curve. This lesson covers how to specify and interpret polynomial contrasts in SPSS.
+
+[Open Tutorial](anova-lessons/trend-analysis.html)
 
 ------------------------------------------------------------------------
 
 ## Two-Way Between-Subjects ANOVA
 
-Open Tutorial
+This lesson extends the one-way design to two categorical factors, introducing the concept of an interaction effect. You will learn how to interpret main effects and interactions and how to follow up a significant interaction with simple effects tests.
+
+[Open Tutorial](anova-lessons/twoway-anova.html)
 
 ------------------------------------------------------------------------
 
 ## Higher Order Between-Subjects ANOVA
 
-Open Tutorial
+Higher order designs include three or more between-subjects factors, producing main effects, two-way interactions, and a three-way interaction. This lesson covers how to interpret and follow up these more complex effect structures.
+
+[Open Tutorial](anova-lessons/higher-order-anova.html)
 
 ------------------------------------------------------------------------
 
-## One-Way Within-Subejcts ANOVA: Univariate and Multivariate Method
+## One-Way Within-Subjects ANOVA: Univariate and Multivariate Method
 
-Open Tutorial
+Within-subjects designs measure the same participants across multiple conditions, reducing error variance by removing individual differences from the error term. This lesson covers both the univariate and multivariate approaches to testing within-subjects effects in SPSS.
+
+[Open Tutorial](anova-lessons/within-subjects-anova.html)
 
 ------------------------------------------------------------------------
 
-## Two-Way Within-Subejcts ANOVA
+## Two-Way/Higher Order Within-Subjects ANOVA
 
-Open Tutorial
+This lesson extends the within-subjects design to two or more repeated factors, covering how to interpret interactions among within-subjects effects and how to conduct follow-up analyses.
+
+[Open Tutorial](anova-lessons/higher-order-within.html)
 
 ------------------------------------------------------------------------
 
 ## Split-Plot ANOVA
 
-Open Tutorial
+The split-plot design combines between-subjects and within-subjects factors in a single analysis, making it one of the most common designs in psychological research. This lesson covers the interpretation of main effects, interactions, and simple effects in mixed designs.
+
+[Open Tutorial](anova-lessons/split-plot.html)
 
 ------------------------------------------------------------------------
 
 ## ANCOVA
 
-Open Tutorial
+ANCOVA extends the ANOVA framework by adding a continuous covariate to the model, reducing error variance and adjusting group means for pre-existing differences. This lesson covers the two-step procedure of testing homogeneity of regression slopes before evaluating the factor effect.
+
+[Open Tutorial](anova-lessons/ancova.html)

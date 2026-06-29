@@ -1,0 +1,1073 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.9.36">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Michael Woller">
+
+<title>Trend Analysis: Testing for Linear and Nonlinear Patterns – InfoGothic</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<link href="../../images/favicon.ico" rel="icon">
+<script src="../../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-dark-f418161beb48e0141c760e455f12af2c.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap-4d14f3be7bc8eb7ec2287338953877e0.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="dark">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+  var nav = document.querySelector(".navbar-nav");
+  var li = document.createElement("li");
+  li.className = "nav-item";
+  li.innerHTML = '<a class="nav-link ml-onclick-form" href="javascript:void(0)" onclick="ml(\'show\', \'18mxag\', true)">Mail List</a>';
+  var icons = nav.querySelector(".nav-item:has(.bi)");
+  nav.insertBefore(li, icons);
+});
+</script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<link rel="stylesheet" href="../../styles.css">
+</head>
+
+<body class="nav-fixed quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="../../index.html">
+    <span class="navbar-title">InfoGothic</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../about.html"> 
+<span class="menu-text">About</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../tutorials.html"> 
+<span class="menu-text">Courses &amp; Tutorials</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../blog-posts.html"> 
+<span class="menu-text">Blog Posts</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="https://notes.infogothic.com"> 
+<span class="menu-text">Obsidian Notes</span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/michaelwoller"> <i class="bi bi-github" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://bsky.app/profile/infogothic.bsky.social"> <i class="bi bi-bluesky" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction">1. Introduction</a></li>
+  <li><a href="#the-running-example" id="toc-the-running-example" class="nav-link" data-scroll-target="#the-running-example">2. The Running Example</a></li>
+  <li><a href="#the-linear-trend-as-a-model-comparison" id="toc-the-linear-trend-as-a-model-comparison" class="nav-link" data-scroll-target="#the-linear-trend-as-a-model-comparison">3. The Linear Trend as a Model Comparison</a>
+  <ul class="collapse">
+  <li><a href="#building-the-linear-contrast" id="toc-building-the-linear-contrast" class="nav-link" data-scroll-target="#building-the-linear-contrast">Building the linear contrast</a></li>
+  </ul></li>
+  <li><a href="#testing-the-linear-trend" id="toc-testing-the-linear-trend" class="nav-link" data-scroll-target="#testing-the-linear-trend">4. Testing the Linear Trend</a></li>
+  <li><a href="#testing-for-nonlinearity" id="toc-testing-for-nonlinearity" class="nav-link" data-scroll-target="#testing-for-nonlinearity">5. Testing for Nonlinearity</a></li>
+  <li><a href="#testing-a-specific-nonlinear-trend" id="toc-testing-a-specific-nonlinear-trend" class="nav-link" data-scroll-target="#testing-a-specific-nonlinear-trend">6. Testing a Specific Nonlinear Trend</a>
+  <ul class="collapse">
+  <li><a href="#full-and-restricted-models-for-a-single-trend" id="toc-full-and-restricted-models-for-a-single-trend" class="nav-link" data-scroll-target="#full-and-restricted-models-for-a-single-trend">Full and restricted models for a single trend</a></li>
+  </ul></li>
+  <li><a href="#trend-coefficients" id="toc-trend-coefficients" class="nav-link" data-scroll-target="#trend-coefficients">7. Trend coefficients</a>
+  <ul class="collapse">
+  <li><a href="#the-relationship-between-the-omnibus-anova-test-and-contrasts" id="toc-the-relationship-between-the-omnibus-anova-test-and-contrasts" class="nav-link" data-scroll-target="#the-relationship-between-the-omnibus-anova-test-and-contrasts">The relationship between the omnibus ANOVA test and contrasts</a></li>
+  <li><a href="#spss-implementation-oneway" id="toc-spss-implementation-oneway" class="nav-link" data-scroll-target="#spss-implementation-oneway">8. SPSS Implementation: ONEWAY</a></li>
+  <li><a href="#spss-implementation-manova" id="toc-spss-implementation-manova" class="nav-link" data-scroll-target="#spss-implementation-manova">9. SPSS Implementation: MANOVA</a></li>
+  <li><a href="#pratice-questions" id="toc-pratice-questions" class="nav-link" data-scroll-target="#pratice-questions">10. Pratice Questions</a></li>
+  <li><a href="#a-note-on-unequal-sample-sizes" id="toc-a-note-on-unequal-sample-sizes" class="nav-link" data-scroll-target="#a-note-on-unequal-sample-sizes">11. A Note on Unequal Sample Sizes</a></li>
+  <li><a href="#summary" id="toc-summary" class="nav-link" data-scroll-target="#summary">11. Summary</a></li>
+  <li><a href="#discussion-questions" id="toc-discussion-questions" class="nav-link" data-scroll-target="#discussion-questions">Discussion Questions</a></li>
+  </ul></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Trend Analysis: Testing for Linear and Nonlinear Patterns</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Michael Woller </p>
+          </div>
+  </div>
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="introduction" class="level2">
+<h2 data-anchor-id="introduction">1. Introduction</h2>
+<p>So far in this series, the grouping variable in our ANOVA has been purely categorical. Drug therapy, biofeedback, dietary modification, and combination treatment have no natural order. There is no sense in which “biofeedback” comes before or after “drug therapy.”</p>
+<p>Trend analysis is for a different situation: when the levels of your independent variable are ordered and numeric. Study time, dosage, age group, and number of practice trials are all examples of variables where you could do a trend analysis as they have natural ordering. When the group variable has this kind of structure, we are not just asking “do the groups differ?” We can ask a more specific question: “does the outcome change in a systematic way as the group increases?”</p>
+<p>That systematic change is called a <strong>trend</strong>. A trend can be linear (a straight increase or decrease), or it can be nonlinear (quadratic, cubic, and so on). Trend analysis lets us test for each of these patterns directly, using the same contrast machinery from Lesson 2.</p>
+<p>Trend analysis is just a special case of contrast testing. The only thing that changes is how the contrast coefficients are chosen. Instead of picking coefficients to test a specific group comparison, we pick coefficients that trace out a specific shape (a line, a parabola, an S-curve, etc.) across the ordered levels of the grouping variable.</p>
+<p>First, we will run through all of the types of trend tests you can do, and then we will overview how to do each in SPSS because it is very simple.</p>
+</section>
+<section id="the-running-example" class="level2">
+<h2 data-anchor-id="the-running-example">2. The Running Example</h2>
+<p>The dataset we will be using is the TrendAnalysis.sav data.</p>
+<p>These data represent recall scores of 24 children that were randomly assigned to one of four experimental conditions. Each child was given a fixed amount of time to study a list of 12 words, and their ability to recall the words was measured afterward, scored in the number of words they successfully recalled. The four experimental conditions was the length of time between memorizing the words and being asked to recall the words. The table below represents the study deisgn (each cell is a child’s unique score).</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th></th>
+<th>1 Minute</th>
+<th>2 Minutes</th>
+<th>3 Minutes</th>
+<th>4 Minutes</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td></td>
+<td>2</td>
+<td>6</td>
+<td>6</td>
+<td>11</td>
+</tr>
+<tr class="even">
+<td></td>
+<td>3</td>
+<td>8</td>
+<td>8</td>
+<td>10</td>
+</tr>
+<tr class="odd">
+<td></td>
+<td>1</td>
+<td>5</td>
+<td>10</td>
+<td>7</td>
+</tr>
+<tr class="even">
+<td></td>
+<td>2</td>
+<td>3</td>
+<td>5</td>
+<td>9</td>
+</tr>
+<tr class="odd">
+<td></td>
+<td>0</td>
+<td>7</td>
+<td>10</td>
+<td>8</td>
+</tr>
+<tr class="even">
+<td></td>
+<td>4</td>
+<td>7</td>
+<td>9</td>
+<td>9</td>
+</tr>
+<tr class="odd">
+<td><strong>Mean</strong></td>
+<td><strong>2</strong></td>
+<td><strong>6</strong></td>
+<td><strong>8</strong></td>
+<td><strong>9</strong></td>
+</tr>
+</tbody>
+</table>
+<p>We can easily observe that the means climb steadily from 2 to 9 as study time increases, which suggests a linear trend. But notice the increase slows down between 3 and 4 minutes (8 to 9) compared to the jump between 1 and 2 minutes (2 to 6). That kind of flattening is exactly the sort of thing trend analysis is built to detect, as there either could be a nonlinear trend that eplains this tapering or that this tapering actually isn’t a big deal.</p>
+</section>
+<section id="the-linear-trend-as-a-model-comparison" class="level2">
+<h2 data-anchor-id="the-linear-trend-as-a-model-comparison">3. The Linear Trend as a Model Comparison</h2>
+<p>We can frame the test for a linear trend the same way we full and reduced models in the first lesson. In this situation, the full model represents <em>all</em> of the trend effects we are interested in. For example, if we are testing for a linear trend, the full model would be</p>
+<p><strong>Full model:</strong> <span class="math display">\[Y_{ij} = \beta_0 + \beta_1 X_j + \varepsilon_{ij}.\]</span></p>
+<p>Here <span class="math inline">\(X_j\)</span> is the study time for group <span class="math inline">\(j\)</span>, <span class="math inline">\(\beta_0\)</span> is the intercept, and <span class="math inline">\(\beta_1\)</span> is the slope: how much recall is expected to change for each one-unit increase in study time. For those who are familiar with linear regression, one can see the obvious similarity between this model and a regression model. This is because, they are the same thing, however for ANOVA <span class="math inline">\(X_j\)</span> must be a discrete grouping variable, whereas regression can have a continuous <span class="math inline">\(X_j\)</span> predictor, but this is besides the point of this lesson.</p>
+<p>The restricted model is just a model that lacks our effect of interest, the linear trend:</p>
+<p><strong>Restricted model</strong> <span class="math display">\[Y_{ij} = \beta_0 + \varepsilon_{ij}\]</span></p>
+<p>Comparing these two models gives us the necessary values to conduct an <span class="math inline">\(F\)</span> test to test the significance of the linear trend.</p>
+<p><strong>Null hypothesis:</strong> the linear slope is zero. <span class="math display">\[\beta_1 = 0\]</span></p>
+<p>A significant F means we reject the null hypothesis that no linear trend exists.</p>
+<p>As a side note, we didn’t cover the full and reduced model comparison in the contrast-focused lessons, but just know that you can specify <em>any</em> contrast comparison in a similar manner.</p>
+<section id="building-the-linear-contrast" class="level3">
+<h3 data-anchor-id="building-the-linear-contrast">Building the linear contrast</h3>
+<p>The contrast coefficients for a linear trend come directly from the values of X, centered around their mean:</p>
+<p><span class="math display">\[c_j = X_j - \bar{X}\]</span></p>
+<p>For our four study times (1, 2, 3, 4), <span class="math inline">\(\bar{X} = 2.5\)</span>, giving the contrast coefficients of <span class="math inline">\(-1.5, -0.5, 0.5, 1.5\)</span>. If you notice, the trend for these contrast coefficients increases linearly from left to right, increasing by 1 each time. This allows us to see how much the means of the data are structured in a linear line.</p>
+<p>These coefficients work fine, but by convention we usually rescale to whole numbers: <span class="math inline">\(-3, -1, 1, 3\)</span>. These two sets of coefficients give identical F statistics and identical p-values, but they differ only if you are interpreting the coefficient itself as a slope estimate or building a confidence interval.</p>
+</section>
+</section>
+<section id="testing-the-linear-trend" class="level2">
+<h2 data-anchor-id="testing-the-linear-trend">4. Testing the Linear Trend</h2>
+<p>For a linear trend, the null hypothesis is simply that no linear trend exists.</p>
+<p><span class="math display">\[H_0: \psi_{linear} = 0\]</span></p>
+<p>Following what we learned in the contrast lesson, we can calulate a contrast value of the linear contrast</p>
+<p><span class="math display">\[\psi_{linear} = 2(-3) + 6(-1) + 8(1) + 9(3) = 23\]</span></p>
+<p>Skipping some math, this will end up giving us an <span class="math inline">\(F\)</span> statistic of</p>
+<p><span class="math display">\[F_{1,20} =  54.724\]</span></p>
+<p>Compare this against the critical value <span class="math inline">\(F_{1, N-a} = F_{1,20} = 4.35\)</span>. Since 54.724 far exceeds the critical value, we reject the null and conclude there is a statistically significant linear trend in recall across the four study times. So as time between memory recall increased, the ammount of words the children were able to recall increased linearly.</p>
+</section>
+<section id="testing-for-nonlinearity" class="level2">
+<h2 data-anchor-id="testing-for-nonlinearity">5. Testing for Nonlinearity</h2>
+<p>Finding a significant linear trend tells us recall tends to go up as study time increases, but it does not tell us whether a straight line is actually a <em>good</em> description of the data. The means (2, 6, 8, 9) suggest the rate of increase might be slowing down, aka there is a bend downward near the end of the trend. Testing for nonlinearity answers exactly that question: is there meaningful curvature left over after the linear trend is accounted for?</p>
+<p>We can understand this as a test between a full and restricted model as well.</p>
+<p><strong>Full model:</strong> <span class="math display">\[Y_{ij} = \beta_0 + \beta_1 X_j + \beta_2 X_j^2 + \cdots + \beta_{a-1} X_j^{a-1} + \varepsilon_{ij}\]</span></p>
+<p><strong>Restricted model:</strong> <span class="math display">\[Y_{ij} = \beta_0 + \beta_1 X_j + \varepsilon_{ij}\]</span></p>
+<p>Here, <span class="math inline">\(\beta_2 X_j^2 + \cdots +\beta_{a-1} X_j^{a-1}\)</span> represents <em>any</em> nonlinear trend that one can test. You are limited by the number of groups you have because it takes <span class="math inline">\(a\)</span> points to pin down a curve of degree <span class="math inline">\(a-1\)</span>, so with only 3 groups you have just enough information to bend a line into a single curve (quadratic), not enough to bend it into an S-shape (cubic).</p>
+<p>So, this test is not specific to what types of nonlinearity exists. The null hypothesis for this test is</p>
+<p><strong>Null hypothesis:</strong> <em>all</em> of the nonlinear slopes are zero. <span class="math display">\[\beta_2 = \beta_3 = \cdots = \beta_{a-1} = 0\]</span></p>
+<p>Because the restricted model here already includes the linear term, this test asks specifically whether anything <em>beyond</em> a straight line is needed.</p>
+<p>However, one should note that a nonsignificant nonlinearity test does not prove the relationship is linear. It may simply reflect low statistical power to detect curvature with this sample size. Conclusions about linearity should be based on both the test result and your theoretical understanding of the variable, not the test alone.</p>
+<p>If this test is significant, and you reject the null, it would mean a straight line does <em>not</em> adequately capture the pattern, and that real curvature exists on top of the linear trend.</p>
+<p>Typically in research that use ANOVA, it is less of interest to test for generic nonlinearities, and instead, it is more useful to hypothesize about specific types of nonlinearities and test those. As a result, there isn’t an easy “nonlinear” contrast you can test in programs in SPSS. So we will turn to specific nonlinear trend contrasts.</p>
+</section>
+<section id="testing-a-specific-nonlinear-trend" class="level2">
+<h2 data-anchor-id="testing-a-specific-nonlinear-trend">6. Testing a Specific Nonlinear Trend</h2>
+<p>Sometimes the nonlinearity test above is too coarse. It lumps every nonlinear term together. If you have a specific hypothesis (for example, that the relationship is quadratic rather than cubic) you can test that single trend directly, using the same contrast logic as before.</p>
+<section id="full-and-restricted-models-for-a-single-trend" class="level3">
+<h3 data-anchor-id="full-and-restricted-models-for-a-single-trend">Full and restricted models for a single trend</h3>
+<p>The full and restricted models here look similar to the above section, but with one important difference: instead of testing <em>every</em> nonlinear term the models are simply testing a specified number of them. For example, to test a quadratic trend, the full model is</p>
+<p><strong>Full model quadratic:</strong> <span class="math display">\[Y_{ij} = \beta_0 + \beta_1 X_j + \beta_2 X_j^2  + \varepsilon_{ij}\]</span></p>
+<p>For a cubic trend, the full model is</p>
+<p><strong>Full model cubic:</strong> <span class="math display">\[Y_{ij} = \beta_0 + \beta_1 X_j + \beta_2 X_j^2 + \beta_3 X_j^3  + \varepsilon_{ij}\]</span></p>
+<p>Note that when testing a higher order nonlinear trend, all lower order trends are included in the model. E.g., if we want to test the cubic trend, the linear and quadratic trends are still included. This is because a cubic shape is still free to also bend linearly and quadratically along the way, so those simpler trends have to stay in the model to be accounted for.</p>
+<p>The restricted models are simply the smaller model that does not include the specific trend you are interested in.</p>
+<p><strong>Reduced model quadratic:</strong> <span class="math display">\[Y_{ij} = \beta_0 + \beta_1 X_j +  \varepsilon_{ij}\]</span></p>
+<p><strong>Reduced model cubic:</strong> <span class="math display">\[Y_{ij} = \beta_0 + \beta_1 X_j + \beta_2 X_j^2 +  \varepsilon_{ij}\]</span></p>
+<p>Therefore, the null hypothesis of each is simply either the quadratic trend or the cubic trend are 0 for their respective models.</p>
+<p><strong>Null hypothesis quadratic:</strong> the quadratic slope is zero (in the full qudartic model. <span class="math display">\[\beta_2 = 0\]</span></p>
+<p><strong>Null hypothesis cubic:</strong> the linear slope is zero (in the full cubic model). <span class="math display">\[\beta_3 = 0\]</span></p>
+<p>This logic continues for even higher nonlinear trends. However, practically speaking, it is rare you would ever test for trends higher than quadratic. Most of the time in ANOVA-based trend analysis, you wouldn’t have enough data or groups to study cubic trends. Also, there is a threat of something called <strong>overfitting</strong>. This is when the model becomes so flexible that it starts bending to fit noise in your specific sample rather than capturing a real, generalizable pattern, producing a trend that looks impressive in this data but fails to hold up in a new sample.</p>
+<p>If we were to go back to the pie analogy from the contrast lesson, we can also demonstrate how we can split up the sum of squares between (<span class="math inline">\(SS_b\)</span>) amongst the trend contrasts.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/trend-pie.png" class="img-fluid figure-img"></p>
+<figcaption>Pie chart showing SS_between split into linear, quadratic, and cubic slices</figcaption>
+</figure>
+</div>
+<p>If any of the trends are significant, that means there is a significant ammount of the <span class="math inline">\(SS_b\)</span> wedge being taken up by that type of trend.</p>
+</section>
+</section>
+<section id="trend-coefficients" class="level1">
+<h1>7. Trend coefficients</h1>
+<p>There are a variety of trend contrasts and coefficients depending on what type of trend you are interested in and how many groups you have. Below we give sets of orthogonal polynomial contrasts for each group level. That is, if you use the linear and quadratic contrasts for a model with 3 group levels, these are guranteed to be orthogonal.</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Levels</th>
+<th>Trend</th>
+<th>Coefficients</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>3</td>
+<td>Linear</td>
+<td>-1, 0, 1</td>
+</tr>
+<tr class="even">
+<td>3</td>
+<td>Quadratic</td>
+<td>1, -2, 1</td>
+</tr>
+<tr class="odd">
+<td>4</td>
+<td>Linear</td>
+<td>-3, -1, 1, 3</td>
+</tr>
+<tr class="even">
+<td>4</td>
+<td>Quadratic</td>
+<td>1, -1, -1, 1</td>
+</tr>
+<tr class="odd">
+<td>4</td>
+<td>Cubic</td>
+<td>-1, 3, -3, 1</td>
+</tr>
+<tr class="even">
+<td>5</td>
+<td>Linear</td>
+<td>-2, -1, 0, 1, 2</td>
+</tr>
+<tr class="odd">
+<td>5</td>
+<td>Quadratic</td>
+<td>2, -1, -2, -1, 2</td>
+</tr>
+<tr class="even">
+<td>5</td>
+<td>Cubic</td>
+<td>-1, 2, 0, -2, 1</td>
+</tr>
+<tr class="odd">
+<td>5</td>
+<td>Quartic</td>
+<td>1, -4, 6, -4, 1</td>
+</tr>
+</tbody>
+</table>
+<p>A few things worth flagging about this table:</p>
+<ul>
+<li>These coefficients assume <strong>equal spacing</strong> of the group variable. If your study times were 1, 2, 4, and 8 minutes instead of 1, 2, 3, and 4, these specific values would no longer be correct.</li>
+<li>You do not need to use every row of the table together. You can test just the linear trend without worrying about needing the others. However, the full set for a given number of levels is also guaranteed to be linearly independent, so you can include all of them at once without violating contrast assumptions. Note that you should think about the types of trends you want to test before hand so you minimize Type I error inflation (or you need to apply a correction we discussed in the previous lesson).</li>
+<li>You cannot test for a trend that requires more groups than you have. With only 3 groups, there is no such thing as a cubic trend.</li>
+</ul>
+<section id="the-relationship-between-the-omnibus-anova-test-and-contrasts" class="level3">
+<h3 data-anchor-id="the-relationship-between-the-omnibus-anova-test-and-contrasts">The relationship between the omnibus ANOVA test and contrasts</h3>
+<p>It is worth pausing on how the overall omnibus ANOVA F test relates to any individual contrast, including a trend contrast like the quadratic one above. They are answering different questions, and the significance of one does not guarantee anything about the significance of the other.</p>
+<p>The omnibus test asks only whether the group means differ <em>somewhere</em>. A contrast asks something more specific: whether one particular pattern among the means, a pairwise difference, a complex comparison, or a trend, is present. Because of this, you can have a significant omnibus F with no single contrast reaching significance. Since the omnibus is just comparing different ammounts of variability, it is possible that the overall variability may be spread across several small differences in the means rather than concentrated in any one comparison. The reverse is also possible: a contrast can be significant even when the omnibus test is not, especially when that contrast was planned in advance and targets exactly where the effect lives, since a focused 1 df test can be more powerful than the broader omnibus test it is drawn from.</p>
+<p><strong>Neither result implies the other.</strong> A nonsignificant omnibus test does not mean a specific trend like the quadratic cannot be significant on its own, and a significant quadratic trend does not require the omnibus test to also be significant. This is exactly why the planned versus post hoc distinction from the previous lesson matters here: if the quadratic trend was specified in advance, testing it directly preserves power. If it was chosen only after looking at the data, it is a post hoc decision and needs the more conservative correction.</p>
+</section>
+<section id="spss-implementation-oneway" class="level2">
+<h2 data-anchor-id="spss-implementation-oneway">8. SPSS Implementation: ONEWAY</h2>
+<p>The easiest way to run a full trend analysis in SPSS is through <code>ONEWAY</code>, using the <code>/POLYNOMIAL</code> subcommand.</p>
+<pre><code>ONEWAY
+recall BY minutes
+/POLYNOMIAL= 3
+/MISSING ANALYSIS.</code></pre>
+<p><strong>Line by line:</strong></p>
+<ul>
+<li><code>ONEWAY</code> opens the one-way ANOVA procedure.</li>
+<li><code>recall BY minutes</code> specifies the outcome (<code>recall</code>) and the grouping variable (<code>minutes</code>).</li>
+<li><code>/POLYNOMIAL= 3</code> tells SPSS to test trends up through the 3rd degree (linear, quadratic, cubic). The number you supply here should be <span class="math inline">\(a - 1\)</span>, where <span class="math inline">\(a\)</span> is the number of groups. With 4 groups, the highest possible trend is cubic, hence 3.</li>
+<li><code>/MISSING ANALYSIS</code> handles missing data using listwise deletion within each analysis. This technically isn’t necessary in this case since there are no missing values, but I give it here anyway.</li>
+</ul>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/oneway-trend.png" class="img-fluid figure-img"></p>
+<figcaption>SPSS ONEWAY output with polynomial trend breakdown</figcaption>
+</figure>
+</div>
+<p>This single subcommand automatically produces the full orthogonal trend breakdown: linear, quadratic, and cubic contrasts, each with their own SS, df, F, and significance, plus a “deviation” row after each trend that test fwhatever variability is left over once that trend and any lower-order trends are accounted for (this is not of our interest).</p>
+</section>
+<section id="spss-implementation-manova" class="level2">
+<h2 data-anchor-id="spss-implementation-manova">9. SPSS Implementation: MANOVA</h2>
+<p><code>ONEWAY</code> is convenient, but it does not give you confidence intervals or let you easily apply a correction for multiple trend tests. Also, it is not compatible with more complicated ANOVAs that we will do in the future. For those reasons, I recommend you specify the trend contrasts using <code>MANOVA</code> in a similar fashion we’ve done in the past two lessons.</p>
+<p>I am going to do a trend analysis for the linear, quadratic, and cubic trend for our four groups (while controlling for Type I error inflation).</p>
+<pre><code>MANOVA recall BY minutes (1 4)
+/print=cellinfo(means)
+/error=within
+/cinterval=individual(.9833)
+/contrast(minutes) = special (1 1 1 1
+                              -3 -1 1 3
+                               1 -1 -1 1
+                              -1 3 -3 1 )
+/design = minutes(1) minutes(2) minutes(3).</code></pre>
+<p><strong>Line by line:</strong></p>
+<ul>
+<li><code>MANOVA recall BY minutes (1 4)</code> declares the outcome and the grouping variable, with levels coded 1 through 4.</li>
+<li><code>/print=cellinfo(means)</code> prints the group means alongside the test output.</li>
+<li><code>/error=within</code> pools the within-groups variance as the error term, exactly as in Lessons 2 and 3.</li>
+<li><code>/cinterval=individual(.9833)</code> controls the confidence level used for each individual parameter estimate. Here, .9833 corresponds to a Bonferroni-corrected alpha of <span class="math inline">\(.05/3 = .0167\)</span>, since we are testing three trends (linear, quadratic, cubic) as a planned family.</li>
+<li><code>/contrast(minutes) = special(...)</code> is where the orthogonal polynomial coefficients go. The first row, <code>1 1 1 1</code>, is always required and represents the grand mean. The remaining three rows are the linear, quadratic, and cubic coefficients from the table in Section 7.</li>
+<li><code>/design = minutes(1) minutes(2) minutes(3).</code> tells SPSS to test each of the three custom contrast rows (excluding the grand mean row of 1’s) as a separate effect in the output. This is the same syntax pattern used in Lesson 3 for testing multiple planned contrasts at once.</li>
+</ul>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/manova-trend.png" class="img-fluid figure-img"></p>
+<figcaption>SPSS MANOVA output for linear, quadratic, and cubic trend contrasts</figcaption>
+</figure>
+</div>
+<p>A reminder carried over from the contrast lesson: MANOVA reports a <span class="math inline">\(t\)</span> value for each parameter, not an <span class="math inline">\(F\)</span>. To recover the F statistic, you simply need to square the t-value: <span class="math inline">\(F = t^2\)</span>. For example, the <span class="math inline">\(t\)</span> statistic linear trend, <span class="math inline">\(t = 7.39758\)</span>, which gives us <span class="math inline">\(F=7.39758^2 = 54.72\)</span>.</p>
+<p><strong>NOTE:</strong> As discussed in the contrast lesson, since we scaled the linear and cubic trend coefficients up by 3 (e.g.&nbsp;for linear, we have (-3, -1, 1, 3) instead of (-1, -1/3, 1/3, 1)), we must divide the confidence interval ends for the linear and cubic trend by 3. So the confidence interval for the linear trend needs to change from <span class="math inline">\([14.88,~31.12]\)</span> to <span class="math inline">\([4.96,~10.37]\)</span>.</p>
+</section>
+<section id="pratice-questions" class="level2">
+<h2 data-anchor-id="pratice-questions">10. Pratice Questions</h2>
+<p>These sets of questions were something I gave to students during our lab. So they could be helpful to go over. The answers (but not SPSS output) are given in drop downs</p>
+<p><strong>Q1: From SPSS, is the linear trend significant at the .05 level?</strong></p>
+<details>
+<summary>
+Click to reveal answer
+</summary>
+<p>Yes. The linear term contrast has <span class="math inline">\(p &lt; .001\)</span>.</p>
+</details>
+<hr>
+<p><strong>Q2: From SPSS, is the quadratic trend significant at the .05 level?</strong></p>
+<details>
+<summary>
+Click to reveal answer
+</summary>
+<p>Yes. The quadratic term contrast has <span class="math inline">\(p = .043\)</span>.</p>
+</details>
+<hr>
+<p><strong>Q3: From SPSS, is the cubic trend significant at the .05 level?</strong></p>
+<details>
+<summary>
+Click to reveal answer
+</summary>
+<p>No.&nbsp;The cubic term contrast has <span class="math inline">\(p = .751\)</span>.</p>
+</details>
+<hr>
+<p><strong>Q4: A researcher went into this project wanting to test every potential trend contrast. Do they need to worry about Type I error inflation, and if so, how should they handle it?</strong></p>
+<details>
+<summary>
+Click to reveal answer
+</summary>
+<p>Yes. Testing the linear, quadratic, and cubic trends all at once is exactly the situation the multiple correction lesson was built around: running several tests inflates the overall (experimentwise) Type I error rate above the nominal .05, even though each individual test is conducted at .05. Since these three trend tests are typically planned in advance (the researcher decided beforehand to examine each polynomial degree), this falls under the <strong>planned pairwise</strong> branch from Lesson 3’s decision tree, and <strong>Bonferroni</strong> is the natural correction.</p>
+<p>With 3 planned comparisons, the per-comparison alpha becomes:</p>
+<p><span class="math display">\[\alpha_{Bonferroni} = \frac{.05}{3} = .0167\]</span></p>
+<p>which is why the <code>/cinterval=individual(.9833)</code> line in Section 8 used .9833, since <span class="math inline">\(1 - .0167 = .9833\)</span>.</p>
+<p>Code given:</p>
+<pre><code>MANOVA recall BY minutes (1 4)
+
+/print=cellinfo(means)
+
+/error=within
+
+/cinterval=joint(.95) univariate(scheffe)
+
+/contrast(minutes) = special (1 1 1 1
+
+-3 -1 1 3
+
+1 -1 -1 1
+
+-1 3 -3 1 )
+
+/design = minutes(1) minutes(2) minutes(3).</code></pre>
+</details>
+<hr>
+<p><strong>Q5: Using the Bonferroni correction, did the significance of the linear, quadratic, or cubic trend change?</strong></p>
+<details>
+<summary>
+Click to reveal answer
+</summary>
+<p>The raw (uncorrected) significance values for each trend stay the same regardless of which confidence interval option you request. What changes is the alpha threshold you compare them against. At the corrected threshold of <span class="math inline">\(\alpha = .0167\)</span>:</p>
+<ul>
+<li><strong>Linear:</strong> Sig. = .00000, still significant.</li>
+<li><strong>Quadratic:</strong> Sig. = .04330. This was significant at the uncorrected .05 level, but .0433 is greater than .0167, so it is <strong>no longer significant</strong> after the Bonferroni correction.</li>
+<li><strong>Cubic:</strong> Sig. = .75107, still not significant.</li>
+</ul>
+<p>This is the practical consequence of multiple testing correction: the quadratic trend that looked significant in the simple ONEWAY output in Section 8 does not survive once we account for the fact that three trends were tested together.</p>
+</details>
+<hr>
+<p>For the following two questions, refer to this syntax:</p>
+<pre><code>MANOVA recall BY minutes (1 4)
+
+/print=cellinfo(means)
+
+/error=within
+
+/cinterval=individual( ? )
+
+/contrast(minutes) = special (1 1 1 1
+
+-3 -1 1 3
+
+1 -1 -1 1
+
+-1 0 0 -1 )
+
+/design = minutes(1) minutes(2) minutes(3).</code></pre>
+<p><strong>Q6: Suppose the researcher only planned to test the linear and quadratic trends. What value belongs in the blank in /cinterval?</strong></p>
+<details>
+<summary>
+Click to reveal answer
+</summary>
+<p>With only 2 planned comparisons, <span class="math inline">\(\alpha_{Bonferroni} = .05/2 = .025\)</span>, so the confidence level becomes <span class="math inline">\(1 - .025 = .975\)</span>. The line should read <code>/cinterval=individual(.975)</code>.</p>
+</details>
+<hr>
+<p><strong>Q7: What is wrong with the syntax above that would give incorrect results?</strong></p>
+<details>
+<summary>
+Click to reveal answer
+</summary>
+<p>The third contrast row, <code>-1 0 0 -1</code>, is supposed to represent the cubic trend, but it does not match the correct orthogonal polynomial coefficients for a cubic trend with 4 levels, which are <code>-1 3 -3 1</code>. Beyond being the wrong shape, these coefficients do not even sum to zero (<span class="math inline">\(-1 + 0 + 0 - 1 = -2\)</span>), which violates the basic requirement for a valid contrast. This contrast would not produce a meaningful cubic trend test, and because it is not orthogonal to the other rows, it would also distort the partitioning of <span class="math inline">\(SS_{between}\)</span> across the trends.</p>
+</details>
+</section>
+<section id="a-note-on-unequal-sample-sizes" class="level2">
+<h2 data-anchor-id="a-note-on-unequal-sample-sizes">11. A Note on Unequal Sample Sizes</h2>
+<p>Everything above assumed equal group sample sizes, which is what guarantees orthogonality between trend contrasts. Real data is often unbalanced. When sample sizes differ across groups, there are two options for constructing the coefficients:</p>
+<p><strong>Weighted</strong>, which incorporates the sample size of each group: <span class="math display">\[c_j = n_j(X_j - \bar{X}_w)\]</span></p>
+<p><strong>Unweighted</strong>, which ignores sample size and uses the simple mean of X: <span class="math display">\[c_j = X_j - \bar{X}_U\]</span></p>
+<p>If you are confident the only true trend in the population is linear, the weighted coefficients are more powerful. But if any nonlinear trend exists in the population, the weighted coefficients can produce a biased estimate of the linear slope. Since it is rarely possible to rule out nonlinearity ahead of time, the general recommendation is to use <strong>unweighted</strong> coefficients. SPSS allows you to define <span class="math inline">\(c_j\)</span> directly within the <code>/contrast</code> subcommand, so you control which version you are using.</p>
+</section>
+<section id="summary" class="level2">
+<h2 data-anchor-id="summary">11. Summary</h2>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Question</th>
+<th>Test</th>
+<th>What it tells you</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Is there an overall linear trend?</td>
+<td>Linear contrast, <span class="math inline">\(F = SS_{linear}/MS_W\)</span></td>
+<td>Whether recall changes at a constant rate as X increases</td>
+</tr>
+<tr class="even">
+<td>Is a straight line enough?</td>
+<td>Nonlinearity test, <span class="math inline">\(F = (SS_B - SS_{linear})/(a-2) \div MS_W\)</span></td>
+<td>Whether meaningful curvature remains after the linear trend</td>
+</tr>
+<tr class="odd">
+<td>Is there specifically a quadratic (or cubic, etc.) trend?</td>
+<td>Single trend contrast, <span class="math inline">\(F = SS_\psi/MS_{Error}\)</span></td>
+<td>Whether one specific nonlinear shape describes the data</td>
+</tr>
+<tr class="even">
+<td>Are multiple trends being tested together?</td>
+<td>Bonferroni-corrected planned contrasts</td>
+<td>Whether trends remain significant once Type I error inflation is controlled</td>
+</tr>
+</tbody>
+</table>
+<p>The throughline connecting all of this back to the lessons on contrast testing because a trend contrast is just a contrast. The only thing that changes is where the coefficients come from. Once you have <span class="math inline">\(\psi\)</span>, the F test, the confidence interval logic, and the multiple comparison corrections all work exactly the way they did before.</p>
+</section>
+<section id="discussion-questions" class="level2">
+<h2 data-anchor-id="discussion-questions">Discussion Questions</h2>
+<ol type="1">
+<li>Why do the contrast coefficients for a linear trend need to sum to zero, and what would happen to <span class="math inline">\(\psi_{linear}\)</span> if they did not?</li>
+<li>The text noted that rescaling coefficients from <span class="math inline">\(-1.5, -0.5, 0.5, 1.5\)</span> to <span class="math inline">\(-3, -1, 1, 3\)</span> does not change the hypothesis test result. Explain why, in terms of the F statistic formula.</li>
+<li>Suppose a 5-group study found a significant linear trend and a significant quadratic trend, but the researcher only planned to test for linearity in advance. How should the quadratic finding be treated, and what correction (if any) is appropriate?</li>
+<li>Why does testing for nonlinearity as a single combined 2-df test (quadratic and cubic together) tend to have less power than testing the quadratic trend alone, even though they can draw on the same underlying variability?</li>
+<li>A colleague proposes using weighted trend coefficients because their groups have unequal sample sizes and they want the most powerful test possible. Under what circumstances would you caution them against this choice?</li>
+</ol>
+
+
+</section>
+</section>
+
+</main> <!-- /main -->
+<!-- MailerLite Universal -->
+<script>
+    (function(w,d,e,u,f,l,n){w[f]=w[f]||function(){(w[f].q=w[f].q||[])
+    .push(arguments);},l=d.createElement(e),l.async=1,l.src=u,
+    n=d.getElementsByTagName(e)[0],n.parentNode.insertBefore(l,n);})
+    (window,document,'script','https://assets.mailerlite.com/js/universal.js','ml');
+    ml('account', '2295583');
+</script>
+<!-- End MailerLite Universal -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/infogothic\.com");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

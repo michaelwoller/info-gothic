@@ -81,6 +81,9 @@ document.addEventListener("DOMContentLoaded", function() {
   nav.insertBefore(li, icons);
 });
 </script>
+<script src="../../site_libs/quarto-diagram/mermaid.min.js"></script>
+<script src="../../site_libs/quarto-diagram/mermaid-init.js"></script>
+<link href="../../site_libs/quarto-diagram/mermaid.css" rel="stylesheet">
 
   <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
   <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
@@ -180,35 +183,29 @@ window.Quarto = {
   <li><a href="#why-running-many-tests-is-dangerous" id="toc-why-running-many-tests-is-dangerous" class="nav-link" data-scroll-target="#why-running-many-tests-is-dangerous">Why Running Many Tests Is Dangerous</a></li>
   <li><a href="#planned-vs.-post-hoc-comparisons" id="toc-planned-vs.-post-hoc-comparisons" class="nav-link" data-scroll-target="#planned-vs.-post-hoc-comparisons">Planned vs.&nbsp;Post Hoc Comparisons</a></li>
   </ul></li>
-  <li><a href="#which-correction-to-use" id="toc-which-correction-to-use" class="nav-link" data-scroll-target="#which-correction-to-use">2. Which Correction to Use?</a></li>
+  <li><a href="#how-to-correct-for-experimentwise-error" id="toc-how-to-correct-for-experimentwise-error" class="nav-link" data-scroll-target="#how-to-correct-for-experimentwise-error">2. How to Correct for Experimentwise Error?</a></li>
   <li><a href="#bonferroni-correction" id="toc-bonferroni-correction" class="nav-link" data-scroll-target="#bonferroni-correction">3. Bonferroni Correction</a>
   <ul class="collapse">
   <li><a href="#the-logic" id="toc-the-logic" class="nav-link" data-scroll-target="#the-logic">The Logic</a></li>
   <li><a href="#setting-c" id="toc-setting-c" class="nav-link" data-scroll-target="#setting-c">Setting C</a></li>
   <li><a href="#the-test-statistic-and-critical-value" id="toc-the-test-statistic-and-critical-value" class="nav-link" data-scroll-target="#the-test-statistic-and-critical-value">The Test Statistic and Critical Value</a></li>
   <li><a href="#advantage-and-limitation" id="toc-advantage-and-limitation" class="nav-link" data-scroll-target="#advantage-and-limitation">Advantage and Limitation</a></li>
+  <li><a href="#bonferroni-in-spss" id="toc-bonferroni-in-spss" class="nav-link" data-scroll-target="#bonferroni-in-spss">Bonferroni in SPSS</a></li>
   </ul></li>
   <li><a href="#tukeys-hsd" id="toc-tukeys-hsd" class="nav-link" data-scroll-target="#tukeys-hsd">4. Tukey’s HSD</a>
   <ul class="collapse">
   <li><a href="#the-logic-1" id="toc-the-logic-1" class="nav-link" data-scroll-target="#the-logic-1">The Logic</a></li>
-  <li><a href="#test-equations" id="toc-test-equations" class="nav-link" data-scroll-target="#test-equations">Test Equations</a></li>
   <li><a href="#tukey-vs.-bonferroni-for-pairwise-comparisons" id="toc-tukey-vs.-bonferroni-for-pairwise-comparisons" class="nav-link" data-scroll-target="#tukey-vs.-bonferroni-for-pairwise-comparisons">Tukey vs.&nbsp;Bonferroni for Pairwise Comparisons</a></li>
-  <li><a href="#an-important-limitation" id="toc-an-important-limitation" class="nav-link" data-scroll-target="#an-important-limitation">An Important Limitation</a></li>
+  <li><a href="#tukey-spss" id="toc-tukey-spss" class="nav-link" data-scroll-target="#tukey-spss">Tukey SPSS</a></li>
   </ul></li>
   <li><a href="#scheffés-method" id="toc-scheffés-method" class="nav-link" data-scroll-target="#scheffés-method">5. Scheffé’s Method</a>
   <ul class="collapse">
   <li><a href="#the-logic-2" id="toc-the-logic-2" class="nav-link" data-scroll-target="#the-logic-2">The Logic</a></li>
-  <li><a href="#test-equations-1" id="toc-test-equations-1" class="nav-link" data-scroll-target="#test-equations-1">Test Equations</a></li>
-  <li><a href="#the-omnibus-connection" id="toc-the-omnibus-connection" class="nav-link" data-scroll-target="#the-omnibus-connection">The Omnibus Connection</a></li>
   <li><a href="#scheffé-vs.-bonferroni-when-to-use-which" id="toc-scheffé-vs.-bonferroni-when-to-use-which" class="nav-link" data-scroll-target="#scheffé-vs.-bonferroni-when-to-use-which">Scheffé vs.&nbsp;Bonferroni: When to Use Which</a></li>
-  </ul></li>
-  <li><a href="#implementing-mcps-in-spss" id="toc-implementing-mcps-in-spss" class="nav-link" data-scroll-target="#implementing-mcps-in-spss">6. Implementing MCPs in SPSS</a>
-  <ul class="collapse">
-  <li><a href="#pairwise-comparisons-with-oneway" id="toc-pairwise-comparisons-with-oneway" class="nav-link" data-scroll-target="#pairwise-comparisons-with-oneway">Pairwise Comparisons with ONEWAY</a></li>
-  <li><a href="#bonferroni-with-manova" id="toc-bonferroni-with-manova" class="nav-link" data-scroll-target="#bonferroni-with-manova">Bonferroni with MANOVA</a></li>
-  <li><a href="#scheffé-with-manova" id="toc-scheffé-with-manova" class="nav-link" data-scroll-target="#scheffé-with-manova">Scheffé with MANOVA</a></li>
+  <li><a href="#scheffé-in-spss" id="toc-scheffé-in-spss" class="nav-link" data-scroll-target="#scheffé-in-spss">Scheffé in SPSS</a></li>
   </ul></li>
   <li><a href="#summary-choosing-your-mcp" id="toc-summary-choosing-your-mcp" class="nav-link" data-scroll-target="#summary-choosing-your-mcp">7. Summary: Choosing Your MCP</a></li>
+  <li><a href="#bonus-false-discovery-rate" id="toc-bonus-false-discovery-rate" class="nav-link" data-scroll-target="#bonus-false-discovery-rate">8. Bonus: False Discovery Rate</a></li>
   <li><a href="#discussion-questions" id="toc-discussion-questions" class="nav-link" data-scroll-target="#discussion-questions">Discussion Questions</a></li>
   <li><a href="#well-done" id="toc-well-done" class="nav-link" data-scroll-target="#well-done">Well Done!</a></li>
   </ul>
@@ -248,47 +245,70 @@ window.Quarto = {
 <p>Think about it this way, imagine standing in front of a mirror and inspecting yourself for flaws. Even if you are a perfectly healthy and beautiful human being, the longer and more carefully you look, the more likely you are to notice something like a blemish, an asymmetry, or a hair out of place. None of these might mean anything, but the sheer act of repeated searching guarantees you will eventually land on something that looks wrong, and this will cause your self esteem to plummet, even if the “flaw” was never a big deal! The more you are looking for personal flaws, the more you are going to find one regardless of how insignificant they are.</p>
 <p>Type I error inflation works the same way. Each additional significance test is another pass in the mirror, and the more passes you take, the more likely you are to flag something as a “real” finding purely by chance.</p>
 <p>This lesson is about how to keep that risk of finding false results under control.</p>
-<p>We will continue with the hypertension dataset from the previous lesson: four treatment groups (drug therapy, biofeedback, dietary modification, and a combination treatment), with blood pressure as the dependent variable. The combination treatment group had the lowest mean (<span class="math inline">\(\bar{X} = 83\)</span>), while the other three groups had means of 91.4, 93, and 92 respectively.</p>
+<p>We will continue with the hypertension dataset from the previous lesson, but it is labeled MultipleCorrections.sav this time. This data consists of four treatment groups (drug therapy, biofeedback, dietary modification, and a combination treatment), with blood pressure as the dependent variable. The combination treatment group had the lowest mean (<span class="math inline">\(\bar{X} = 83\)</span>), while the other three groups had means of 91.4, 93, and 92 respectively.</p>
 <hr>
 </section>
 <section id="the-multiple-comparisons-problem" class="level2">
 <h2 data-anchor-id="the-multiple-comparisons-problem">1. The Multiple Comparisons Problem</h2>
 <section id="why-running-many-tests-is-dangerous" class="level3">
 <h3 data-anchor-id="why-running-many-tests-is-dangerous">Why Running Many Tests Is Dangerous</h3>
-<p>When you reject the null hypothesis at <span class="math inline">\(\alpha = .05\)</span>, you are accepting a 5% chance that you are wrong — that the effect you found is a false positive, also called a <strong>Type I error</strong>. That 5% risk is manageable for a single test.</p>
-<p>The problem arises when you run many tests at once. Each individual test has its own 5% chance of a false positive, and these chances accumulate. With enough tests, it becomes nearly inevitable that at least one of your results will be a false positive, even if nothing is truly significant.</p>
+<p>When you reject the null hypothesis at the level <span class="math inline">\(\alpha = .05\)</span>, you are accepting a 5% chance that you are wrong and that the effect you found is a false positive. This is called a <strong>Type I error</strong>. That 5% is arbitrary, but it is generally the recommended manageable risk for a single test for psychology. In clinical settings, you might use <span class="math inline">\(\alpha = .01\)</span> instead, but we will use .05 going forward.</p>
 <p>We distinguish two kinds of error rates:</p>
 <ul>
 <li><strong>Per-comparison error rate</strong> (<span class="math inline">\(\alpha_{PC}\)</span>): the false positive rate for a single test, the one you set directly (e.g., .05).</li>
 <li><strong>Experimentwise error rate</strong> (<span class="math inline">\(\alpha_{EW}\)</span>): the probability of making <em>at least one</em> Type I error across the entire set of tests you are running.</li>
 </ul>
-<p>For a set of orthogonal contrasts, the experimentwise error rate is:</p>
+<p>The former is what you set directly by choosing your significance threshold before running a test. The latter is what researchers need to worry about as they publish their studies: it is the real probability that your study produced at least one false positive result.</p>
+<p>A practical way to think about it is that <span class="math inline">\(\alpha_{PC}\)</span> is the concern of a researcher evaluating a single isolated test, while <span class="math inline">\(\alpha_{EW}\)</span> is the concern of a psychologist writing up a results section and asking whether their pattern of significant findings can be trusted. If you ran one contrast and it was significant, <span class="math inline">\(\alpha_{PC}\)</span> is what matters. If you ran six contrasts and three of them were significant, <span class="math inline">\(\alpha_{EW}\)</span> is what should haunt you.</p>
+<p>For a set of contrasts, the experimentwise error rate is:</p>
 <p><span class="math display">\[\alpha_{EW} = 1 - (1 - \alpha_{PC})^C\]</span></p>
 <p>where <span class="math inline">\(C\)</span> is the number of comparisons being made. With just 3 comparisons at <span class="math inline">\(\alpha = .05\)</span>:</p>
 <p><span class="math display">\[\alpha_{EW} = 1 - (1 - .05)^3 = 1 - (.95)^3 \approx .143\]</span></p>
-<p>So your real Type I error rate is already 14%, not 5%. With 10 comparisons it climbs to about 40%. You are no longer doing science at <span class="math inline">\(\alpha = .05\)</span> — you are just conducting a lottery.</p>
+<p>So, if you did 3 tests, your real Type I error rate is actually 14%, not 5%. With 10 comparisons it climbs to about 40%. You are no longer doing science at <span class="math inline">\(\alpha = .05\)</span>. You are just conducting a lottery and hoping you get lucky.</p>
+<p>Luckily, there are ways to help mitigate this issue that researchers need to be aware of. Unfortunately, most people don’t do this, since they either A) don’t know about these things or B) don’t want to lose their “significant” results (i.e., they don’t want to admit they might have had false findings).</p>
+<p>It’s a bit disheartening the ammount of researchers who don’t even consider experimentwise error rates, but you, reader, can be the change we need!</p>
 </section>
 <section id="planned-vs.-post-hoc-comparisons" class="level3">
 <h3 data-anchor-id="planned-vs.-post-hoc-comparisons">Planned vs.&nbsp;Post Hoc Comparisons</h3>
-<p>An important distinction for choosing how to control Type I error is whether your comparisons were <strong>planned</strong> or <strong>post hoc</strong>.</p>
+<p>An important distinction for choosing how to control Type I error is whether your mean comparisons were <strong>planned</strong> or <strong>post hoc</strong>.</p>
 <p>A <strong>planned contrast</strong> is one you decided to test <em>before</em> looking at the data, based on your theoretical hypotheses. You committed to it in advance.</p>
-<p>A <strong>post hoc contrast</strong> is one you decided to test <em>after</em> examining the data — for example, after noticing that two particular group means look far apart.</p>
-<p>This distinction matters more than it might seem. Suppose you run a four-group study and after seeing the results you decide to test the largest-looking mean difference. It feels like you are only running one test. But in reality, you implicitly scanned all possible pairwise differences before choosing that one. The comparison that “caught your eye” is almost by definition the most extreme one in the data, which means it is also the one most likely to be a false positive. You did not really run one test — you ran all of them mentally and selected the winner.</p>
-<p>This means that the number of comparisons you must account for is not just the ones you formally tested, but the entire family of comparisons that your selection process implicitly considered.</p>
+<p>A <strong>post hoc contrast</strong> is one you decided to test <em>after</em> examining the data. For example, after noticing that two particular group means look far apart.</p>
+<p>This distinction matters more than it might seem. Suppose you run a four-group study and after seeing the results you decide to test the largest-looking mean difference. It feels like you are only running one test. But in reality, you implicitly scanned all possible pairwise differences before choosing that one. The comparison that “caught your eye” is almost by definition the most extreme one in the data, which means it is also the one most likely to be a false positive. You did not really run one test. You ran all of them mentally and selected the winner.</p>
+<p>This is called data-driven science and is generally frowned upon within psychology. This type of behavior has heavily contributed to replication issues, since researchers are just looking for <em>any</em> significance rather than actually doing hypothesis testing from theoretical decisions.</p>
+<p>To account for these issues of post hoc testing, the number of comparisons you must account for is not just the ones you formally tested, but the entire family of comparisons that your selection process implicitly considered.</p>
 <hr>
 </section>
 </section>
-<section id="which-correction-to-use" class="level2">
-<h2 data-anchor-id="which-correction-to-use">2. Which Correction to Use?</h2>
-<p>There is no single universal correction for Type I error inflation. The right choice depends on two things: (1) whether your comparisons were planned or post hoc, and (2) whether your comparisons are pairwise only, or include complex comparisons.</p>
-<p>The decision tree below summarizes the recommendations:</p>
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><img src="images/mcp-decision-tree.png" class="img-fluid figure-img" width="600"></p>
-<figcaption>Decision tree for choosing a multiple comparison procedure</figcaption>
-</figure>
-</div>
+<section id="how-to-correct-for-experimentwise-error" class="level2">
+<h2 data-anchor-id="how-to-correct-for-experimentwise-error">2. How to Correct for Experimentwise Error?</h2>
+<p>The solution to Type I error inflation is to apply a multiple comparison procedure, which is a method that adjusts how you evaluate significance when running more than one test. These procedures make sure your experimentwise error rate stays at .05 rather than ballooning beyond it. The general idea behind all of these methods is the same: make each individual test harder to pass, so that the cumulative probability of any false positive across all tests stays controlled.</p>
+<p>For instance, instead of requiring <span class="math inline">\(p &lt; .05\)</span> to declare a contrast significant, you might require <span class="math inline">\(p &lt; .017\)</span> if you are running three tests. Each individual hurdle is higher, but the payoff is that your overall false positive risk across all three tests stays at .05.</p>
+<p>There is no single universal correction, and each one differs in the situations they are designed for. The right choice depends on two things:</p>
+<ol type="1">
+<li><p>Whether your comparisons were planned before data collection or chosen post hoc after examining the results.</p></li>
+<li><p>Whether your comparisons are pairwise only (one group compared to another group), or include complex comparisons that involve averages of multiple groups.</p></li>
+</ol>
 <p>The three most common procedures are <strong>Bonferroni</strong>, <strong>Tukey</strong>, and <strong>Scheffé</strong>. We will cover each in turn, using the hypertension dataset to illustrate.</p>
+<p>Before we go into detail, a handy decision tree below summarizes the recommendations depending on your scenario (Note, “CV” stands for critical value, which we will get into).</p>
+<div class="cell" data-layout-align="default">
+<div class="cell-output-display">
+<div>
+<p></p><figure class="figure"><p></p>
+<div>
+<pre class="mermaid mermaid-js">flowchart TD
+    A[Were the comparisons planned in advance?] --&gt;|Yes| B[Pairwise comparisons only?]
+    A --&gt;|No| C[Pairwise comparisons only?]
+    B --&gt;|Yes| D["If all C = a(a-1)/2 comparisons, then use Tukey"]
+    B --&gt;|Yes, alternative route| E["Compare critical values: Tukey vs Bonferroni, based on df and C"]
+    B --&gt;|No, includes complex comparisons| F["Compare critical values: Scheffe vs Bonferroni, based on df and C"]
+    C --&gt;|Yes| G[Use Tukey]
+    C --&gt;|No, includes complex comparisons| H[Use Scheffe]
+</pre>
+</div>
+<p></p></figure><p></p>
+</div>
+</div>
+</div>
 <hr>
 </section>
 <section id="bonferroni-correction" class="level2">
@@ -297,9 +317,15 @@ window.Quarto = {
 <h3 data-anchor-id="the-logic">The Logic</h3>
 <p>Bonferroni is the simplest approach. If you are running <span class="math inline">\(C\)</span> tests and want your overall experimentwise error rate to be <span class="math inline">\(\alpha_{EW} = .05\)</span>, you just divide your significance threshold by <span class="math inline">\(C\)</span>:</p>
 <p><span class="math display">\[\alpha_{Bonferroni} = \frac{\alpha_{EW}}{C} = \frac{.05}{C}\]</span></p>
-<p>Each individual comparison must then have <span class="math inline">\(p &lt; \alpha_{Bonferroni}\)</span> to be declared significant. For example, if you plan 3 comparisons:</p>
+<p>Each individual comparison must then have <span class="math inline">\(p &lt; \alpha_{Bonferroni}\)</span> to be declared significant. Think of your total allowable false positive risk as a budget. You only have five cents to spend across all your tests. Bonferroni simply splits that budget evenly, giving each test an equal share. The more tests you run, the smaller each share gets, and the harder each individual test becomes to pass.</p>
+<p>For example, if you plan 3 comparisons:</p>
 <p><span class="math display">\[\alpha_{Bonferroni} = \frac{.05}{3} = .0167\]</span></p>
-<p>This is conservative — by making each individual test harder to reject, the probability of <em>any</em> of them being a false positive is held at or below .05. It is a blunt instrument but it always works, as long as you can specify <span class="math inline">\(C\)</span> in advance.</p>
+<p>In this case, the budget for individual tests was <span class="math inline">\(\alpha_{Bonferroni}=.0167\)</span> each for your allowance of <span class="math inline">\(\alpha_{EW}=.05\)</span>.</p>
+<p>This value of .0167 is conservative, meaning it is harder to reject individual tests.</p>
+<blockquote class="blockquote">
+<p>Terminology note on testing: “Conservative” means tests are harder to reject. “Liberal” means tests are easier to reject. One is not better than the other inherently. It depends the context. With concern to Type I error, however, the more conservative your test, the least likely you are to make a false positive. However, this comes with a trade off in statistical power. So the more conservative your test is, the harder it is to reject. That means it is harder to make a false positive, but as a result, it also is harder to make a <em>correct</em> positive. Often times, when choosing your methods and anlyese, you will have to decide where on this trade off you want to be. But more on this later.</p>
+</blockquote>
+<p>Bonferroni is a blunt instrument for correction, but it always works, as long as you can specify <span class="math inline">\(C\)</span> in advance. Because of this, it is the most universally applied correction as it can be applied in any scenario. It just depends on what you set <span class="math inline">\(C\)</span> as.</p>
 </section>
 <section id="setting-c" class="level3">
 <h3 data-anchor-id="setting-c">Setting C</h3>
@@ -309,21 +335,46 @@ window.Quarto = {
 <li>If you want to test all pairwise comparisons (or if your original plan was all pairwise but you ended up testing fewer), <span class="math inline">\(C\)</span> must be set to <span class="math inline">\(\frac{a(a-1)}{2}\)</span>, where <span class="math inline">\(a\)</span> is the number of groups.</li>
 <li>If you intended to test a subset of pairwise comparisons but then tested additional ones after seeing the data, again <span class="math inline">\(C = \frac{a(a-1)}{2}\)</span>.</li>
 </ul>
-<p>The key principle: if you let the data influence which comparisons you run, your <span class="math inline">\(C\)</span> expands to cover all comparisons that could have been selected.</p>
+<p>The key principle: if you let the data influence which comparisons you run, your <span class="math inline">\(C\)</span> needs to expand to cover all comparisons that could have been selected. This controls for the “eyeballing it” scenario.</p>
+<p>For an example, let’s say after running an ANOVA for a variable with 5 groups, you want to test a pairwise comparison. This means you would have seen the results and the sizes of the means, so it is appropriate to control for all possible pairwise comparisons. That means you set <span class="math inline">\(C\)</span> as</p>
+<p><span class="math display">\[C =\frac{5(5-1)}{2}=\frac{20}{2}=10\]</span></p>
+<p>Therefore, your Bonferroni corrected alpha level is <span class="math inline">\(\alpha_{Bonferroni}=.05/10=.005\)</span>. This means for any of the pairwise comparisons you make as a contrast for this ANOVA, the p values must be less than .005 to be considered significant.</p>
 </section>
 <section id="the-test-statistic-and-critical-value" class="level3">
 <h3 data-anchor-id="the-test-statistic-and-critical-value">The Test Statistic and Critical Value</h3>
-<p>The F statistic and confidence interval formulas for Bonferroni contrasts are identical to those from the Contrasts lesson — nothing changes there. What changes is the <strong>critical value</strong> you compare your F statistic to. Under the Bonferroni correction with equal variances:</p>
+<p>The F statistic and confidence interval formulas for Bonferroni contrasts are identical to those from the Contrasts lesson, nothing changes there. You can look those up if you want to. What does change is the <strong>critical value</strong> of your significance test. Under the Bonferroni correction with equal variances:</p>
 <p><span class="math display">\[CV = F_{\alpha/C;\; 1,\; df_{error}}\]</span></p>
-<p>The confidence interval formula is:</p>
-<p><span class="math display">\[\hat{\psi} \pm CV \sqrt{MS_W \sum_{j=1}^{a} \left(\frac{c_j^2}{n_j}\right)}\]</span></p>
-<p>where <span class="math inline">\(CV = \sqrt{F_{\alpha/C;\; 1,\; df_{error}}}\)</span>.</p>
-<p>When variances are unequal, the same CV applies but the F statistic and CI use group-specific variances <span class="math inline">\(s_j^2\)</span> in place of the pooled <span class="math inline">\(MS_W\)</span>, with adjusted degrees of freedom (the Welch-style correction from the Contrasts lesson).</p>
+<p>This is more or less the same as what you would use for any contrast, except instead of just using <span class="math inline">\(\alpha = .05\)</span>, you use whatever <span class="math inline">\(\alpha/C\)</span> comes out to be.</p>
+<p>This new critical values redefines the confidence intervals as well. So as a result, the confidence intervals for Bonferroni corrected tests become wider.</p>
 </section>
 <section id="advantage-and-limitation" class="level3">
 <h3 data-anchor-id="advantage-and-limitation">Advantage and Limitation</h3>
 <p>The main advantage of Bonferroni is its simplicity and flexibility — it works for any set of contrasts, pairwise or complex, planned or post hoc (as long as <span class="math inline">\(C\)</span> is finite and specifiable).</p>
 <p>The limitation is power. As <span class="math inline">\(C\)</span> grows, each individual threshold becomes more and more stringent, making it harder to detect real effects. For a small number of planned comparisons, Bonferroni is excellent. For a large number, or for post hoc complex comparisons where <span class="math inline">\(C\)</span> is theoretically infinite, it breaks down.</p>
+</section>
+<section id="bonferroni-in-spss" class="level3">
+<h3 data-anchor-id="bonferroni-in-spss">Bonferroni in SPSS</h3>
+<p>There is no official way to do Bonferroni in SPSS. ALl you need to do is look at your p value in the output, and compare that to what your <span class="math inline">\(\alpha_{Bonefrroni} = \alpha/C\)</span> level. However, if you want corrected confidence intervals, you <strong>need</strong> to manually set your confidence level</p>
+<p>There’s different ways to do this in SPSS, however, I highly recommend using MANOVA because it gives you full control and scope over everything it is doing.</p>
+<pre class="text"><code>MANOVA pressure BY treat (1 4) 
+/print=cellinfo(means)
+/error=within
+/cinterval =individual(.9833) /* add this line to specific confidence levels
+/contrast(treat) = special (1    1     1     1
+                            1    1     1    -3
+                            .5   .5   -.5  -.5
+                            1   -1     0     0) 
+/design = treat(1) treat(2) treat(3).</code></pre>
+<p>The <code>/cinterval</code> line is where you specify the new Bonferroni confidence level. This level is simple equal to <span class="math inline">\(1-(\alpha/c)\)</span>, so in our example with 3 contrast comparisons, it is <span class="math inline">\(1−(.05/3)=1-.0166=.9833\)</span>. It is important to remember to put this in your syntax before you estimate the model or else you will get the wrong confidence intervals, and thus might be giving the wrong results.</p>
+<p>The output for this would look like:</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/bci.png" class="img-fluid figure-img" width="600"></p>
+<figcaption>Contrasts Output with Bonferroni Corrections</figcaption>
+</figure>
+</div>
+<p>This piece of the output contains each of the contrasts I specified for treatment above. This isn’t the best example, but we can see that the p values are greater than <span class="math inline">\(\alpha/c = .0166\)</span>, thus none are significant after controlling for experimentwise error rate. The confidence intervals are also adjusted appropriately, as you can see in the top “.9833 confidence intervals”.</p>
+<p>This goes to show how simple and easy Bonferroni corrections are to use, and why more people should be using them. However, Bonferroni corrections are not always the most optimal corrections to use. Depending on the scenario, other techniques will be much better at controlling for experimentwise error rates. And while Bonferroni acts as a good “this is better than nothing” method, if you really care about getting your error rates as optimal, we will cover two over methods.</p>
 <hr>
 </section>
 </section>
@@ -331,24 +382,17 @@ window.Quarto = {
 <h2 data-anchor-id="tukeys-hsd">4. Tukey’s HSD</h2>
 <section id="the-logic-1" class="level3">
 <h3 data-anchor-id="the-logic-1">The Logic</h3>
-<p>Tukey’s Honestly Significant Difference (HSD) procedure is designed specifically for <strong>all pairwise comparisons</strong>. Rather than dividing alpha by <span class="math inline">\(C\)</span>, Tukey uses a different statistical distribution — the <strong>studentized range distribution</strong> — to set a single critical value that simultaneously controls the familywise error rate across all <span class="math inline">\(\frac{a(a-1)}{2}\)</span> pairwise comparisons.</p>
-<p>The core intuition is this: if you are going to run all pairwise comparisons, the most dangerous one — the one most likely to be a false positive — is the comparison between the largest and smallest group means. Tukey asks: how large can the range between the maximum and minimum group means get just by chance, assuming all population means are actually equal? It uses the sampling distribution of this worst-case difference to set a threshold, then applies that same threshold to all pairwise comparisons.</p>
-<p>Formally, Tukey computes a <span class="math inline">\(q\)</span> statistic for a pairwise comparison between groups <span class="math inline">\(g\)</span> and <span class="math inline">\(h\)</span>:</p>
-<p><span class="math display">\[q = \frac{\bar{Y}_g - \bar{Y}_h}{\sqrt{MS_W / n}}\]</span></p>
-<p>The maximum <span class="math inline">\(q\)</span> across all pairs, <span class="math inline">\(q_{max}\)</span>, follows the <strong>studentized range distribution</strong> with parameters <span class="math inline">\(a\)</span> (number of groups) and <span class="math inline">\(df_{error}\)</span>. From that distribution you find the critical value <span class="math inline">\(q_{CV}\)</span>, which can be converted to a critical F value:</p>
-<p><span class="math display">\[F_{CV} = \frac{q_{CV}^2}{2}\]</span></p>
-</section>
-<section id="test-equations" class="level3">
-<h3 data-anchor-id="test-equations">Test Equations</h3>
-<p>Assuming equal variances, the Tukey F statistic for the pairwise comparison between groups <span class="math inline">\(g\)</span> and <span class="math inline">\(h\)</span> is:</p>
-<p><span class="math display">\[F_\psi = \frac{n_g n_h (\bar{Y}_g - \bar{Y}_h)^2}{(n_g + n_h) MS_W}\]</span></p>
-<p>and the confidence interval is:</p>
-<p><span class="math display">\[(\bar{Y}_g - \bar{Y}_h) \pm \frac{q_{CV}}{\sqrt{2}} \sqrt{MS_W \left(\frac{1}{n_g} + \frac{1}{n_h}\right)}\]</span></p>
-<p>The critical value <span class="math inline">\(q_{CV}\)</span> is looked up from a studentized range table using the number of groups <span class="math inline">\(a\)</span> and <span class="math inline">\(df_{error}\)</span>. Note that <strong>Tukey requires equal variances</strong> — if that assumption is violated, Tukey is not appropriate.</p>
+<p>Tukey’s Honestly Significant Difference (HSD) procedure is designed specifically for <strong>pairwise comparisons</strong>. Rather than dividing alpha by <span class="math inline">\(C\)</span>, Tukey uses a different statistical distribution called the <strong>studentized range distribution</strong>. This method sets a single critical value that simultaneously controls the familywise error rate across <em>all</em> <span class="math inline">\(\frac{a(a-1)}{2}\)</span> pairwise comparisons.</p>
+<p>The core intuition is this: if you are going to run all pairwise comparisons, the most dangerous one (i.e.&nbsp;the one most likely to be a false positive) is the comparison between the largest and smallest group means. Tukey asks: how large can the range between the maximum and minimum group means get just by chance, assuming all population means are actually equal? It uses the sampling distribution of this “worst-case scenario” difference to set a threshold, then applies that same threshold to all pairwise comparisons. This works regardless of if the contrasts are planned or post hoc.</p>
+<p>Rather than using a <span class="math inline">\(F\)</span> or <span class="math inline">\(t\)</span> statistic, Tukey computes a “<span class="math inline">\(q\)</span> statistic” for a pairwise comparison between the lowest mean group <span class="math inline">\(g\)</span> and highest mean group <span class="math inline">\(h\)</span>. I’ll skip the function, but the bottom line is that this <span class="math inline">\(q\)</span> statistic operates similarly to a <span class="math inline">\(t\)</span> statistic in that it compares two means, but it accounts for the fact that you are selecting the most extreme pair from a family of comparisons, and it uses <span class="math inline">\(MS_{within}\)</span> as its error term. This makes the test more conservative than a plain <span class="math inline">\(t\)</span> test, and thus better at controlling for experimentwise error rates.</p>
+<p>From the studentized range distribution of the <span class="math inline">\(q\)</span> statistic, you can ge tthe critical <span class="math inline">\(q_{CV}\)</span> value, which can be converted to a critical <span class="math inline">\(F\)</span> value:</p>
+<p><span class="math display">\[F_{1,df_{error}} = \frac{q_{CV}^2}{2}.\]</span> This fact will become important in the next subsection, but this F statistic is also used to compute a confidence interval for the mean-to-mean contrast comparisons.</p>
+<p>The takeaway is that this method gives you a more efficient method of testing mean-to-mean comparisons with the least amount of risk of committing a Type I error. What I mean by “efficient” is that it is able to find the optimal balance between being too conservative (low Type I error, low power) and too liberal (high Type I error, high power). When in doubt, you can always take the path with least amount of risk and do the most conservative test, but for researchers who want to increase the chances of finding an effect to the utmost degree, Tukey can be beneficial.</p>
 </section>
 <section id="tukey-vs.-bonferroni-for-pairwise-comparisons" class="level3">
 <h3 data-anchor-id="tukey-vs.-bonferroni-for-pairwise-comparisons">Tukey vs.&nbsp;Bonferroni for Pairwise Comparisons</h3>
-<p>When you plan to test <em>all</em> pairwise comparisons, both Tukey and Bonferroni (with <span class="math inline">\(C = \frac{a(a-1)}{2}\)</span>) control the familywise error rate at .05. However, Tukey is more powerful in this situation, because its critical value is optimized for the structure of pairwise comparisons while Bonferroni is a general-purpose correction. The advantage grows as the number of groups increases:</p>
+<p>When you plan to test <em>all</em> pairwise comparisons, both Tukey and Bonferroni control the familywise error rate at .05.</p>
+<p>However, Tukey is more powerful in this situation, because its critical value (CV) is optimized for the structure of pairwise comparisons while Bonferroni is a general-purpose correction. You can see this by looking at the relative increases of their critical values as the number of groups and maximum pairwise comparisons increase:</p>
 <table class="caption-top table">
 <thead>
 <tr class="header">
@@ -391,13 +435,43 @@ window.Quarto = {
 </tr>
 </tbody>
 </table>
-<p>(Critical F values shown for <span class="math inline">\(df_{error} = 12\)</span>, <span class="math inline">\(\alpha = .05\)</span>.)</p>
-<p>As the table shows, Tukey’s critical value stays lower than Bonferroni’s as more groups are added, meaning it is easier to reject the null with Tukey. When the number of pairwise comparisons is small (e.g., just 2 groups), they are equivalent.</p>
-<p><strong>Rule of thumb:</strong> when all pairwise comparisons are of interest, Tukey is preferred over Bonferroni.</p>
+<p>As the table shows, Tukey’s critical value stays lower than Bonferroni’s as more groups are added, meaning it is easier to reject the null with Tukey. Thus, you are able to control for inflated Type I error rates <em>while</em> keeping your tests as powerful as possible.</p>
+<p>However, when the number of pairwise comparisons is small (e.g., just 2 groups), they are equivalent. Therefore, the <strong>rule of thumb</strong> is that when all pairwise comparisons are of interest, Tukey is preferred over Bonferroni.</p>
+<p>Comparing these critical values can help you determine in what situations Tukey or Bonferroni is more preferable. The test with the lower CV is more powerful and is preferable. Traditionally, researchers had to reference critical value tables to figure these out, but nowadays there are easy to use calculators online.</p>
+<p>For Bonferroni, you can use a generic critical <span class="math inline">\(F\)</span> value calculator. I cannot find one developed specifically for Bonferroni CV’s (there are calculators that give you Bonferroni adjusted alpha levels and <span class="math inline">\(p\)</span> values though).</p>
+<p><a href="https://www.danielsoper.com/statcalc/calculator.aspx?id=4">Here’s a calculator I like</a>. There are two caveats:</p>
+<ol type="1">
+<li><p>You must make the first degree of freedom 1 and the second degree of freedom <span class="math inline">\(N-a\)</span>.</p></li>
+<li><p>You need to put in your adjusted alpha level <span class="math inline">\(\alpha /c\)</span> in the probability level.</p></li>
+</ol>
+<p>To get the Tukey <span class="math inline">\(F\)</span> statistic CV, you need to first get the q statistic CV and then convert it to an <span class="math inline">\(F\)</span> statistic. It’s a bit obnoxious I know, but feel free to code and host a program that does this automatically if you can. I will gladly link to you.</p>
+<p><a href="https://elvers.us/stats/tables/qprobability.html">Here’s a calcualtor to get you the critical q value</a>. There are som caveats:</p>
+<ol type="1">
+<li><p>Use the Critical <span class="math inline">\(q\)</span> value option.</p></li>
+<li><p>Number of means equals the number of groups in your group variable.</p></li>
+<li><p><span class="math inline">\(df_{error}\)</span> is <span class="math inline">\(N-a\)</span></p></li>
+<li><p>In this case, keep <span class="math inline">\(/alpha = .05\)</span></p></li>
+</ol>
+<p>Then, you just need to plug this <span class="math inline">\(q\)</span> statistic into the equation I gave abov, given again here</p>
+<p><span class="math display">\[F_{1,df_{error}} = \frac{q_{CV}^2}{2}.\]</span> Whichever of these two methods has the smaller critical <span class="math inline">\(F\)</span> value is the one you should use.</p>
+<p>Again, this is if you want to be optimal. One can use Bonferroni if you want, but just be aware you are losing power.</p>
 </section>
-<section id="an-important-limitation" class="level3">
-<h3 data-anchor-id="an-important-limitation">An Important Limitation</h3>
-<p>Tukey cannot be run through MANOVA in SPSS. It must be done through the <code>ONEWAY</code> procedure. This means that for more complex designs (within-subjects, split-plot, etc.), Tukey is generally not available unless you are willing to compute it by hand.</p>
+<section id="tukey-spss" class="level3">
+<h3 data-anchor-id="tukey-spss">Tukey SPSS</h3>
+<p>Tukey cannot be run through MANOVA in SPSS. It must be done through the <code>ONEWAY</code> procedure. This means that for more complex designs (within-subjects, split-plot, etc. that we will do in the future), Tukey is generally not available unless you are willing to compute it by hand.</p>
+<p>To get this, you should run code like this</p>
+<pre class="text"><code>ONEWAY pressure BY treat
+/statistics descriptives
+/posthoc=tukey.</code></pre>
+<p>In the <code>/posthoc=</code> line, just put <code>tukey</code>. The output should give you a Tukey test for every single pariwise comaprison</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/Tukey.png" class="img-fluid figure-img" width="600"></p>
+<figcaption>All Pairwise Comparisons with Tukey Corrected Significance Tests</figcaption>
+</figure>
+</div>
+<p>This output gives all possible pairwise mean comparisons in the treatment groups and does a Tukey QSD test for each. You can see in the left most column one group that is compared to a group in the second column. For example, the first row is the Drug Therapy group compared to the Biofeedback group. In this set up, there are some redundancies as each pairwise comparison will show up twice (the Drug Therapy vs Biofeedback comparison shows up again in fourth row for example). The significance column gives the p value based on the Tukey test, which you compare to .05, and the confidence intervals are already adjusted for the Tukey test.</p>
+<p>Again, this isn’t the best example data set, but as we can see none of the pairwise comparisons are significant after controlling for experimentwise error rates using the Tukey test.</p>
 <hr>
 </section>
 </section>
@@ -405,31 +479,23 @@ window.Quarto = {
 <h2 data-anchor-id="scheffés-method">5. Scheffé’s Method</h2>
 <section id="the-logic-2" class="level3">
 <h3 data-anchor-id="the-logic-2">The Logic</h3>
-<p>Scheffé is designed for <strong>post hoc complex comparisons</strong> — the situation where you decide which contrasts to test only after examining the data, and your contrasts may include complex (non-pairwise) comparisons.</p>
-<p>In this situation, Bonferroni does not apply because <span class="math inline">\(C\)</span> is not defined — you did not select a pre-specified set of contrasts. And Tukey does not apply because Tukey only handles pairwise differences. Scheffé handles the general case.</p>
-<p>The key insight behind Scheffé is that, in a post hoc setting, you are implicitly searching across <em>all possible contrasts</em> — not just pairwise ones, but any weighted combination of group means. Among all possible contrasts, one of them will necessarily have the largest <span class="math inline">\(SS_\psi\)</span> — the largest contrast sum of squares. Scheffé identifies what the maximum <span class="math inline">\(F\)</span> statistic could be under this worst-case selection and uses that as the critical value.</p>
-<p>It turns out that the worst-case contrast can capture at most all of the between-groups sum of squares, <span class="math inline">\(SS_B\)</span>. Since the omnibus F statistic is <span class="math inline">\(F_{omnibus} = SS_B / [(a-1) \cdot MS_W]\)</span>, the maximum possible contrast F is:</p>
+<p>Scheffé was designed for <strong>post hoc complex comparisons</strong>. This is the situation where you decide which contrasts to test only after examining the data, and your contrasts may include complex (non-pairwise) comparisons.</p>
+<p>In this situation, Bonferroni should <em>not</em> be applied because <span class="math inline">\(C\)</span> is not defined as you did not select a pre-specified set of contrasts. And Tukey does not apply to complex comparisons because Tukey only handles pairwise differences. Scheffé can be used when complex comparisons in both planned or post hoc comparisons. In planned complex comparisons, it competes with Bonferroni. In post hoc complex comparisons, it is the only option.</p>
+<p>The key insight behind Scheffé is that, in a post hoc setting, you are implicitly searching across <em>all possible contrasts</em>. You are not just examining pairwise comparisons but any combination of group means. Among all possible contrasts, one of them will necessarily have the largest <span class="math inline">\(SS_\psi\)</span> (the largest contrast sum of squares). Scheffé identifies what the maximum <span class="math inline">\(F\)</span> statistic could be under this worst-case selection and uses that as the critical value. In this sense, it operates with a similar philosophy to Tukey’s HSD test, but it operates in a braoder spectrum of possible contrasts.</p>
+<p>To get in the weeds a bit (the techncial details are not htat important), it turns out that the worst-case contrast can capture at most all of the between-groups sum of squares, <span class="math inline">\(SS_B\)</span>. Since the omnibus <span class="math inline">\(F\)</span> statistic (the <span class="math inline">\(F\)</span> statistic from the original ANOVA) is <span class="math inline">\(F_{omnibus} = SS_B / [(a-1) \cdot MS_W]\)</span>, the maximum possible contrast F is:</p>
 <p><span class="math display">\[F_{max} = (a - 1) \cdot F_{omnibus}\]</span></p>
-<p>This leads directly to Scheffé’s critical value:</p>
+<p>This leads directly to Scheffé’s critical value, which is helpful to know:</p>
 <p><span class="math display">\[CV_{Scheffé} = (a - 1) \cdot F_{.05;\; a-1,\; N-a}\]</span></p>
-<p>This is a fixed value that depends only on the number of groups and the error degrees of freedom — it does not change regardless of how many contrasts you test. That is what makes Scheffé appropriate for post hoc work: you do not need to pre-specify <span class="math inline">\(C\)</span>.</p>
-</section>
-<section id="test-equations-1" class="level3">
-<h3 data-anchor-id="test-equations-1">Test Equations</h3>
-<p>Assuming equal variances, the F statistic is identical to the standard contrast F:</p>
-<p><span class="math display">\[F_\psi = \frac{(\hat{\psi})^2}{\left[MS_W \sum_{j=1}^{a} \left(\frac{c_j^2}{n_j}\right)\right]}\]</span></p>
-<p>The confidence interval is:</p>
-<p><span class="math display">\[\hat{\psi} \pm \sqrt{(a-1) F_{.05;\; a-1,\; N-a}} \cdot \sqrt{MS_W \sum_{j=1}^{a} \left(\frac{c_j^2}{n_j}\right)}\]</span></p>
-<p>You compare the calculated <span class="math inline">\(F_\psi\)</span> to <span class="math inline">\((a-1) F_{.05;\; a-1,\; N-a}\)</span>. If <span class="math inline">\(F_\psi\)</span> exceeds the critical value, the contrast is significant.</p>
-<p><strong>Important:</strong> Scheffé requires equal variances. If heterogeneity of variance is present, Scheffé is not appropriate.</p>
-</section>
-<section id="the-omnibus-connection" class="level3">
-<h3 data-anchor-id="the-omnibus-connection">The Omnibus Connection</h3>
-<p>There is a useful and elegant link between Scheffé and the omnibus ANOVA: <strong>if and only if the omnibus F test is significant, at least one contrast will be significant by Scheffé’s method</strong>. Conversely, if the omnibus test is non-significant, Scheffé cannot produce any significant contrasts. This means that if your omnibus ANOVA is non-significant, you can skip Scheffé entirely — you already know the answer.</p>
+<p>This is a fixed value that depends only on the number of groups and the error degrees of freedom. It does not change regardless of how many contrasts you test. That is what makes Scheffé appropriate for post hoc work: you do not need to pre-specify <span class="math inline">\(C\)</span>.</p>
+<p>Another conseqeunce of this is that the Scheffé test <em>cannot</em> be significant if the omnibus test is not significant. Therefore, it is not possible for you to get a Type I error for the Scheffé test being significant in scenarios where the main ANOVA is not significant (this is not true for Bonferroni or Tukey). It is also <em>guaranteed</em> that one Scheffé contrast test will be significant if the omnibus ANOVA was significant.</p>
+<p>This isn’t that important in practical research, but at least can inform you if you did something wrong.</p>
+<p>This formula for the CV will become important in the next section where we should compare the Scheffé to Bonferroni approaches. If you are interested in the <span class="math inline">\(F\)</span> statistic or confidence interval equations for this method, I suggest you look them up. Note that they are different than the general formulas for the <span class="math inline">\(F\)</span> statistic.</p>
+<p>Before we move on, it is important to note that Scheffé requires equal variances. If heterogeneity of variance is present (aka, the group variances in their data is not equal amongst eachother), Scheffé is not appropriate.</p>
 </section>
 <section id="scheffé-vs.-bonferroni-when-to-use-which" class="level3">
 <h3 data-anchor-id="scheffé-vs.-bonferroni-when-to-use-which">Scheffé vs.&nbsp;Bonferroni: When to Use Which</h3>
-<p>Both Scheffé and Bonferroni can be used for planned complex comparisons. The question is which one gives you more power (i.e., lower critical value) for your specific situation. The answer depends on how many comparisons you are making:</p>
+<p>As specified before, in situations where you are doing a post hoc comparisons of complex contrasts (i.e., non-pairwise contrasts), you must use Scheffé because Bonferroni requires planned comparison contrasts (<span class="math inline">\(C\)</span>). However, in situations where you are looking at complex contrasts that were <em>planned</em>, then it is possible to use either Bonferroni or Scheffé.</p>
+<p>In this scenario, the question is which one gives you more power (i.e., lower critical value) for your specific situation and which one is more conservative (i.e., lower Type I error but lower power). The answer depends on how many comparisons you are making:</p>
 <table class="caption-top table">
 <thead>
 <tr class="header">
@@ -477,71 +543,37 @@ window.Quarto = {
 </tbody>
 </table>
 <p>(For <span class="math inline">\(a = 4\)</span> groups, <span class="math inline">\(df_{error} = 30\)</span>.)</p>
-<p>Bonferroni’s critical value increases with <span class="math inline">\(C\)</span>, while Scheffé’s stays fixed. They cross over at around 8 comparisons. So:</p>
+<p>Bonferroni’s critical value increases with <span class="math inline">\(C\)</span>, while Scheffé’s stays fixed regardless of the number of contrasts you are comparing. In this example, they cross over at around 8 comparisons. So, as a general rule:</p>
 <ul>
 <li>For a <strong>small number of planned comparisons</strong>, Bonferroni has more power and should be preferred.</li>
 <li>For a <strong>large number of comparisons or post hoc complex contrasts</strong>, Scheffé is preferred (and may be the only valid option).</li>
 <li><strong>Scheffé should not be used unless at least one comparison is complex.</strong> For pairwise-only post hoc comparisons, use Tukey.</li>
 </ul>
-<hr>
-</section>
-</section>
-<section id="implementing-mcps-in-spss" class="level2">
-<h2 data-anchor-id="implementing-mcps-in-spss">6. Implementing MCPs in SPSS</h2>
-<section id="pairwise-comparisons-with-oneway" class="level3">
-<h3 data-anchor-id="pairwise-comparisons-with-oneway">Pairwise Comparisons with ONEWAY</h3>
-<p>The easiest way to run all three procedures for all pairwise comparisons is via the <code>ONEWAY</code> command. Just add a <code>/posthoc=</code> line:</p>
-<pre class="text"><code>ONEWAY pressure BY treat
-/statistics descriptives
-/posthoc=tukey scheffe bonferroni.</code></pre>
-<p>This produces a “Multiple Comparisons” table in the output that lists every pairwise mean difference for each correction method, along with its standard error, adjusted <span class="math inline">\(p\)</span> value, and 95% confidence interval. The output is easy to read and directly interpretable.</p>
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><img src="images/3.1.png" class="img-fluid figure-img"></p>
-<figcaption>ONEWAY output with Tukey, Scheffé, and Bonferroni pairwise comparisons</figcaption>
-</figure>
-</div>
-<p>In the output, each row shows a pair of groups (I) and (J), the mean difference (I–J), the standard error, the adjusted significance value, and the 95% CI. For Tukey and Bonferroni, you can use the <span class="math inline">\(p\)</span> values directly — they are adjusted. For Scheffé in pairwise mode, the <span class="math inline">\(p\)</span> values are also valid here since ONEWAY computes them correctly.</p>
-<p>This syntax works well when your goal is all pairwise comparisons. However, <strong>if you want to test specific planned contrasts or complex comparisons, you need to use MANOVA</strong> with the <code>/cinterval</code> line instead.</p>
-<p><strong>Note:</strong> ONEWAY cannot do within-subjects or factorial designs. For those, you will always need MANOVA.</p>
-</section>
-<section id="bonferroni-with-manova" class="level3">
-<h3 data-anchor-id="bonferroni-with-manova">Bonferroni with MANOVA</h3>
-<p>To apply a Bonferroni correction to specific planned contrasts in MANOVA, you use the <code>/cinterval=individual(#)</code> line. The <code>#</code> is the confidence level for each <em>individual</em> interval, calculated as:</p>
-<p><span class="math display">\[\# = 1 - \frac{\alpha}{C} = 1 - \frac{.05}{C}\]</span></p>
-<p>For our hypertension example, suppose you planned the following 3 contrasts before data collection:</p>
+<p>In terms of scenarios where you want to optimize your power, you will need to calculate the CV’s and go with the method that has the smaller value. You can use the same online calculator for Bonferroni as I gave above (repeated here for convenience):</p>
+<blockquote class="blockquote">
+<p><a href="https://www.danielsoper.com/statcalc/calculator.aspx?id=4">Here’s a calculator I like</a>. There are two caveats:</p>
+</blockquote>
+<blockquote class="blockquote">
 <ol type="1">
-<li>Drug therapy &amp; biofeedback &amp; diet vs.&nbsp;combination (<span class="math inline">\(\psi_1\)</span>)</li>
-<li>Drug therapy &amp; biofeedback vs.&nbsp;diet &amp; combination (<span class="math inline">\(\psi_2\)</span>)</li>
-<li>Drug therapy vs.&nbsp;biofeedback (<span class="math inline">\(\psi_3\)</span>)</li>
+<li>You must make the first degree of freedom 1 and the second degree of freedom <span class="math inline">\(N-a\)</span>.</li>
 </ol>
-<p>With <span class="math inline">\(C = 3\)</span>:</p>
-<p><span class="math display">\[\# = 1 - \frac{.05}{3} = 1 - .0167 = .9833\]</span></p>
-<p>The SPSS syntax is:</p>
-<pre class="text"><code>MANOVA pressure BY treat (1 4)
-/print=cellinfo(means)
-/error=within
-/cinterval =individual(.9833)
-/contrast(treat) = special (1    1    1    1
-                             1    1    1   -3
-                             .5   .5  -.5  -.5
-                             1   -1    0    0)
-/design = treat(1) treat(2) treat(3).</code></pre>
-<p>The number <code>.9833</code> tells SPSS to construct a 98.33% confidence interval for each individual contrast. This is what makes the family-wise error rate .05 across 3 contrasts: each comparison gets a stricter interval than the usual 95%.</p>
-<p>To assess significance, compare each <span class="math inline">\(p\)</span> value in the output to your corrected <span class="math inline">\(\alpha = .05/C = .0167\)</span>. If <span class="math inline">\(p &lt; .0167\)</span>, the contrast is significant under Bonferroni.</p>
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><img src="images/3.2.png" class="img-fluid figure-img"></p>
-<figcaption>MANOVA output with Bonferroni correction (individual .9833 confidence intervals)</figcaption>
-</figure>
-</div>
-<p>The output shows the <code>Coeff.</code> (your <span class="math inline">\(\hat{\psi}\)</span>), <code>Std. Err.</code>, <code>t-Value</code>, <code>Sig. t</code> (the <span class="math inline">\(p\)</span> value), and the lower and upper bounds of the confidence interval. Compare each <span class="math inline">\(p\)</span> value to <span class="math inline">\(\alpha/C\)</span>. Note that the confidence intervals printed reflect the Bonferroni-corrected width.</p>
-<p><strong>To get the F statistic from this output:</strong> square the <span class="math inline">\(t\)</span>-Value. So <span class="math inline">\(t^2 = F\)</span>.</p>
-<p><strong>If you plan to test 4 comparisons</strong> (across one or two MANOVA calls), the corrected confidence level would be <span class="math inline">\(1 - (.05/4) = .9875\)</span>, regardless of how many contrasts appear in each individual MANOVA call.</p>
+</blockquote>
+<blockquote class="blockquote">
+<ol start="2" type="1">
+<li>You need to put in your adjusted alpha level <span class="math inline">\(\alpha /c\)</span> in the probability level.</li>
+</ol>
+</blockquote>
+<p>For Scheffé’s test, you can actually use the same <span class="math inline">\(F\)</span> critical value calculator. There are a few important caveats though:</p>
+<ol type="1">
+<li><p>You will use the regular <span class="math inline">\(F\)</span> statistic degrees of freedom. That is, the first degree of freedom is <span class="math inline">\(a-1\)</span> and the second degree of freedom is <span class="math inline">\(N-a\)</span>.</p></li>
+<li><p>The alpha level should stay at <span class="math inline">\(\alpha = .05\)</span>.</p></li>
+<li><p>After you calculate the <span class="math inline">\(F\)</span> statistic using the two above steps, you must multiple this <span class="math inline">\(F\)</span> value by <span class="math inline">\((a-1)\)</span>. E.g., if you got an <span class="math inline">\(F\)</span> value of <span class="math inline">\(3.2\)</span> with <span class="math inline">\(a=4\)</span> groups, the Scheffé critical <span class="math inline">\(F\)</span> value is <span class="math inline">\((4-1)3.2 = 9.6\)</span>. This last step is important because if you do not multiply the <span class="math inline">\(F\)</span> value you get from the calculator, your CV for the Scheffé test <em>will be wrong</em>.</p></li>
+</ol>
+<p>The last thing is to compare the Bonferroni value and the Scheffé value and go with the test that has the lowest CV. Again, there is not an easier way of doing it. So if you are really worried in a case where you are doing planned comaprisons, you could always just do Bonferroni (as this is the most common and easily defended). Bonferroni will be more powerful if you don’t have a large number of groups (common in psychological researcher). Just note that you might be at more risk of Type I error if you don’t compare.</p>
 </section>
-<section id="scheffé-with-manova" class="level3">
-<h3 data-anchor-id="scheffé-with-manova">Scheffé with MANOVA</h3>
-<p>To apply a Scheffé correction in MANOVA, change the <code>/cinterval</code> line to use the joint and univariate Scheffé specification:</p>
+<section id="scheffé-in-spss" class="level3">
+<h3 data-anchor-id="scheffé-in-spss">Scheffé in SPSS</h3>
+<p>To apply a Scheffé correction, you need to use MANOVA. (Note, I am aware of a few other options to get you “Scheffé” test results in SPSS, however I honestly don’t know what these are doing as the results are wrong. So just use this method.). First, change the <code>/cinterval</code> line to use the joint and univariate Scheffé specification:</p>
 <pre class="text"><code>MANOVA pressure BY treat (1 4)
 /print=cellinfo(means)
 /error=within
@@ -553,31 +585,33 @@ window.Quarto = {
 /design = treat.</code></pre>
 <p>Two things have changed from the Bonferroni syntax:</p>
 <p><strong>The <code>/cinterval</code> line</strong> now uses <code>joint(.95) univariate(scheffe)</code>. <code>joint(.95)</code> keeps the <em>family-wise</em> error rate at .05 across all contrasts tested together. <code>univariate(scheffe)</code> specifies the Scheffé method for each individual contrast interval.</p>
-<p><strong>The <code>/design</code> line</strong> has changed from <code>treat(1) treat(2) treat(3)</code> to simply <code>treat</code>. This is critical. MANOVA uses the <code>/design</code> line not only to specify what goes in the model, but also to define what constitutes a <em>family</em> of tests. If you leave it as <code>treat(1) treat(2) treat(3)</code>, MANOVA treats each contrast as its own separate family, which sets <span class="math inline">\(\alpha_{PC} = .05\)</span> for each one individually — defeating the purpose of the correction. Writing <code>/design = treat.</code> tells MANOVA to treat all contrasts together as a single family, so the correction applies across all of them jointly.</p>
+<p><strong>The <code>/design</code> line</strong> has changed from <code>treat(1) treat(2) treat(3)</code> to simply <code>treat</code>. <em>This is critical</em>. MANOVA uses the <code>/design</code> line not only to specify what goes in the model, but also to define what constitutes a <em>family</em> of tests (a family of tests simply means the set of comparisons over which the experimentwise error rate of .05 is being controlled together). If you leave it as <code>treat(1) treat(2) treat(3)</code>, MANOVA treats each contrast as its own separate family, which sets <span class="math inline">\(\alpha_{PC} = .05\)</span> for each one individually, defeating the purpose of the correction. Writing <code>/design = treat.</code> tells MANOVA to treat all contrasts together as a single family, so the correction applies across all of them jointly.</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="images/3.3.png" class="img-fluid figure-img"></p>
+<p><img src="images/scheffe.png" class="img-fluid figure-img"></p>
 <figcaption>MANOVA output with Scheffé correction (joint .95 univariate Scheffé confidence intervals)</figcaption>
 </figure>
 </div>
-<p><strong>Critical warning about the Scheffé output:</strong> The <span class="math inline">\(p\)</span> values in the Scheffé MANOVA output are <strong>not corrected</strong>. Do not use them for significance testing. SPSS provides the Scheffé-corrected confidence intervals and the <span class="math inline">\(t\)</span> statistics (which you square to get <span class="math inline">\(F\)</span>), but the printed <span class="math inline">\(p\)</span> values are the ordinary uncorrected ones. To assess significance with Scheffé, you must either:</p>
+<p>This output gives you the contrast <span class="math inline">\(\Psi\)</span> coefficients, their standard errors, the <span class="math inline">\(t\)</span> statistics (square them to get the Scheffé <span class="math inline">\(F\)</span> statistics), and Scheffé 95% confidence intervals.</p>
+<p><strong>Critical warning about the Scheffé output:</strong> The <span class="math inline">\(p\)</span> values in the Scheffé MANOVA output are <strong>not corrected</strong>. <strong>Do not use them for significance testing</strong>. SPSS provides the Scheffé-corrected confidence intervals and the <span class="math inline">\(t\)</span> statistics, but the printed <span class="math inline">\(p\)</span> values are the ordinary uncorrected ones. To assess significance with Scheffé, you must either:</p>
 <ol type="1">
 <li>Compare the calculated <span class="math inline">\(F_\psi = t^2\)</span> to the Scheffé critical value <span class="math inline">\((a-1) F_{.05;\; a-1,\; N-a}\)</span>, or</li>
 <li>Check whether the Scheffé confidence interval excludes zero.</li>
 </ol>
+<p>This is just a limitation of SPSS.</p>
 <p>For our hypertension example with <span class="math inline">\(a = 4\)</span> groups and <span class="math inline">\(df_{error} = 16\)</span> (since <span class="math inline">\(n = 5\)</span> per group, <span class="math inline">\(N = 20\)</span>), the Scheffé critical value is:</p>
 <p><span class="math display">\[CV_{Scheffé} = (4-1) \times F_{.05;\; 3,\; 16} = 3 \times 3.24 = 9.72\]</span></p>
-<p>Any contrast F statistic must exceed 9.72 to be declared significant.</p>
+<p>Any contrast F statistic must exceed 9.72 to be declared significant. In our cases, none do, and we can also see how 0 is contained within each of the confidence intervals too.</p>
 <hr>
 </section>
 </section>
 <section id="summary-choosing-your-mcp" class="level2">
 <h2 data-anchor-id="summary-choosing-your-mcp">7. Summary: Choosing Your MCP</h2>
-<p>The choice of correction method comes down to your research context:</p>
+<p>The choice of correction method comes down to your research context. I recommend referencing the flow chart I gave above, but here are some rules of thumb.</p>
 <table class="caption-top table">
 <colgroup>
-<col style="width: 33%">
-<col style="width: 66%">
+<col style="width: 36%">
+<col style="width: 63%">
 </colgroup>
 <thead>
 <tr class="header">
@@ -591,14 +625,18 @@ window.Quarto = {
 <td>Bonferroni</td>
 </tr>
 <tr class="even">
+<td>A larger set of planned pairwise contrasts</td>
+<td>Comapre Bonferroni and Tukey CVs; use the lower one</td>
+</tr>
+<tr class="odd">
 <td>All pairwise comparisons planned or post hoc</td>
 <td>Tukey</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td>Post hoc complex comparisons</td>
 <td>Scheffé</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td>Planned contrasts with many comparisons</td>
 <td>Compare Bonferroni and Scheffé CVs; use the lower one</td>
 </tr>
@@ -608,10 +646,20 @@ window.Quarto = {
 <ul>
 <li>Tukey and Scheffé <strong>require equal variances</strong>. If the homogeneity of variance assumption is violated, use Bonferroni (which can accommodate heterogeneous variances via the unequal variance formulas).</li>
 <li>Tukey <strong>cannot be implemented via MANOVA</strong> in SPSS; use <code>ONEWAY</code> for Tukey.</li>
-<li>For Scheffé in MANOVA, always use <code>/design = treat.</code> (not the individual contrast design) to ensure the correction applies family-wide.</li>
-<li>For Scheffé, <strong>never use the output</strong> <span class="math inline">\(p\)</span> values — only use the <span class="math inline">\(F\)</span> statistic vs.&nbsp;the critical value or the confidence intervals.</li>
+<li>For Scheffé in MANOVA, always use <code>/design = GROUP_VARIABLE</code> (not the individual contrast design) to ensure the correction applies family-wide.</li>
+<li>For Scheffé, <strong>never use the output</strong> <span class="math inline">\(p\)</span> values. Only use the <span class="math inline">\(F\)</span> statistic vs.&nbsp;the critical value or the confidence intervals.</li>
 <li>If the omnibus ANOVA is non-significant, Scheffé will never find a significant contrast. You can skip it.</li>
 </ul>
+<hr>
+</section>
+<section id="bonus-false-discovery-rate" class="level2">
+<h2 data-anchor-id="bonus-false-discovery-rate">8. Bonus: False Discovery Rate</h2>
+<p>All of the procedures covered so far control the “familywise” error rate. Aka, the probability of making any false positive across your whole set of tests (the whole experiment is a “family” in our scenarios, but families can be more specific). This is a strict standard, and it gets harder to satisfy as the number of comparisons grows.</p>
+<p>An alternative approach, common when researchers run a very large number of tests (common in fields like genomics, neuroimaging, or any study with dozens of comparisons), is to control the false discovery rate (FDR) instead. Rather than asking “what is the chance of even one false positive?”, FDR asks a more forgiving question: “of the tests I declare significant, what proportion are likely to be false positives?”</p>
+<p>For example, controlling FDR at .05 means that, on average, no more than 5% of your significant results are expected to be false positives, not that there is only a 5% chance of any false positive occurring at all. This distinction makes FDR considerably less conservative than Bonferroni or Scheffé, which is exactly why it became popular in contexts where dozens or hundreds of tests are unavoidable and familywise correction would leave you with almost no power to detect anything.</p>
+<p>Imagine if you did 100 tests on neuroimaging data (I’ve seen much higher). The Bonferroni corrected level would be <span class="math inline">\(.05/100 = .0005\)</span>, which is lower than many programs will even print for you by default. It’s just not practical. So the FDR method gives researchers a way to correct for error <em>after</em> they concluded significance on a regular <span class="math inline">\(\alpha=.05\)</span>.</p>
+<p>The most common method for controlling FDR is the Benjamini-Hochberg procedure, which ranks your <span class="math inline">\(p\)</span> values from smallest to largest and compares each one to a sliding threshold rather than a single fixed cutoff.</p>
+<p>We will not cover the mechanics of FDR control in this course, since our designs typically involve a small, manageable number of planned or post hoc contrasts where familywise correction is appropriate. But it is worth knowing that FDR exists as the standard approach once the number of comparisons becomes very large, and you may encounter it when reading research in other fields.</p>
 <hr>
 </section>
 <section id="discussion-questions" class="level2">

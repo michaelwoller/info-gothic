@@ -37,7 +37,7 @@ From my experience leading the lab lectures of this course, this lesson tends to
 
 ### The Dataset
 
-The motivating example is a context where a researcher is interested in treatments to reduce hypertension of the blood stream. Consider a hypothetical study with four independent groups of subjects, each of whom is assigned randomly to one of the following treatments: drug therapy, biofeedback, dietary modification, or a treatment combining all aspects of the other treatments. For simplicity, suppose the dependent variable is a single blood pressure reading taken 2 weeks after the termination of treatment.
+We will be using the Contrasts.sav dataset for this lesson. The motivating example is a context where a researcher is interested in treatments to reduce hypertension of the blood stream. Consider a hypothetical study with four independent groups of subjects, each of whom is assigned randomly to one of the following treatments: drug therapy, biofeedback, dietary modification, or a treatment combining all aspects of the other treatments. For simplicity, suppose the dependent variable is a single blood pressure reading taken 2 weeks after the termination of treatment.
 
 The data would consist of four groups.
 
@@ -74,8 +74,7 @@ So the testing value for this contrast is $\Psi = -1.6$ (note, which order you s
 
 I'll spare you the formulas, but in the end, this value will give us an F statistic and a p value, so we can see if this mean difference is significant or not. If it *is* significant, this could be *a* source of the significant omnibus ANOVA test, however there could be contrasts that are significant. The F statistic for the test follows the form
 
-$$CV = F_{\alpha;~ 1, ~df_{error}}.$$
-where $\alpha$ is your alpha level and $df_{error}$ is your degrees-of-freedom of the error variance.
+$$CV = F_{\alpha;~ 1, ~df_{error}}.$$ where $\alpha$ is your alpha level and $df_{error}$ is your degrees-of-freedom of the error variance.
 
 Unlike with t tests, you can test multiple means at once in any method so long as you can formulate them into a simple equality ($MEAN 1 = MEAN 2$). How this works is that you can test whether the *average* of multiple means differs from other means.
 
@@ -228,7 +227,7 @@ This syntax works well for one-way between-subjects designs but fails for other 
 
 ![ONEWAY output](images/2.1.png)
 
-The new and important part of the output are at the bottom and labeled as contrasts. The "Contrast Coefficients" block just print the contrasts you put in the syntax. The "Contrast Tests" table gives the t tests for the contrasts. The "Assumes/Does not assume equal variances" blocks just give you two different results depending on your homoskedasticity assumption (covered in a future lesson), but we are interested in the top half of the table. The contrasts are labeled in the order you inputted them.
+The new and important part of the output are at the bottom and labeled as contrasts. The "Contrast Coefficients" block just print the contrasts you put in the syntax. The "Contrast Tests" table gives the t tests for the contrasts. The "Assumes/Does not assume equal variances" blocks just give you two different results depending on your homoskedasticity assumption (covered in a future lesson), but this assumption essentially means you assume the variances of the scores within each group are the same. We are interested in the top half of the table. The contrasts are labeled in the order you inputted them.
 
 -   **Value of Contrast** - the $\Psi$ contrast value
 -   **Std. Error** - the standard error of the $\Psi$
@@ -268,11 +267,11 @@ Guidelines for the special matrix:
 
 1.  **The first row consists of all ones.** This adds the grand mean to our model (equivalently, the intercept in the regression framework). Without it, SPSS would not know what baseline to use for your contrasts. I usually put this directly after `special(` on that same line for clarity, that way each contrast is on an individual row.
 
-2.  **The special matrix must always be a square matrix**, with the number of columns and rows equal to $a$, the number of groups. Within the MANOVA function, you can test $a - 1$ contrasts per special matrix. With our data of 4 groups, we can only test 3 contrasts at a time, and we *must* test three contrasts at a time. You have no choice in this. If you were interested in more than $a-1$ contrasts (e.g., in this case I wanted to test 4 contrasts), then you have to run multiple MANOVA procedures just with different contrasts in the special matrix.
+2.  **The special matrix must always be a square matrix**. This means the rows and columns need to be equal in size (including the ros of all 1's). The number of columns and rows must be equal to $a$, which is the number of groups for your group variable. Within the MANOVA function, you can test $a - 1$ contrasts per special matrix. This means with our data of 4 groups, we can only test 3 contrasts at a time, and we *must* test three contrasts at a time. You have no choice in this for this method. If you were interested in more than $a-1$ contrasts (e.g., if I wanted to test 4 contrasts), then you have to run multiple MANOVA procedures just with different contrasts in the special matrix.
 
 Sometimes this limitation means that some of your contrasts will be redundant. For example, if I wanted to only test 2 contrasts, I still have to fit 3 in the matrix. In this case, that third contrast I fit is just fluff. I don't care about the output, so I can ignore it. In fact, you *should* ignore it because it is bad science to take significant results after you've already decided that you don't care about it. This is called "p hacking".
 
-Here's an example
+Here's an example where I am interested in 4 contrasts. The first MANOVA block has the first three contrasts (stated in a square matrix, including the first row of ones). The second MANOVA block contains the the fourth contrast I am interested in (.5, .5, 0, -1), and the other two contrasts are redundant and just necessary.
 
 ``` text
 MANOVA pressure BY treat (1 4)

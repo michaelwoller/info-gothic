@@ -1,0 +1,927 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.9.36">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Michael Woller">
+
+<title>One-Way Within-Subjects ANOVA – InfoGothic</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<link href="../../images/favicon.ico" rel="icon">
+<script src="../../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-dark-f418161beb48e0141c760e455f12af2c.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap-4d14f3be7bc8eb7ec2287338953877e0.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="dark">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+  var nav = document.querySelector(".navbar-nav");
+  var li = document.createElement("li");
+  li.className = "nav-item";
+  li.innerHTML = '<a class="nav-link ml-onclick-form" href="javascript:void(0)" onclick="ml(\'show\', \'18mxag\', true)">Mail List</a>';
+  var icons = nav.querySelector(".nav-item:has(.bi)");
+  nav.insertBefore(li, icons);
+});
+</script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<link rel="stylesheet" href="../../styles.css">
+</head>
+
+<body class="nav-fixed quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="../../index.html">
+    <span class="navbar-title">InfoGothic</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../about.html"> 
+<span class="menu-text">About</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../tutorials.html"> 
+<span class="menu-text">Courses &amp; Tutorials</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../blog-posts.html"> 
+<span class="menu-text">Blog Posts</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="https://notes.infogothic.com"> 
+<span class="menu-text">Obsidian Notes</span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/michaelwoller"> <i class="bi bi-github" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://bsky.app/profile/infogothic.bsky.social"> <i class="bi bi-bluesky" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction">1. Introduction</a></li>
+  <li><a href="#difference-scores" id="toc-difference-scores" class="nav-link" data-scroll-target="#difference-scores">2. Difference Scores</a></li>
+  <li><a href="#the-univariate-mixed-model-approach" id="toc-the-univariate-mixed-model-approach" class="nav-link" data-scroll-target="#the-univariate-mixed-model-approach">3. The Univariate (Mixed-Model) Approach</a>
+  <ul class="collapse">
+  <li><a href="#the-fullreduced-model-framework" id="toc-the-fullreduced-model-framework" class="nav-link" data-scroll-target="#the-fullreduced-model-framework">The Full/Reduced Model Framework</a></li>
+  <li><a href="#the-sphericity-assumption" id="toc-the-sphericity-assumption" class="nav-link" data-scroll-target="#the-sphericity-assumption">The Sphericity Assumption</a></li>
+  <li><a href="#spss-syntax-and-output-univariate-approach" id="toc-spss-syntax-and-output-univariate-approach" class="nav-link" data-scroll-target="#spss-syntax-and-output-univariate-approach">SPSS Syntax and Output: Univariate Approach</a></li>
+  </ul></li>
+  <li><a href="#the-multivariate-approach" id="toc-the-multivariate-approach" class="nav-link" data-scroll-target="#the-multivariate-approach">4. The Multivariate Approach</a>
+  <ul class="collapse">
+  <li><a href="#the-fullreduced-model-for-each-d-variable" id="toc-the-fullreduced-model-for-each-d-variable" class="nav-link" data-scroll-target="#the-fullreduced-model-for-each-d-variable">The Full/Reduced Model for Each D Variable</a></li>
+  <li><a href="#syntax-and-output-multivariate-approach" id="toc-syntax-and-output-multivariate-approach" class="nav-link" data-scroll-target="#syntax-and-output-multivariate-approach">Syntax and Output: Multivariate Approach</a></li>
+  <li><a href="#testing-contrasts-in-the-multivariate-approach" id="toc-testing-contrasts-in-the-multivariate-approach" class="nav-link" data-scroll-target="#testing-contrasts-in-the-multivariate-approach">Testing Contrasts in the Multivariate Approach</a></li>
+  <li><a href="#type-i-error-control" id="toc-type-i-error-control" class="nav-link" data-scroll-target="#type-i-error-control">Type I Error Control</a></li>
+  </ul></li>
+  <li><a href="#summary" id="toc-summary" class="nav-link" data-scroll-target="#summary">5. Summary</a></li>
+  <li><a href="#discussion-questions" id="toc-discussion-questions" class="nav-link" data-scroll-target="#discussion-questions">6. Discussion Questions</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">One-Way Within-Subjects ANOVA</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Michael Woller </p>
+          </div>
+  </div>
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="introduction" class="level2">
+<h2 data-anchor-id="introduction">1. Introduction</h2>
+<p>In every lesson so far, we have worked with <strong>between-subjects designs</strong>: each participant appears in exactly one condition, and all comparisons are made across different groups of people. This lesson introduces a fundamentally different structure called the <strong>within-subjects design</strong> (also called a <strong>repeated-measures design</strong>). In this design, each participant is measured under every level of the factor.</p>
+<p>Within-subjects designs appear across a wide range of research contexts. A developmental psychologist might track children’s vocabulary scores at ages 3, 4, 5, and 6 to ask whether language growth differs across developmental periods. In this case, time is the within-subjects factor. For another example, a clinical researcher might expose participants to four different dosages of an anxiolytic drug, measuring anxiety symptoms for each, without a period where the participants are not taking the drug (aka, they take each drug back-to-back). In this design are drug dosage is the within-subjects factor.</p>
+<p>Within-subjects designs carry two important advantages over between-subjects designs.</p>
+<p><strong>Efficiency.</strong> Each participant contributes multiple scores on the outcome rather than one, so you need far fewer participants to achieve a given level of statistical power.</p>
+<p><strong>Reduced error.</strong> People differ from one another in stable ways. For example, some children consistently score higher, some consistently score lower. There are inter-personal differences that could skew the independent groups in ways that are not accounted for. In a between-subjects design, that stable individual variation isn’t captured but gets absorbed into the error. This makes it harder to detect treatment effects. In a within-subjects design, each participant serves as their own comparison, and that stable individual variation can be isolated and removed from the error, leaving a much smaller residual.</p>
+<p>The tradeoff is that repeated measurement introduces complications. Chief among them is the problem of <strong>order effects</strong>: participants may improve (or fatigue) simply from repeated exposure to a task, independent of any true treatment difference. Researchers address this through counterbalancing schemes such as crossover designs (for two levels) or Latin square designs (for more than two levels), and through wash-out periods between conditions. In a crossover design, half the participants complete condition A then B while the other half complete B then A, ensuring order effects cancel out across the groups. Latin squares extend this logic to three or more conditions by systematically rotating the order so that each condition appears in each position an equal number of times. If you ever see the term <strong>wash-out period</strong>, know that this is simply a gap between conditions long enough for any lingering effects of the previous condition to dissipate before the next one begins.</p>
+<p>The dataset we will be working with is <code>OneWay-WithinSubjects.sav</code>. This scores from 12 children assessed at four ages: 30, 36, 42, and 48 months. These are age-normed general cognitive score from the McCarthy Scales of Children’s Abilities. Every child contributes a score at every time point, making this a within-subjects design with one factor (time) at four levels. However, as you might notice. This “time” factor doesn’t actually exist in the data set. You will see when we go over the syntax how this will be created.</p>
+<blockquote class="blockquote">
+<p>Note, this data is in a “wide” format, where each measurement occasion is in its own column and each individual has their own row. Each cell represents one score per person at a specific occasion Another format common with repeated measures is the “long” format, where individuals, within-subjects occasions, and the Y outcome are all in different columns. It <em>is</em> possible to do what we do here with long data, but it requires different syntax. And in the future, we will need to use syntax that matches the wide format data, so I am focusing on this specifically. If you are using data in the long format, you will need to figure out how to restructure it in the wide format.</p>
+</blockquote>
+<p>There are two main frameworks for analyzing a one-way within-subjects ANOVA: the <strong>univariate</strong> approach and the <strong>multivariate</strong> approach. Broadly, they differ in how they handle the correlations among repeated measurements and what assumptions they require about the structure of those correlations, but we will dive into each in more detail in the subsequent sections.</p>
+</section>
+<section id="difference-scores" class="level2">
+<h2 data-anchor-id="difference-scores">2. Difference Scores</h2>
+<p>Difference scores are a fundamental concept for within-subjects designs, and they will come up repeatedly across both approaches covered in this and future lessons. Luckily, they are a rather straightforward and intuitive concept. A difference score is simply the result of subtracting one measurement from another for the same participant. If a child scores 96 at 30 months and 107 at 36 months, their difference score for that interval is 11. Rather than comparing group averages across conditions, a difference score tells you directly how much a single participant changed from one condition to the next.</p>
+<p>Here is a brief overview on how they will come up in this lesson. In the univariate approach, the sphericity assumption (discussed later) is defined directly in terms of difference scores. In the multivariate approach, difference scores are the actual quantities being modeled.</p>
+<p>If you are familiar with the <strong>paired samples <span class="math inline">\(t\)</span> test</strong>, the numerator of its equation (<span class="math inline">\(\frac{\bar{X}_2 - \bar{X}_1}{s_D / \sqrt{n}}\)</span>) has a difference score. Within-subjects ANOVA extends this kind of idea to multiple paired samples. E.g., score at time 1 to score at time 2, score at time 2 to score at time 3, etc.</p>
+</section>
+<section id="the-univariate-mixed-model-approach" class="level2">
+<h2 data-anchor-id="the-univariate-mixed-model-approach">3. The Univariate (Mixed-Model) Approach</h2>
+<p>The univariate approach, also called the mixed-model approach, treats the repeated measurements as a single dependent variable observed under different conditions. It extends the logic of a two-way ANOVA without an interaction term, where one factor is the within-subjects condition and the other is the subject themselves. The key advantage of this approach is statistical power: by isolating stable individual differences as a separate source of variance, it removes them from the error term, leaving a smaller residual against which to test condition effects. The tradeoff is that the approach rests on an assumption about the structure of the data called sphericity, which we will cover in detail below. When that assumption holds, the univariate approach is generally the preferred choice.</p>
+<p>This method has a lot of limitations when you try to extend it to higher-order within-subjects ANOVAs and is generally less powerful than the multivariate method.</p>
+<section id="the-fullreduced-model-framework" class="level3">
+<h3 data-anchor-id="the-fullreduced-model-framework">The Full/Reduced Model Framework</h3>
+<p>As in every previous lesson, we begin by writing out full and restricted models and asking how much error is reduced when we allow condition means to differ.</p>
+<p>Let <span class="math inline">\(Y_{ij}\)</span> denote the score for subject <span class="math inline">\(i\)</span> in condition <span class="math inline">\(j\)</span>. The <strong>full model</strong> for the univariate approach includes a grand mean, a condition effect, and a subject effect:</p>
+<p><span class="math display">\[
+Y_{ij} = \mu + \alpha_j + \pi_i + \varepsilon_{ij}
+\]</span></p>
+<p>where <span class="math inline">\(\mu\)</span> is the grand mean, <span class="math inline">\(\alpha_j\)</span> is the effect of the <span class="math inline">\(j\)</span>th level of the within-subjects factor (e.g., time 1, time 2, etc.), <span class="math inline">\(\pi_i\)</span> is the effect of the <span class="math inline">\(i\)</span>th subject (their stable individual tendency to score above or below the grand mean), and <span class="math inline">\(\varepsilon_{ij}\)</span> is the residual error.</p>
+<p>The <strong>restricted model</strong> drops the condition effects entirely, constraining all <span class="math inline">\(\alpha_j = 0\)</span>:</p>
+<p><span class="math display">\[
+Y_{ij} = \mu + \pi_i + \varepsilon_{ij}
+\]</span></p>
+<p>Therefore, the null hypothesis is <span class="math inline">\(H_0\colon \alpha_1 = \alpha_2 = \cdots = \alpha_a = 0\)</span>, which is equivalent to saying all condition population means are equal.</p>
+<p>Notice that both models include the subject term <span class="math inline">\(\pi_i\)</span>. By keeping subject effects in both models, we ensure that stable individual differences are accounted for rather than left as error. Essentially, this means we are comparing each participant’s scores across conditions relative to their own baseline, rather than relative to the group as a whole. A child who consistently scores high across all time points contributes little error to the comparison. What matters is how their scores shift across conditions, not where they start.</p>
+<p>If all of this seems a bit abstract, that’s ok. These concepts are not needed to be able to conduct a within-subjects ANOVA.</p>
+</section>
+<section id="the-sphericity-assumption" class="level3">
+<h3 data-anchor-id="the-sphericity-assumption">The Sphericity Assumption</h3>
+<p>The univariate approach requires an assumption called <strong>sphericity</strong>. This <em>is</em> an important concept because if you don’t have spherecity, then the basic output you will get will be unsound. The assumption of sphericity holds when, for any two levels of the factor, the difference scores <span class="math inline">\(Y_{il} - Y_{im}\)</span> have the same population variance across all possible pairs of levels. In plain terms, it means the factor does not affect some pairs of conditions more consistently than others.</p>
+<p>For example, in the McCarthy data we have four time points, which means there are six possible pairs of difference scores: M36 - M30, M42 - M36, M48 - M42, M42 - M30, M48 - M36, and M48 - M30. Sphericity requires that the variance of each of these six difference scores be equal in the population.</p>
+<p>If children vary a great deal in how much they change between 30 and 36 months but vary very little in how much they change between 42 and 48 months, the variances of those two difference scores are not equal and sphericity is violated.</p>
+<p>As a side note, there is a special case of sphericity is <strong>compound symmetry</strong>, where all variances equal and all <em>covariances</em> equal. Sphericity is a weaker requirement than compound symmetry. It can hold even when compound symmetry fails.</p>
+<p>Sphericity is often unrealistic in time-series designs, where measurements made closer together tend to be more strongly correlated than measurements separated by longer intervals. When sphericity fails, the unadjusted <span class="math inline">\(F\)</span> test is positively biased, and its <span class="math inline">\(p\)</span> value is too small with inflated Type I error.</p>
+<p>SPSS tests sphericity with <strong>Mauchly’s test</strong>. If Mauchly’s <span class="math inline">\(W\)</span> is significant, the sphericity assumption is rejected and adjustments are needed.</p>
+<p>When sphericity is violated, there are some adjustments you can use. These can get technical, so I will just introduce them as options.</p>
+<p>SPSS provides three corrected tests alongside the unadjusted result:</p>
+<ul>
+<li><strong>Greenhouse-Geisser (</strong><span class="math inline">\(\hat{\varepsilon}\)</span>): A conservative estimate that reliably controls Type I error but can be overly conservative, especially with mild violations. This is generally the safest choice when sphericity is violated.</li>
+<li><strong>Huynh-Feldt (</strong><span class="math inline">\(\tilde{\varepsilon}\)</span>): Less conservative than Greenhouse-Geisser and more powerful, but can fail to control Type I error in some conditions.</li>
+<li><strong>Lower-bound:</strong> The most conservative possible correction. Rarely used in practice.</li>
+</ul>
+<p>For now, if Mauchly’s test is not significant (aka, spherecity is upheld), report the unadjusted (“sphericity assumed”) row. If it is significant, report the Greenhouse-Geisser result as the primary test.</p>
+</section>
+<section id="spss-syntax-and-output-univariate-approach" class="level3">
+<h3 data-anchor-id="spss-syntax-and-output-univariate-approach">SPSS Syntax and Output: Univariate Approach</h3>
+<p>The univariate approach uses the McCarthy data, where each row is one subject and each column is a time point (<code>M30</code>, <code>M36</code>, <code>M42</code>, <code>M48</code>).</p>
+<pre class="spss"><code>MANOVA M30 M36 M42 M48
+  /WSFACTORS time(4)
+  /WSDESIGN time
+  /ERROR WITHIN
+  /OMEANS
+  /PRINT SIGNIF(GG HF).</code></pre>
+<p><code>MANOVA M30 M36 M42 M48</code> lists the four repeated-measures variables directly. In the wide format, each time point is its own column, so rather than naming a single dependent variable and a grouping variable, you list all four columns and let SPSS treat each as a separate level of the within-subjects factor.</p>
+<p><code>/WSFACTORS time(4)</code> declares a within-subjects factor named <code>time</code> with 4 levels (as denoted by <code>(4)</code>). The name <code>time</code> is created here and does not need to exist as a variable in your dataset. This is a unique feature of within-subjects designs in SPSS. It has to be done because SPSS needs a label to refer to the within-subjects factor internally, but that factor is not stored as a column in your data the way a between-subjects grouping variable would be. It is implied by the structure of the repeated measurements themselves.</p>
+<p><code>/WSDESIGN time</code> specifies the within-subjects model to test, here the main effect of <code>time</code>. When working with within-subjects factors, you need to specify a <code>/WSDESIGN</code> line as opposed to the <code>/DESIGN</code> line used for between-subjects ANOVA. This distinction will be important in the future Split-Plot Design lesson.</p>
+<p><code>/ERROR WITHIN</code> uses the subjects-by-condition interaction as the error term.</p>
+<p><code>/OMEANS</code> requests observed means for each level of the within-subjects factor. Not necessary but helpful.</p>
+<p><code>/PRINT SIGNIF(GG HF)</code> requests the Greenhouse-Geisser and Huynh-Feldt corrected tests alongside the unadjusted results, which will be important if Mauchly’s test turns out to be significant.</p>
+<p>Before you look at the output, you must look at the Mauchly’s test of spherecity. This can be found in the following table</p>
+<p><img src="images/mauchley-uni.png" class="img-fluid" alt="Mauchly's test of sphericity output table showing W, chi-square, df, significance, and epsilon estimates"> In this output, we can see the significance of the Mauchly’s test of significance (which is a Chi-square test). Looking at the <code>Significance =</code> line, we can see that <span class="math inline">\(p = .017 &lt; .05\)</span>, therefore we <em>reject</em> the assumption of spherecity. The three corrections I mentioned before are given below. The epislons are just factors used to adjust the tests, but are not needed.</p>
+<p>Further down, we can find the main test output:</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/within-uni.png" class="img-fluid figure-img" alt="Tests of within-subjects effects table showing SS, df, MS, F, and p for the time factor under sphericity assumed, Greenhouse-Geisser, Huynh-Feldt, and lower-bound rows"></p>
+<figcaption>SPSS output: Tests of Within-Subjects Effects for the McCarthy data</figcaption>
+</figure>
+</div>
+<p>The output for the “Multivariate Tests of Significance” section is for the multivariate approach (which we will discuss next).</p>
+<p>In the “AVERAGED Tests of Significance” section, there is the univariate tests. Looking at the <code>TIME</code> table, the first row is the unadjusted test that assumes spherecity, which we don’t want for our data because spherecity was violated. The three lines below it are the adjusted tests. In each method, the results are <em>not</em> significance (<span class="math inline">\(p = .075,~.064,\)</span> and <span class="math inline">\(.110\)</span> respectively), though practically, we should just look at the Greenhouse-Geiser results (<span class="math inline">\(p = .075\)</span>). This is a good example of how ignoring spherecity violations would lead you to false conclusions.</p>
+<p>In terms of the actual data, this means we do not have sufficient evidence to conclude that children’s cognitive scores change systematically across the four age points when we account for the violation of sphericity. While there is a descriptive trend in the means (scores rise from 103 at 30 months to 107 at 36 months, 110 at 42 months, and 112 at 48 months) that pattern is not strong enough relative to the variability in individual children’s trajectories to reach statistical significance. I.e., some children show consistent growth, others plateau, and others even decline, which makes it harder to detect a reliable time effect.</p>
+<p>One last thing to note is near the top of the output, you will see a section labeled “Tests of Between-Subjects Effects”. This is the test of the grand mean of the data. That is, it is testing whether the overall mean across all participants and all time points is significantly different from zero. In most research contexts this is not of interest. It is evident that the cognitive scores are not zero, so you can safely ignore this portion of the output.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/within-unit-between.png" class="img-fluid figure-img" alt="Tests of grand mean test, showing table showing SS, df, MS, F, and p."></p>
+<figcaption>SPSS output: Tests of Within-Subjects Grand Mean for the McCarthy data</figcaption>
+</figure>
+</div>
+<p>This confirms that the mean across every participant is not 0 as the <span class="math inline">\(p\)</span> value is <span class="math inline">\(&lt;.001\)</span>.</p>
+<p>We will now turn to the other method for one-way within-subjects ANOVA: the multivariate method.</p>
+</section>
+</section>
+<section id="the-multivariate-approach" class="level2">
+<h2 data-anchor-id="the-multivariate-approach">4. The Multivariate Approach</h2>
+<p>The multivariate approach sidesteps the sphericity problem entirely by reformulating the question. Instead of treating the repeated measurements as a single outcome variable observed under different conditions the (<span class="math inline">\(\alpha_j\)</span> in the univariate full model), it treats them as multiple outcome variables measured on the same people and asks whether the pattern of means across those variables equals zero.</p>
+<p>The core idea is the construction of <strong>difference score variables</strong>, called <strong>D variables</strong>. For a within-subjects factor with <span class="math inline">\(a\)</span> levels, we create <span class="math inline">\(a - 1\)</span> difference variables, each representing a contrast between levels. If the population means for all <span class="math inline">\(a\)</span> levels are equal, then each of these difference variables has a population mean of zero. Testing whether all condition means are equal is equivalent to testing whether all D variable means equal zero simultaneously.</p>
+<p>For the McCarthy data has <span class="math inline">\(a = 4\)</span> levels (4 time points), we need <span class="math inline">\(a - 1 = 3\)</span> D variables. Using successive pairwise differences, the D variables are:</p>
+<p><span class="math display">\[
+D_1 = M36 - M30, \quad D_2 = M42 - M36, \quad D_3 = M48 - M42
+\]</span></p>
+<p>The null hypothesis <span class="math inline">\(H_0\colon \mu_1 = \mu_2 = \mu_3 = \mu_4\)</span> is equivalent to <span class="math inline">\(H_0\colon \mu_{D_1} = \mu_{D_2} = \mu_{D_3} = 0\)</span>.</p>
+<p>To put it more intuitively, this method is asking: if there were truly no effect of time, then on average, no child should be gaining or losing ground from one time point to the next. If the mean of any D variable is meaningfully different from zero, that is evidence that something is happening across time. The multivariate approach bundles all three of those difference score tests together and evaluates them simultaneously.</p>
+<section id="the-fullreduced-model-for-each-d-variable" class="level3">
+<h3 data-anchor-id="the-fullreduced-model-for-each-d-variable">The Full/Reduced Model for Each D Variable</h3>
+<p>The multivariate approach applies the full/reduced model framework to each D variable separately, then combines the evidence across all of them. Therefore, there are a total of <span class="math inline">\(a - 1\)</span> full/reduced models. One for each difference score.</p>
+<p>For each D variable <span class="math inline">\(D_k\)</span>, the general formulation of each model is:</p>
+<p><strong>Full model:</strong> <span class="math inline">\(D_{ki} = \mu_k + \varepsilon_{ki}\)</span></p>
+<p>The full model allows <span class="math inline">\(D_k\)</span> to have a nonzero mean <span class="math inline">\(\mu_k\)</span>, which is the average change.</p>
+<p>The restricted models are</p>
+<p><strong>Restricted model:</strong> <span class="math inline">\(D_{ki} = \varepsilon_{ki}\)</span></p>
+<p>The restricted model constrains the mean to zero, which is what the null hypothesis requires.</p>
+<p>Because D variables are correlated with each other by nature, knowing that a child gained a lot from month 30 to 36 tells you something about their gain from 36 to 42. The multivariate approach accounts for those correlations when combining evidence across all D variables into a single omnibus test. This is the essential difference from the univariate approach, which pools the errors across comparisons without accounting for their correlations and requires spherecity to keep that in check.</p>
+<p>As a result, the multivariate method is much more flexible, and as you will see, is usually the method used for more complicated within-subjects designs.</p>
+</section>
+<section id="syntax-and-output-multivariate-approach" class="level3">
+<h3 data-anchor-id="syntax-and-output-multivariate-approach">Syntax and Output: Multivariate Approach</h3>
+<p>The multivariate approach must use wide format data. So if you ever have long format data, you will need to restructure it.</p>
+<p>The SPSS code for this approach is actually the exact same as we had in Section 3 for the univariate output. If you recall, I told you to skip the multivariate output. Well now we want to examine it, so I am pasting it here again.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/within-multi.png" class="img-fluid figure-img" alt="Multivariate tests table showing Pillai's Trace, Wilks' Lambda, Hotelling's Trace, and Roy's Largest Root with F values, hypothesis df, error df, and significance"></p>
+<figcaption>SPSS output: Multivariate Tests of Significance for the McCarthy data</figcaption>
+</figure>
+</div>
+<p>Here we see four tests: Pillais, Hotellings, Wilks, and Roys. These tests are four different ways of summarizing the same multivariate evidence into a single test statistic, and in a pure one-way within-subjects design with no between-subjects factors (i.e, not a split-plot design, which we will cover in the future), they will always yield identical <span class="math inline">\(F\)</span> values. You do not need to choose between them in this context. So in our study, the McCarthy data, all four yield <span class="math inline">\(p = .153\)</span>, indicating that the D variable means are not jointly significantly different from zero.</p>
+<p>Thus, our conclusion is the same as the univariate method!</p>
+</section>
+<section id="testing-contrasts-in-the-multivariate-approach" class="level3">
+<h3 data-anchor-id="testing-contrasts-in-the-multivariate-approach">Testing Contrasts in the Multivariate Approach</h3>
+<p>Let’s say our omnibus test for the multivariate approach was significant. In this hypothetical, the next step we will want to do is to examine specific comparisons among the condition means. In the multivariate approach, contrasts are tested by constructing the appropriate D variable for that comparison and testing whether its mean equals zero. This is equivalent to a paired-samples <span class="math inline">\(t\)</span> test on the difference scores, and the <span class="math inline">\(F\)</span> statistic equals <span class="math inline">\(t^2\)</span>.</p>
+<p>The critical practical point is that <strong>contrasts specified in SPSS MANOVA must be orthogonal</strong>. If you supply non-orthogonal contrasts using the <code>/CONTRAST(...)=SPECIAL</code> statement, SPSS will silently substitute its own orthogonalized version and test those instead. You will receive output, but it will not correspond to the contrasts you requested. Think of it as ordering a specific dish at a restaurant and having the chef decide you must have meant something else entirely.</p>
+<p>This is a very important thing to keep in mind. In between-subjects ANOVA, you don’t need to worry about non-orthogonal contrasts because each contrast draws on independent groups of participants. In a within-subjects design, the same participants appear in every condition, so the contrasts share information and must be orthogonal for SPSS to test what you actually asked for.</p>
+<p>If you don’t remember or don’t know what orthogonality means, you need to review the Contrasts lesson becasue orthogonality is a prerequisite to even doing within-subjects ANOVA. From my experience, this is something that many people forget or don’t realize they need to do and get completely wrong results without realizing it!</p>
+<p>When contrasts are orthogonal, you can specify the contrasts with the <code>/CONTRAST...SPECIAL</code> matrix as usual.</p>
+<blockquote class="blockquote">
+<p>Recall, the first row must always be a row of ones (representing the grand mean). Subsequent rows contain the orthogonal contrasts</p>
+</blockquote>
+<p>Let’s say we want to test the linear and polynomial trends, which is common in repeated measures studies. Luckily, these are inherently orthogonal, so we don’t need to worry about them. If you don’t recall how these work, review the Trend Analysis lesson.</p>
+<p>The SPSS syntax to do this is the following:</p>
+<pre class="spss"><code>MANOVA M30 M36 M42 M48
+  /WSFACTORS time(4)
+  /CONTRAST(time)=SPECIAL (1  1  1  1
+                           -3 -1  1  3
+                            1 -1 -1  1
+                           -1  3 -3  1)
+  /PRINT transform param(estim)
+  /RENAME mean linear quad cubic
+  /WSDESIGN time.</code></pre>
+<p><code>/CONTRAST(time)=SPECIAL (...)</code> – the <code>SPECIAL</code> keyword signals a user-defined contrast matrix. The matrix has <span class="math inline">\(a\)</span> rows and <span class="math inline">\(a\)</span> columns. The first row is always all ones. Rows 2 through <span class="math inline">\(a\)</span> specify the <span class="math inline">\(a - 1\)</span> contrasts of interest.</p>
+<p><code>-3 -1 1 3</code>: linear trend coefficients for four equally spaced levels (see the Trend Analysis lesson).</p>
+<p><code>1 -1 -1 1</code>: quadratic trend coefficients.</p>
+<p><code>-1 3 -3 1</code>: cubic trend coefficients.</p>
+<p><code>/PRINT transform</code>: prints the transformation matrix SPSS actually uses, so you can verify it matches what you specified. This is not necessary, but can be helpful just to make sure the code is working as intended.</p>
+<p><code>/PRINT param(estim)</code>: prints the estimated contrast value, its standard error, <span class="math inline">\(t\)</span> statistic, significance, and 95% confidence interval for each contrast. Recall that the confidence intervals for the linear and cubic trends will need to be rescaled becasue they are each multiplied by 3 (review the Contrasts and Trend Analysis lessons). So they each just need to be divided by 3.</p>
+<p><code>/RENAME mean linear quad cubic</code>: labels the intercept and three contrasts in the output for readability. Note, that the first label will label the row of 1’s, which is the grand mean. If you are going to label the contrasts, don’t make the mistake of forgetting this and using <code>/RENAME linear quad cubic</code>. This will label the grand mean test as “linear”, the linear test as “quadratic”, and so forth.</p>
+<p>The output for <code>/PRINT transform</code> looks like the following:</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/within-difscores.png" class="img-fluid figure-img" alt="Orthonormalized transformation matrix showing the coefficients SPSS used for the mean, linear, quadratic, and cubic contrasts across M30, M36, M42, and M48"></p>
+<figcaption>SPSS output: Orthonormalized Transformation Matrix for the McCarthy data</figcaption>
+</figure>
+</div>
+<p>This table shows the contrast coefficients SPSS actually used after orthonormalizing our specified contrast matrix. Each column corresponds to one of our named contrasts (MEAN, LINEAR, QUAD, CUBIC) and each row corresponds to a time point. The key thing to check here is that the pattern of signs in each column matches what you intended. For the LINEAR column, coefficients increase in linearly from negative to positive across time points, which is exactly what a linear trend contrast should look like. If SPSS had silently substituted different contrasts, this table would reveal it. Though this table is, admittedly, a bit confusing. So I would focus on just making super sure your syntax is correct. But this output can be good as a fact check.</p>
+<p>The output for the contrasts tests looks like the following:</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/within-contrasts.png" class="img-fluid figure-img" alt="Within-subjects contrasts output showing SS, df, MS, F, and p for linear, quadratic, and cubic components of the time effect"></p>
+<figcaption>SPSS output: Tests of Within-Subjects Contrasts for linear, quadratic, and cubic trends</figcaption>
+</figure>
+</div>
+<p>Here we can see that the linear trend is significant (<span class="math inline">\(p = .0496\)</span>). However, the other trends are not significant. In fact, the cubic trend is so non-significant that SPSS has round it’s <span class="math inline">\(p\)</span> valueup to 1. Recall, that to get appropriate 95% confidence intervals for the linear and cubic trend, you need to divide the confidence interval ends by 3.</p>
+</section>
+<section id="type-i-error-control" class="level3">
+<h3 data-anchor-id="type-i-error-control">Type I Error Control</h3>
+<p>Lastly, like always, Type I error control is something to keep in mind. Luckily, since this is just a basic one-way ANOVA, the method to use this is very straight forward. I will refer to the Multiple Comparisons lesson for guidance on the univariate approach as it uses the basic Type I error methods exactly (if spherecity holds; if spherecity doesn’t hold, the Tukey test becomes unavaialble. See in (1) below).</p>
+<p>However, there are two thing I should note for the multivariate approach.</p>
+<ol type="1">
+<li><p>Tukey’s HSD assumes that all pairwise comparisons share the same error term and that the variances of all difference scores are equal, which is precisely the sphericity assumption. Since the multivariate approach is used specifically when sphericity cannot be assumed, using Tukey’s HSD would reintroduce the very problem we were trying to avoid. Bonferroni does not rely on that assumption and is therefore the appropriate choice for pairwise comparisons in the multivariate approach.</p></li>
+<li><p>For post hoc complex comparisons, you will use the Roy-Bose procedure. This method is the multivariate analog of Scheffé’s method and controls the familywise error rate across all possible contrasts. Functionally, it works the same way as Scheffé but the critical value is computed differently:</p></li>
+</ol>
+<p><span class="math display">\[\text{CV}_{\text{Roy-Bose}} = \frac{(n-1)(a-1)}{n-a+1} \cdot F_{\alpha;\; a-1,\; n-a+1}\]</span></p>
+<p>compared to the Scheffé critical value:</p>
+<p><span class="math display">\[\text{CV}_{\text{Scheffé}} = (a-1) \cdot F_{\alpha;\; a-1,\; N-a}\]</span> Other than this, the Roy-Bose method should be used equivalently to the Scheffé method.</p>
+</section>
+</section>
+<section id="summary" class="level2">
+<h2 data-anchor-id="summary">5. Summary</h2>
+<p>This lesson introduced the one-way within-subjects ANOVA, examining two approaches to testing whether condition means differ when the same participants are measured at every level of the factor.</p>
+<p>The <strong>univariate (mixed-model) approach</strong> partitions variability into condition effects, subject effects, and a residual subjects-by-condition term that serves as the error. It is efficient when its key assumption of sphericity is met. When sphericity is violated, Greenhouse-Geisser or Huynh-Feldt adjustments to the degrees of freedom provide reasonable correction, with Greenhouse-Geisser being the safer choice.</p>
+<p>The <strong>multivariate approach</strong> reformulates the problem in terms of <span class="math inline">\(a - 1\)</span> D difference variables and tests whether their means jointly equal zero. It does not require sphericity and uses a separate error term for each contrast, making contrast tests more robust. The cost is fewer denominator degrees of freedom, which reduces power when samples are small.</p>
+<p>The univariate and multivariate approaches answer the same omnibus question: do the condition means differ? They just make different assumptions and trade power differently. I did not cover eveyrthing in the below table, but this table is hopefully helpful as a reference guide.</p>
+<table class="cmtable caption-top table">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th" style="text-align: left; color: #000; padding: 10px; border-bottom: 2px solid #888; width: 20%;">Feature</th>
+<th data-quarto-table-cell-role="th" style="text-align: left; color: #000; padding: 10px; border-bottom: 2px solid #888; width: 40%;">Univariate (Mixed-Model)</th>
+<th data-quarto-table-cell-role="th" style="text-align: left; color: #000; padding: 10px; border-bottom: 2px solid #888; width: 40%;">Multivariate (MANOVA)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="padding: 10px; border-bottom: 1px solid #555">Sphericity required?</td>
+<td style="padding: 10px; border-bottom: 1px solid #555">Yes (or epsilon adjustment)</td>
+<td style="padding: 10px; border-bottom: 1px solid #555">No</td>
+</tr>
+<tr class="even">
+<td style="padding: 10px; border-bottom: 1px solid #555">Error term for contrasts</td>
+<td style="padding: 10px; border-bottom: 1px solid #555">Pooled (\(MS_{A \times S}\))</td>
+<td style="padding: 10px; border-bottom: 1px solid #555">Separate for each contrast</td>
+</tr>
+<tr class="odd">
+<td style="padding: 10px; border-bottom: 1px solid #555">Denominator df</td>
+<td style="padding: 10px; border-bottom: 1px solid #555">Larger: \((n-1)(a-1)\)</td>
+<td style="padding: 10px; border-bottom: 1px solid #555">Smaller: \(n - a + 1\)</td>
+</tr>
+<tr class="even">
+<td style="padding: 10px; border-bottom: 1px solid #555">Power when sphericity holds</td>
+<td style="padding: 10px; border-bottom: 1px solid #555">Higher (more df)</td>
+<td style="padding: 10px; border-bottom: 1px solid #555">Lower (fewer df)</td>
+</tr>
+<tr class="odd">
+<td style="padding: 10px; border-bottom: 1px solid #555">Power when sphericity fails</td>
+<td style="padding: 10px; border-bottom: 1px solid #555">Reduced; epsilon adjustments help but are conservative</td>
+<td style="padding: 10px; border-bottom: 1px solid #555">Often higher; accounts for correlations among comparisons</td>
+</tr>
+<tr class="even">
+<td style="padding: 10px; border-bottom: 1px solid #555">Sample size requirement</td>
+<td style="padding: 10px; border-bottom: 1px solid #555">Any \(n \geq 2\)</td>
+<td style="padding: 10px; border-bottom: 1px solid #555">\(n\) must exceed \(a\); small samples reduce power sharply</td>
+</tr>
+<tr class="odd">
+<td style="padding: 10px; border-bottom: 1px solid #555">Normality assumption</td>
+<td style="padding: 10px; border-bottom: 1px solid #555">Univariate normality</td>
+<td style="padding: 10px; border-bottom: 1px solid #555">Multivariate normality</td>
+</tr>
+<tr class="even">
+<td style="padding: 10px; border-bottom: 1px solid #555">SPSS procedure</td>
+<td style="padding: 10px; border-bottom: 1px solid #555">MANOVA univariate output with /PRINT SIGNIF(GG HF)</td>
+<td style="padding: 10px; border-bottom: 1px solid #555">MANOVA, multivariate output</td>
+</tr>
+<tr class="odd">
+<td style="padding: 10px">Data format</td>
+<td style="padding: 10px">Long (one row per observation)</td>
+<td style="padding: 10px">Wide (one row per subject)</td>
+</tr>
+</tbody>
+</table>
+<p>The practical guidance that follows from this comparison:</p>
+<p>When sphericity holds, the univariate approach is preferred because it has more denominator degrees of freedom and therefore more power. When Mauchly’s test is significant and the sample is reasonably large, the multivariate approach is generally preferred because it does not require sphericity and uses separate error terms for each contrast. When the sample is small relative to the number of levels (roughly <span class="math inline">\(n &lt; 2a\)</span>), the multivariate approach loses power rapidly and may not even be computable. The epsilon-adjusted univariate tests are the better option in that scenario.</p>
+<p>A useful default practice is to run the <code>MANOVA</code> syntax with <code>/PRINT SIGNIF(GG HF)</code>, which produces the univariate and multivariate sets of results in a single pass. This lets you check Mauchly’s test and choose the appropriate result to report without re-running the analysis.</p>
+<p>If you are doing Type I error control methods, make sure you recall some of the caveats. If spherecity doesn’t hold or you are using the multivariate approach, you cannot use Tukey’s HSD method. And if you are using the multivariate approach, the Scheffé method becomes the Roy-Bose method, which has a different function for calculating its critical values.</p>
+<p>Finally, if you are using contrasts, <strong>MAKE SURE YOUR CONTRASTS ARE ORTHOGONAL</strong>. This is something to easily forget or make a mistake in calculating, but this is important.</p>
+<p>Going forward, we will have to use the multivariate method as we move on to higher-order within-subject designs and split-plot methods as it is much simpler to use in these scenarios.</p>
+</section>
+<section id="discussion-questions" class="level2">
+<h2 data-anchor-id="discussion-questions">6. Discussion Questions</h2>
+<p><strong>1.</strong> A researcher measures participants’ reaction time under three noise conditions (quiet, moderate, loud) using a within-subjects design with <span class="math inline">\(n = 15\)</span> participants. Mauchly’s test is not significant. Which approach, univariate or multivariate, should they use for the omnibus test, and why?</p>
+<details>
+<summary>
+Click to reveal answer
+</summary>
+<p>When Mauchly’s test is not significant, the sphericity assumption is tenable. In this case the univariate approach is preferred, because it has denominator df of <span class="math inline">\((n-1)(a-1) = (14)(2) = 28\)</span>, compared to the multivariate approach’s denominator df of <span class="math inline">\(n - a + 1 = 13\)</span>. With more denominator degrees of freedom, the univariate test is more powerful when its assumptions are met.</p>
+</details>
+<hr>
+<p><strong>2.</strong> In the McCarthy study, the univariate test with sphericity assumed yields <span class="math inline">\(F(3, 33) = 3.027\)</span>, <span class="math inline">\(p = .043\)</span>, but the Greenhouse-Geisser corrected test yields <span class="math inline">\(p = .075\)</span>. Explain in plain language what the Greenhouse-Geisser correction is doing and why the <span class="math inline">\(F\)</span> value does not change.</p>
+<details>
+<summary>
+Click to reveal answer
+</summary>
+<p>The Greenhouse-Geisser correction works by reducing the degrees of freedom used to evaluate significance, not by changing the <span class="math inline">\(F\)</span> statistic itself. The <span class="math inline">\(F\)</span> statistic is a ratio of mean squares, which are fixed by the data. What changes is the reference distribution used to obtain a <span class="math inline">\(p\)</span> value: with smaller degrees of freedom, a larger <span class="math inline">\(F\)</span> is needed to reach the same significance threshold. The correction shrinks the df by multiplying both numerator and denominator by <span class="math inline">\(\hat{\varepsilon} = .610\)</span>, reflecting the degree to which sphericity is violated. The same ratio of mean squares is now evaluated against a more stringent critical value, which is why <span class="math inline">\(p\)</span> rises from .043 to .075.</p>
+</details>
+<hr>
+<p><strong>3.</strong> A student runs the multivariate approach on a dataset with <span class="math inline">\(n = 5\)</span> subjects measured at <span class="math inline">\(a = 6\)</span> time points. SPSS refuses to produce multivariate test output. Why?</p>
+<details>
+<summary>
+Click to reveal answer
+</summary>
+<p>The multivariate approach requires <span class="math inline">\(n &gt; a\)</span>. That is, more subjects than levels of the factor. With <span class="math inline">\(n = 5\)</span> and <span class="math inline">\(a = 6\)</span>, the denominator degrees of freedom would be <span class="math inline">\(n - a + 1 = 5 - 6 + 1 = 0\)</span>, which makes the <span class="math inline">\(F\)</span> test mathematically impossible. The multivariate approach simply cannot be computed when the number of subjects does not exceed the number of conditions. In this case the researcher would need to use the epsilon-adjusted univariate tests instead, or collect more data.</p>
+</details>
+<hr>
+<p><strong>4.</strong> A researcher uses SPSS MANOVA to test two planned contrasts in a within-subjects design: (1) the mean at time 1 versus the mean at time 3, and (2) the mean at time 2 versus the mean at time 4. They specify these in a <code>/CONTRAST(time)=SPECIAL</code> matrix. When they print the transformation matrix, they find SPSS used different coefficients than they entered. What most likely happened, and what should they do?</p>
+<details>
+<summary>
+Click to reveal answer
+</summary>
+<p>The most likely explanation is that the two contrasts were not orthogonal. SPSS requires that contrasts specified in the <code>/CONTRAST...SPECIAL</code> matrix for a within-subjects factor be orthogonal to one another.Iif they are not, SPSS silently replaces them with its own orthogonalized versions and tests those instead. Printing the transformation matrix (via <code>/PRINT transform</code>) reveals this substitution. The researcher should verify whether their two contrasts are orthogonal by checking that the sum of the products of their coefficients equals zero. If the contrasts of interest are not orthogonal, they cannot both be tested simultaneously using this approach.</p>
+</details>
+
+
+</section>
+
+</main> <!-- /main -->
+<!-- MailerLite Universal -->
+<script>
+    (function(w,d,e,u,f,l,n){w[f]=w[f]||function(){(w[f].q=w[f].q||[])
+    .push(arguments);},l=d.createElement(e),l.async=1,l.src=u,
+    n=d.getElementsByTagName(e)[0],n.parentNode.insertBefore(l,n);})
+    (window,document,'script','https://assets.mailerlite.com/js/universal.js','ml');
+    ml('account', '2295583');
+</script>
+<!-- End MailerLite Universal -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/infogothic\.com");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>
