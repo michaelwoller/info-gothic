@@ -1,6 +1,6 @@
 ---
 title: "AI and Bragolin: Slope or Art?"
-date: "2026-24-07"
+date: "2026-5-07"
 description: "Is AI killing Goth?"
 author: "Michael Woller"
 categories: [music, goth, AI]
