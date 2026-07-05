@@ -1,0 +1,188 @@
+---
+title: "Musings on the 14th Amendment"
+subtitle: "Birth of The Second Republic"
+author: "Michael Woller"
+date: 2026-07-04
+categories: [civics, history, politics]
+---
+
+Just to learn more about the historical context of today, I've been going through the Constitution and its amendments. It's been a decade since I studied any of this in high school, so I figured a refresher was overdue.
+
+And I've been writing this up to the 250th anniversary of the United States on July 4, 2026. I will say, working through the federal Constitution and its amendments, you get a really interesting perspective of American history. The cover sweeping ideas and reforms that evolve over the centuries. Yet they are all short and sweat considering their levity. This is in contrast to state constitutions which are amended all over the place in explicit legalese. (I've been working through California's constitution, and it is more mind numbing).
+
+I wanted to highlight one thing that stood out to me in my independent studies. From what I can tell, American history really hinges around the 14th Amendment as a focal point for histories that came before it and how much impact it has had on everything that came after it. Look at many flash points in American history, and they *all* have something to do with the 14th Amendment (usually the equal protections or the due process clause). But it is CONSTNATLY evoked, probably more than any other amendment than the 1st.
+
+Initially the 14th Amendment was written to make sure nothing like the Civil War could ever happen again. It's really valiant the degree to which they wanted to say "fuck you" to confederates when the Union drafted this, and I wish that mentality carried all the way through reconstruction. Honestly, I've never been super interested in the American Civil War. I don't know, as a Man, I guess my hobby war was always World War II, but reading through this amendment and its history has actually really inspired me to learn more about this warring period because this piece of foundational script is very interesting and is ever increasingly relevant today.
+
+For some context, here's Section 1:
+
+> All persons born or naturalized in the United States, and subject to the jurisdiction thereof, are citizens of the United States and of the State wherein they reside. No State shall make or enforce any law which shall abridge the privileges or immunities of citizens of the United States; nor shall any State deprive any person of life, liberty, or property, without due process of law; nor deny to any person within its jurisdiction the equal protection of the laws.
+
+This comes straight into play with [the Supreme Court's recent 6-3 decision](https://www.americanimmigrationcouncil.org/blog/birthright-citizenship-14th-amendment-lives-on/) to uphold this part of the 14th Amendment. Seeing the clause written out like this makes it so much more clear what was actually being debated.
+
+But before I go on, I am going to go through this Amendment more or less from top to bottom and highlight some personal takeaways. Thoughts are in bullet points like how I was drafting notes. Ianted to make this by July 4th, plus its more raw this way ya feel me?
+
+# Section 1
+
+## The Citizenship Clause
+
+In Section 1, we have the [Citizenship Clause](https://constitution.congress.gov/browse/essay/amdt14-S1-1-2/ALDE_00000812/),
+
+> All persons born or naturalized in the United States, and subject to the jurisdiction thereof, are citizens of the United States and of the State wherein they reside.
+
+This clause has a hot topic since forever, not just this week. Here are some musings and notes I took:
+
+-   A big limiting factor with the original Constitution was that it never actually defined federal citizenship. It talks about citizens constantly, qualifications for President, Senator, Representative, all of it, but never once says what makes someone a citizen in the first place.
+-   A lot of people argue the writers of this amendment never foresaw issues of immigrants. That's backwards. The birthright citizenship piece was directly built around the question of non-citizen parents.
+    -   This clause was written specifically to overturn [*Dred Scott v. Sandford* (1857)](https://www.archives.gov/milestone-documents/dred-scott-v-sandford), which successfully argued to SCOTUS that Black Americans descended from enslaved people couldn't be citizens, and that the US couldn't ban slavery in federal territory like DC.
+        -   This was a monstrous argument, upheld by the Court anyway. Arguably much worse than anything modern SCOTUS has ever done (low bar).
+
+        -   The entire Citizenship Clause of the 14th Amendment was largely written to say "nah fuck that" to this court ruling and give formerly enslaved people citizenship, permanently, as text, not as something a future Court could undo. I find it pretty admirable and wish we had that energy now.
+
+            -   The writers very much knew this would apply to immigrants' children too. We have recorded debates from the drafting process where the issue of immigrant parents giving birth to US citizens was directly raised, and people were fine with it. So the argument some are making today, and what SCOTUS was frighteningly split on in 2026, is literally the opposite of the original intent of the people who wrote this amendment. See the [Congressional Globe records](https://www.brennancenter.org/our-work/research-reports/birthright-citizenship-under-us-constitution) and [more background here](https://www.americanimmigrationcouncil.org/blog/origins-birthright-citizenship-united-states-explained/).
+
+            > When Congress debated the language of the Citizenship Clause in 1866, Sen. Jacob Howard explained that the clause was “simply declaratory of . . . the law of the land already, that every person born within the limits of the United States, and subject to their jurisdiction, is by virtue of natural law and national law a citizen of the United States.” Several lawmakers expressed concerns that such a broad guarantee would extend citizenship to the children of immigrants. Sen. John Conness affirmed that the proposed language “declare\[s\] that the children of all parentage . . . should be regarded and treated as citizens of the United States, entitled to equal civil rights with other citizens of the United States.”
+
+            -   It gives such context of the lunacy of the 3 dissenting justices. This debate was already had 150 years ago.
+
+                -   Even still, in [*United States v. Wong Kim Ark* (1898)](https://constitutioncenter.org/the-constitution/supreme-court-case-library/united-states-v-wong-kim-ark-1898), SCOTUS upheld that a child born in the US to Chinese immigrant parents was a citizen, even though those parents were legally barred from ever becoming citizens themselves under the [Chinese Exclusion Act](https://www.archives.gov/milestone-documents/chinese-exclusion-act).
+                    -   So this piece of the 14th Amendment was already tested in 1898, on the record, with the exact scenario of non-citizen immigrant parents and was upheld. It's genuinely bizarre that SCOTUS would be anywhere near 6-3 on this in 2026.
+
+## The Due Process Clause
+
+The [Due Process Clause](https://constitution.congress.gov/browse/essay/amdt14-S1-3/ALDE_00013743/) of Section 1, also the vehicle for the "incorporation doctrine", was essentially a guarantee that the rights granted by the 5th Amendment applied at the state court level too. This clause is
+
+> No State shall make or enforce any law which shall abridge the privileges or immunities of citizens of the United States; nor shall any State deprive any person of life, liberty, or property, without due process of law
+
+-   For background, the [5th Amendment](https://constitution.congress.gov/browse/essay/amdt5-5-1/ALDE_00013721/) gave due process to citizens, but only in *federal* courts. This clause of the 14th gives it at the state level.
+-   This was essentially there to stop Southern states from running their own show after the Civil War.
+    -   A lot of due process wasn't guaranteed at the state level at all, and cases hinging on this clause ended up granting people real protections from state's-rights shenanigans.
+-   This has had huge implications ever since, because this clause implies states owe citizens protections even for things not explicitly outlined in the Constitution.
+    -   The [9th Amendment](https://constitution.congress.gov/constitution/amendment-9/) basically says people have more rights than whatever got written down in the first ten amendments. This is to just guarantee that the federal Constitution is not the end-all-be-all handbook of rights for American citizens.
+        -   Extend the protections of fundamental rights from the Due Process Clause of through that logic, and you get the idea that there are whole categories of unwritten rights states have to guarantee their own citizens.
+            -   As a result, a huge number of civil rights cases get argued at the state level on the basis of this clause.
+                -   It was created to stop ex-Confederate fuckery specifically, but it's been extended to marriage, contraception and abortion, medical care, education, and plenty else. Really, it's one of the most important clauses in the Constitution for non-rich white straight men.
+-   Without this clause, states could get away with whatever internally. Without it working alongside the 9th Amendment, they could get away with being maximally narrow about what "rights" even means for individuals. I'm skipping a lot here, since even more stuff hangs off this clause, like state tax cases, but that's the shape of it.
+
+## The Equal Protection Clause
+
+> nor deny to any person within its jurisdiction the equal protection of the laws.
+
+This is one of the most litigated pieces of writing in the entire Constitution.
+
+-   It means states must apply their laws equally and can't discriminate.
+
+-   You can't necessarily invent a class of people subject to different laws without justification.
+
+    -   However, there are three tiers to how hard that justification has to work
+
+        -   **Strict scrutiny**: The hardest classification to make to distinguish citizens. Virtually nothing justifies these, since the government has to show a compelling interest and prove the law is narrowly tailored to it. There has to be just legitimate basis for these to be considered at all.
+
+            -   e.g. race-based classifications.
+
+            -   Obviously, it took Americans some time to get behind this all the way (and still has issues with it still). This is the tier of scrutiny that got *Brown v. Board of Education* (1954) striking down school segregation ([ruling](https://supreme.justia.com/cases/federal/us/347/483/)).
+
+        -   **Intermediate scrutiny**: Classificiation distinctions between citizens is allowed under this scrutiny if the laws further an objective that is genuinely publicly important.
+
+            -   e.g. sex/gender-based classifications.
+
+            -   This was established specifically in *Craig v. Boren* (1976), which set a middle standard requiring an important government objective, not just a legitimate one ([Oyez](https://www.oyez.org/cases/1976/75-628)).
+
+            -   There's more room here than with race, since some distinctions might genuinely exist. For example, sex differences that must, by nature, be treated differently between the citizenry in ways race distinctions never are.
+
+        -   **Rational basis review**: everything else the government can justify with some legitimate, loosely connected reason.
+
+            -   This is the default, lowest bar, traced back through *Nebbia v. New York* (1934) into Footnote Four itself ([Wikipedia overview](https://en.wikipedia.org/wiki/Rational_basis_review)).
+
+            -   Things like income tax brackets, minor vs. adult laws, that kind of thing.
+
+                -   The government *needs* classifications between citizens for whatever reason, and can arbitrarily make them.
+
+# Section 2: Apportionment (repealing the 3/5ths clause)
+
+> "Representatives shall be apportioned among the several States according to their respective numbers, counting the whole number of persons in each State, excluding Indians not taxed. But when the right to vote at any election for the choice of electors for President and Vice-President of the United States, Representatives in Congress, the Executive and Judicial officers of a State, or the members of the Legislature thereof, is denied to any of the male inhabitants of such State, being twenty-one years of age, and citizens of the United States, or in any way abridged, except for participation in rebellion, or other crime, the basis of representation therein shall be reduced in the proportion which the number of such male citizens shall bear to the whole number of male citizens twenty-one years of age in such State."
+
+-   This replaces the[Three-Fifths Clause from the original Constitution](https://constitution.congress.gov/browse/essay/amdt14-S2-1/ALDE_00000847/). Now everyone counts as a whole person for apportionment, not three-fifths of one.
+    -   Interestingly enough, the whole "slaves count as three-fifths a white person" actually benefited slave states. They wanted slaves to count as state population so they could get more state representatives and thus more power in federal congress. As dark as it is, it was probably better for the abolitionist movement to not count slaves a whole persons in this way.
+        -   Obviously, once the Confederates were curb stomped and the 13th Amendment ratified, there was no reason to not count every citizen, regardless of race, as a "whole" person.
+-   This section also excludes "Indians not taxed," meaning Native Americans not subject to state or federal tax jurisdiction at the time weren't counted in a state's population for these purposes.
+-   The section also includes a penalty mechanism: if a state denies the vote to male citizens 21 or older for any reason other than crime or rebellion, that state's congressional representation is supposed to shrink proportionally (keep in mind, the federal voting age was 21 until the [26th Amendment](https://en.wikipedia.org/wiki/Twenty-sixth_Amendment_to_the_United_States_Constitution) in 1971).
+    -   This was aimed squarely at Southern states trying to deny Black men the vote through means other than an outright racial ban. Though, it was to mixed success.
+        -   It has never actually been enforced to reduce a single state's seats, despite a century of exactly the disenfranchisement it was written to punish.
+        -   Scholars call this dormancy of the punishment well-documented and essentially permanent in practice ([University of Chicago Law Review, "The Worrisome Ghost of the Fourteenth Amendment's Second Section"](https://lawreview.uchicago.edu/online-archive/worrisome-ghost-fourteenth-amendments-second-section)).
+            -   Basically, most legal scholars think this clause is dead, but some what to revive it for different personal desires to punish different states.
+        -   It's not entirely inert, though. The Supreme Court actually leaned on this clause in *Richardson v. Ramirez* (1974) to *justify* felon disenfranchisement, reasoning that since Section 2 of the 14th Amendment explicitly carves out an exception for denying the vote to people convicted of crime, felon disenfranchisement gets a pass from strict equal protection scrutiny under Section 1. However, this was shot down ([summarized here](https://www.hrw.org/legacy/reports98/vote/usvot98o-05.htm)).
+    -   Worth noting: the clause only ever covered *male* citizens. The 19th and 26th Amendments (women's suffrage, and lowering the voting age to 18) effectively expanded who the penalty clause would apply to if it were ever actually used, but never fixed the fact that it's still built on 1868's assumption that only men vote. Though, it would likely be extended to other groups of modern voters ([NYU Law Review](https://nyulawreview.org/issues/volume-96-number-4/the-penalty-clause-and-the-fourteenth-amendments-consistency-on-universal-representation/)).
+        -   Constitutional law scholarship is very quirky, but having gone through all of this, I can kind of see the appeal. It's a never ending cascade of technicalities.
+
+# Section 3: Disqualification for Insurrection
+
+> "No person shall be a Senator or Representative in Congress, or elector of President and Vice-President, or hold any office, civil or military, under the United States, or under any State, who, having previously taken an oath, as a member of Congress, or as an officer of the United States, or as a member of any State legislature, or as an executive or judicial officer of any State, to support the Constitution of the United States, shall have engaged in insurrection or rebellion against the same, or given aid or comfort to the enemies thereof. But Congress may by a vote of two-thirds of each House, remove such disability."
+
+-   This section bars former officeholders who'd already sworn an oath to the Constitution from holding office again if they later engaged in insurrection or rebellion, or gave aid to the enemies of the US.
+
+    -   Aka, it was originally at former Confederates specifically so they can get fucked, oh I mean, to keep people who'd already broken their oath once from getting back into government.
+
+-   Interestingly, congress can lift the disqualification with a two-thirds vote of both chambers, and it did so repeatedly.
+
+    -   A general amnesty in 1872 restored eligibility to almost everyone except the highest-ranking former Confederate officials, and a broader 1898 act removed nearly all remaining disqualifications from the Civil War era ([history.com](https://www.history.com/articles/14th-amendment-section-three-disqualification-clause-confederates)).
+        -   This was one of the failings of reconstruction and allowed southern sympathizers to get much more cultural clout in America in the decades preceding.
+
+-   A lot of people tried to punish Trump's January 6th Riots as insurrection, preventing him from running again under this section of the 14th Amendment. Idk, from a layman, that always made sense to me. The Colorado Supreme Court had already found, as a factual matter, that Trump engaged in insurrection, and they tried to remove him off the state ballot. The US Supreme Court never actually refuted that conclusion of insurrection (citation provided below). So whether or not he committed insurrection was NEVER in question.
+
+    -   But in [*Trump v. Anderson* (2024)](https://en.wikipedia.org/wiki/Trump_v._Anderson) (which will definitely be a court case taught to highschool children) was decided unanimously, and on much narrower grounds than the "insurrection" claim people were making.
+
+        -   Instead, SCOTUS held that individual states have no constitutional authority to enforce Section 3 of the 14th Amendment against candidates for federal office. Under Section 5 of the 14th Amendment (see further below), only Congress, through actual legislation, can enforce Section 3 against federal officeholders and candidates, not state courts or state election officials acting on their own ([Wikipedia summary](https://en.wikipedia.org/wiki/Trump_v._Anderson), [Constitution Annotated](https://constitution.congress.gov/browse/essay/amdt14-S3-2/ALDE_00000070/)).
+
+            -   Basically, my read is SCOTUS saying "you aren't wrong in your assessment, but you don't have the power to ban Trump off the ballot".
+
+            -   The practical effect was that Trump stayed on the ballot, but the reasoning was about who has the authority to enforce Section 3. Which really comes across as trying to make this part of the 14th Amendment completely moot. If the states can't do this, who can? I guess it has to come ordained down from high congress deciding to kick Trump off.
+
+                -   A fatal flay of the reconstructionists with the 14th Amendment is that they never though that multiple branches of the government would be in cahoots with each other. Because if congress doesn't want to enforce the Insurrection Clause, nobody fucking can and insurrection is free game. Ridiculous
+
+                    -   January 6th really is such a fucking melting pot of so much dysfunction in the American system. There is SO much to that day that a lot of people aren't even aware of. Like craaazy shit was happening behind closed doors that day. Unfortunately, Trump being able to get away with this is just another aspect of failed reconstruction.
+
+# Section 4: Public Debt
+
+> "The validity of the public debt of the United States, authorized by law, including debts incurred for payment of pensions and bounties for services in suppressing insurrection or rebellion, shall not be questioned. But neither the United States nor any State shall assume or pay any debt or obligation incurred in aid of insurrection or rebellion against the United States, or any claim for the loss or emancipation of any slave; but all such debts, obligations and claims shall be held illegal and void."
+
+-   This section does two main things:
+    -   It forced Confederates to pay their own debts, so they couldn't weasel their way out of reparations to the Union. It explicitly voids Confederate war debt and bars any compensation to former slaveholders for the loss of enslaved people as "property."
+        -   Aka, any debt the Confederate government made during their rebellion is on *them*, not the Union. And the Union owed no reparations to the Confederates.
+            -   Uhhh.... Based?
+    -   It mandates that the United States has to pay off its national debt
+-   This section keeps coming up in debt ceiling fights. The argument is that Section 4 could let a president keep paying the nation's bills even if Congress won't raise the debt ceiling, since defaulting would itself "question" the debt in a way the amendment forbids.
+    -   Aka, we could just perpetually exist with a 4th dimensional sword of Damocles in a state of limbo
+        -   (Uniroincally though, the debt ceiling is a [very real and very scary](https://www.npr.org/2023/05/24/1177668000/default-debt-ceiling-limit-negotiations-recession-global-financial-crisis) issue that is best ignored, lest the madness of the Lovecraftian nightmare defaulting would incur. So at least you can get the earnestness of people trying to use constitutional force here).
+    -   Bill Clinton said publicly he'd have invoked it without hesitation and made the courts stop him. Biden considered it during the 2023 standoff but backed off, saying it would inevitably be litigated and might not resolve things fast enough to avoid default anyway ([CNN](https://www.cnn.com/2023/05/12/politics/14th-amendment-debt-ceiling/index.html), [Time](https://time.com/6278100/debt-ceiling-14th-amendment-legal-theory/)).
+        -   Section 4 of the 14th Amendment here is basically a loaded gun on a table at this point.
+
+# Section 5: Enforcement
+
+> "The Congress shall have power to enforce, by appropriate legislation, the provisions of this article."
+
+-   This simply gives Congress the ability to actually enforce the amendment through statute, not leave it entirely to case-by-case court interpretation.
+    -   This was important so Congress could against ex-Confederate shenanigans and not sit as a passive force. (This type of clause is pretty common throughout multiple Amendments regardless).
+-   This power isn't unlimited, however.[City of Boerne v. Flores (1997)](https://en.wikipedia.org/wiki/City_of_Boerne_v._Flores) held Congress's Section 5 power only extends to remedying or preventing actual constitutional violations, with a "congruence and proportionality" requirement between the harm being addressed and the legislative response.
+    -   Aka, Congress can't use Section 5 to just invent new substantive rights the Court hasn't already recognized .
+    -   This is the same clause the Court leaned on in *Trump v. Anderson* to say enforcement of Section 3 specifically has to run through Congress, not the states or the courts acting on their own.
+
+------------------------------------------------------------------------
+
+## The Second Republic
+
+Here's the reframe that actually changes how you should think about all of the above, and one I've heard in the past but now makes so much sense. Calling this "an amendment" undersells it badly.
+
+-   The original 1787 Constitution left a genuinely staggering amount unresolved. Like, having read through it. It's genuinely baffling how little it actually says: no definition of citizenship, no clear distinction between rights from the federal government and rights from the states, no protection enforcement of federal rights across the states, constant unaddressed issues about slavery, and more (that get fixed with other Amendments).
+-   The 14th Amendment, bracketed by the 13th (no non-penal slavery) and 15th (equal rights to vote for men), goes back and does the best attempt at completely rework the constitution to the point that the nation before and after the ratification of the 14th are notably different countries in their governments.
+-   Here are some other writings on this (which maybe one day I will read)
+    -   Historian Eric Foner's book on this period is literally called [*The Second Founding*](https://en.wikipedia.org/wiki/The_Second_Founding), arguing the Reconstruction amendments grafted an entirely new principle, actual legal equality, onto the Constitution that was never built around it.
+    -   Historian Manisha Sinha titles her book on the whole era [*The Rise and Fall of the Second American Republic*](https://history.uconn.edu/2024/03/01/the-rise-and-fall-of-the-second-american-republic/), treating 1860 to 1920 as one continuous constitutional rupture as significant as the founding itself.
+    -   [Legal scholar Bruce Ackerman's work](https://chicagounbound.uchicago.edu/cgi/viewcontent.cgi?article=12611&context=journal_articles) on constitutional moments argues the post-1870 order should be read as a genuinely separate regimes.
+    -   Even the [National Constitution Center](https://constitutioncenter.org/education/classroom-resource-library/classroom/14.2-info-brief-reconstruction-and-americas-second-founding) teaches this period to students under the heading "America's Second Founding." (I don't remember if I ever got taught that).
+
+The 14th Amendment is probably one of the more impressive things the country has every tried to achieve, and I feel it was much more sincere in its pursue of equality among men (sorry, ladies, you get your due eventually in history). Obviously, it was far from perfect, but you could tell that the reconstructionists really tried. Take this in comparison to the founding fathers who bickered so much that much fo the constitution was either vague, given limited protections (like how congress couldn't touch the Atlantic salve trade until 1808), and just generally self aware of how illiberal it was. For a founding text of Liberalism™, so many people knew it wasn't true to that cause, even at the time. I feel like the 14th Amendment, while flawed, was at least earnest. I mean a whole fucking civil war was fought, brother against brother, over these issues. It took over a century for a lot of the explicit institutionalized issues black Americans still had to deal with post Civil War (and obviously there's still many issues today), but at least we can appreciate the accomplishment at the time.
+
+At the very least, this is the type of energy we need right now. I doubt we are ever really going to get this level of reformation anytime soon unless some serious prosecutions happen (if God is kind).
+
+Anyway, I think the 14th Amendment is pretty cool.

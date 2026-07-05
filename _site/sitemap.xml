@@ -1,104 +1,100 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://infogothic.com/tutorials/anova-lessons/Contrasts.html</loc>
-    <lastmod>2026-06-21T18:40:18.595Z</lastmod>
+    <loc>https://infogothic.com/tutorials/anova-lessons/higher-order-anova.html</loc>
+    <lastmod>2026-06-24T19:22:10.116Z</lastmod>
   </url>
   <url>
-    <loc>https://infogothic.com/tutorials/anova-lessons/Multiple-Comparisons.html</loc>
-    <lastmod>2026-06-21T18:45:57.328Z</lastmod>
-  </url>
-  <url>
-    <loc>https://infogothic.com/tutorials/regression-lessons/nonlinear-regression.html</loc>
-    <lastmod>2026-04-26T21:42:05.250Z</lastmod>
-  </url>
-  <url>
-    <loc>https://infogothic.com/tutorials/regression-lessons/variable-importance.html</loc>
-    <lastmod>2026-04-26T21:42:05.239Z</lastmod>
-  </url>
-  <url>
-    <loc>https://infogothic.com/tutorials/regression-lessons/logistic-regression.html</loc>
-    <lastmod>2026-04-26T21:42:05.227Z</lastmod>
-  </url>
-  <url>
-    <loc>https://infogothic.com/tutorials/regression-lessons/moderation.html</loc>
-    <lastmod>2026-04-26T21:42:05.215Z</lastmod>
-  </url>
-  <url>
-    <loc>https://infogothic.com/tutorials/regression-lessons/prediction.html</loc>
-    <lastmod>2026-04-26T21:42:05.203Z</lastmod>
-  </url>
-  <url>
-    <loc>https://infogothic.com/tutorials/reg-course.html</loc>
-    <lastmod>2026-06-22T18:54:04.233Z</lastmod>
-  </url>
-  <url>
-    <loc>https://infogothic.com/about.html</loc>
-    <lastmod>2026-05-26T04:43:56.122Z</lastmod>
-  </url>
-  <url>
-    <loc>https://infogothic.com/posts/zapffe-hope/index.html</loc>
-    <lastmod>2026-04-13T17:59:36.934Z</lastmod>
-  </url>
-  <url>
-    <loc>https://infogothic.com/posts/evolutionary-psychology-loon/index.html</loc>
-    <lastmod>2026-04-13T17:59:47.067Z</lastmod>
-  </url>
-  <url>
-    <loc>https://infogothic.com/posts/i-dont-like-what-it-does-to-me/index.html</loc>
-    <lastmod>2026-05-23T22:02:05.775Z</lastmod>
-  </url>
-  <url>
-    <loc>https://infogothic.com/index.html</loc>
-    <lastmod>2026-04-15T23:51:55.679Z</lastmod>
-  </url>
-  <url>
-    <loc>https://infogothic.com/tutorials.html</loc>
-    <lastmod>2026-04-26T21:30:51.350Z</lastmod>
-  </url>
-  <url>
-    <loc>https://infogothic.com/tutorials/regression-lessons/multiple-linear-regression.html</loc>
-    <lastmod>2026-04-26T21:42:05.197Z</lastmod>
-  </url>
-  <url>
-    <loc>https://infogothic.com/tutorials/regression-lessons/inference-and-multiple-correlations.html</loc>
-    <lastmod>2026-04-26T21:42:05.209Z</lastmod>
-  </url>
-  <url>
-    <loc>https://infogothic.com/tutorials/regression-lessons/multicategorical-predictors.html</loc>
-    <lastmod>2026-04-26T21:42:05.221Z</lastmod>
-  </url>
-  <url>
-    <loc>https://infogothic.com/tutorials/regression-lessons/simple-linear-regression.html</loc>
-    <lastmod>2026-04-26T21:42:05.232Z</lastmod>
-  </url>
-  <url>
-    <loc>https://infogothic.com/tutorials/regression-lessons/diagnostics.html</loc>
-    <lastmod>2026-04-26T21:42:05.245Z</lastmod>
-  </url>
-  <url>
-    <loc>https://infogothic.com/tutorials/anova-course.html</loc>
-    <lastmod>2026-06-26T19:24:31.063Z</lastmod>
-  </url>
-  <url>
-    <loc>https://infogothic.com/tutorials/anova-lessons/SPSS-ANOVA-Intro.html</loc>
-    <lastmod>2026-06-24T19:38:09.560Z</lastmod>
-  </url>
-  <url>
-    <loc>https://infogothic.com/blog-posts.html</loc>
-    <lastmod>2026-04-26T21:47:26.773Z</lastmod>
+    <loc>https://infogothic.com/tutorials/anova-lessons/ancova.html</loc>
+    <lastmod>2026-06-26T19:22:27.552Z</lastmod>
   </url>
   <url>
     <loc>https://infogothic.com/tutorials/anova-lessons/trend-analysis.html</loc>
     <lastmod>2026-06-21T22:30:14.985Z</lastmod>
   </url>
   <url>
-    <loc>https://infogothic.com/tutorials/anova-lessons/twoway-anova.html</loc>
-    <lastmod>2026-06-24T19:28:40.588Z</lastmod>
+    <loc>https://infogothic.com/tutorials/anova-lessons/Contrasts.html</loc>
+    <lastmod>2026-06-21T18:40:18.595Z</lastmod>
   </url>
   <url>
-    <loc>https://infogothic.com/tutorials/anova-lessons/higher-order-anova.html</loc>
-    <lastmod>2026-06-24T19:22:10.116Z</lastmod>
+    <loc>https://infogothic.com/tutorials/anova-lessons/SPSS-ANOVA-Intro.html</loc>
+    <lastmod>2026-06-24T19:38:09.560Z</lastmod>
+  </url>
+  <url>
+    <loc>https://infogothic.com/tutorials/anova-course.html</loc>
+    <lastmod>2026-06-26T19:24:31.063Z</lastmod>
+  </url>
+  <url>
+    <loc>https://infogothic.com/tutorials/regression-lessons/diagnostics.html</loc>
+    <lastmod>2026-04-26T21:42:05.245Z</lastmod>
+  </url>
+  <url>
+    <loc>https://infogothic.com/tutorials/regression-lessons/simple-linear-regression.html</loc>
+    <lastmod>2026-04-26T21:42:05.232Z</lastmod>
+  </url>
+  <url>
+    <loc>https://infogothic.com/tutorials/regression-lessons/multicategorical-predictors.html</loc>
+    <lastmod>2026-04-26T21:42:05.221Z</lastmod>
+  </url>
+  <url>
+    <loc>https://infogothic.com/tutorials/regression-lessons/inference-and-multiple-correlations.html</loc>
+    <lastmod>2026-04-26T21:42:05.209Z</lastmod>
+  </url>
+  <url>
+    <loc>https://infogothic.com/tutorials/regression-lessons/multiple-linear-regression.html</loc>
+    <lastmod>2026-04-26T21:42:05.197Z</lastmod>
+  </url>
+  <url>
+    <loc>https://infogothic.com/tutorials.html</loc>
+    <lastmod>2026-04-26T21:30:51.350Z</lastmod>
+  </url>
+  <url>
+    <loc>https://infogothic.com/index.html</loc>
+    <lastmod>2026-04-15T23:51:55.679Z</lastmod>
+  </url>
+  <url>
+    <loc>https://infogothic.com/posts/i-dont-like-what-it-does-to-me/index.html</loc>
+    <lastmod>2026-05-23T22:02:05.775Z</lastmod>
+  </url>
+  <url>
+    <loc>https://infogothic.com/posts/evolutionary-psychology-loon/index.html</loc>
+    <lastmod>2026-04-13T17:59:47.067Z</lastmod>
+  </url>
+  <url>
+    <loc>https://infogothic.com/posts/zapffe-hope/index.html</loc>
+    <lastmod>2026-04-13T17:59:36.934Z</lastmod>
+  </url>
+  <url>
+    <loc>https://infogothic.com/about.html</loc>
+    <lastmod>2026-05-26T04:43:56.122Z</lastmod>
+  </url>
+  <url>
+    <loc>https://infogothic.com/tutorials/reg-course.html</loc>
+    <lastmod>2026-06-22T18:54:04.233Z</lastmod>
+  </url>
+  <url>
+    <loc>https://infogothic.com/tutorials/regression-lessons/prediction.html</loc>
+    <lastmod>2026-04-26T21:42:05.203Z</lastmod>
+  </url>
+  <url>
+    <loc>https://infogothic.com/tutorials/regression-lessons/moderation.html</loc>
+    <lastmod>2026-04-26T21:42:05.215Z</lastmod>
+  </url>
+  <url>
+    <loc>https://infogothic.com/tutorials/regression-lessons/logistic-regression.html</loc>
+    <lastmod>2026-04-26T21:42:05.227Z</lastmod>
+  </url>
+  <url>
+    <loc>https://infogothic.com/tutorials/regression-lessons/variable-importance.html</loc>
+    <lastmod>2026-04-26T21:42:05.239Z</lastmod>
+  </url>
+  <url>
+    <loc>https://infogothic.com/tutorials/regression-lessons/nonlinear-regression.html</loc>
+    <lastmod>2026-04-26T21:42:05.250Z</lastmod>
+  </url>
+  <url>
+    <loc>https://infogothic.com/tutorials/anova-lessons/Multiple-Comparisons.html</loc>
+    <lastmod>2026-06-21T18:45:57.328Z</lastmod>
   </url>
   <url>
     <loc>https://infogothic.com/tutorials/anova-lessons/within-subjects-anova.html</loc>
@@ -113,7 +109,11 @@
     <lastmod>2026-06-26T18:36:59.678Z</lastmod>
   </url>
   <url>
-    <loc>https://infogothic.com/tutorials/anova-lessons/ancova.html</loc>
-    <lastmod>2026-06-26T19:22:27.552Z</lastmod>
+    <loc>https://infogothic.com/tutorials/anova-lessons/twoway-anova.html</loc>
+    <lastmod>2026-06-24T19:28:40.588Z</lastmod>
+  </url>
+  <url>
+    <loc>https://infogothic.com/blog-posts.html</loc>
+    <lastmod>2026-04-26T21:47:26.773Z</lastmod>
   </url>
 </urlset>
