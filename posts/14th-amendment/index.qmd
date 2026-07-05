@@ -2,8 +2,9 @@
 title: "Musings on the 14th Amendment"
 subtitle: "Birth of The Second Republic"
 author: "Michael Woller"
-date: 2026-07-04
+date: "2026-07-04"
 categories: [civics, history, politics]
+image: "14th.png"
 ---
 
 Just to learn more about the historical context of today, I've been going through the Constitution and its amendments. It's been a decade since I studied any of this in high school, so I figured a refresher was overdue.
