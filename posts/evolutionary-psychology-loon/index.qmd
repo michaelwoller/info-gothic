@@ -1,7 +1,7 @@
 ---
 title: "[OLD] How Evolutionary Psychology Turned me into a Loon"
 date: "2024-10-24"
-description: "A soft defense and attack on the field"
+description: "A soft defense and attack on the field of Evolutionary Psychology. This field and the discussions around it in the popular domain make me go looney. I love water fowl."
 author: "Michael Woller"
 categories: [philosophy, psychology, evolution, analysis]
 image: "loon.webp"

@@ -1,7 +1,7 @@
 ---
 title: "AI and Bragolin: Slope or Art?"
 date: "2026-5-07"
-description: "Is AI killing Goth?"
+description: "Bragolin's new music video used generative AI. All of Gothdome have lost their shit. Here, I break down the album, the backlash, and why most of the online arguments about it don't hold up but some do."
 author: "Michael Woller"
 categories: [music, goth, AI]
 image: "album.jpeg"

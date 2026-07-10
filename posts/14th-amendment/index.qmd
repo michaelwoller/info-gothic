@@ -2,6 +2,7 @@
 title: "Musings on the 14th Amendment"
 subtitle: "Birth of The Second Republic"
 author: "Michael Woller"
+description: "The more and more I learn about the 14th Amendment, the more I am convinced it is one of the most importnat pieces of writing in the history of the US. Here are my musings on why."
 date: "2026-07-04"
 categories: [civics, history, politics]
 image: "14th.png"

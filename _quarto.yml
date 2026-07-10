@@ -2,10 +2,12 @@ project:
   type: website
 
 website:
-  description: "A blog built with Quarto"
+  description: "Gothic Flavor of Statistics, Psychology, Economics"
   site-url: https://infogothic.com 
   title: "InfoGothic"
   favicon: images/favicon.ico
+  twitter-card: true
+  open-graph: true
   navbar:
     right:
       - about.qmd

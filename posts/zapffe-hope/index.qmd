@@ -1,7 +1,7 @@
 ---
 title: "[OLD] Zapffe: Our Undesirable Instinct of Hope"
 date: "2023-04-09"
-description: "How biological instinct only leads to mistaken optimism in service of reproduction"
+description: "How biological instinct only leads to mistaken optimism in service of reproduction. A dive into Zapffe's pessimist philosophy and the Irish elk allegory."
 author: "Michael Woller"
 categories: [philosophy, pessimism, evolution]
 image: "zapffe-portrait.webp"
