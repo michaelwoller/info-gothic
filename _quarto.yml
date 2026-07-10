@@ -11,8 +11,8 @@ website:
       - about.qmd
       - tutorials.qmd
       - blog-posts.qmd
-      - text: "Obsidian Notes"
-        href: "https://notes.infogothic.com"
+      - text: "Open Notes"
+        href: "https://publish.obsidian.md/infogothic/Home"
       - icon: github
         href: https://github.com/michaelwoller
       - icon: bluesky
